@@ -9,12 +9,14 @@ package frames;
  * @author Kevin Rios
  */
 public class Login extends javax.swing.JFrame {
-
+    MenuPrincipal menu = new MenuPrincipal();
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        
     }
 
     /**
@@ -27,51 +29,80 @@ public class Login extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        iconoCentro = new javax.swing.JLabel();
+        lblLogoCabecera = new javax.swing.JLabel();
+        btnSalir = new javax.swing.JButton();
         barra = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        lblImagenUsuario = new javax.swing.JLabel();
         txtContrasena = new javax.swing.JTextField();
-        txtUsuario1 = new javax.swing.JTextField();
+        txtUsuario = new javax.swing.JTextField();
         btnIngresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jPanel1.setLayout(null);
 
-        iconoCentro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Abarrotes (1).png"))); // NOI18N
-        jPanel1.add(iconoCentro);
-        iconoCentro.setBounds(130, 0, 0, 30);
+        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
+        jPanel1.add(lblLogoCabecera);
+        lblLogoCabecera.setBounds(130, 0, 250, 30);
+
+        btnSalir.setBackground(new java.awt.Color(110, 88, 68));
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_exitApp.png"))); // NOI18N
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSalir);
+        btnSalir.setBounds(475, 5, 20, 20);
 
         barra.setEditable(false);
         barra.setBackground(new java.awt.Color(110, 88, 68));
+        barra.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jPanel1.add(barra);
         barra.setBounds(0, 0, 500, 30);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/user.png"))); // NOI18N
-        jPanel1.add(jLabel1);
-        jLabel1.setBounds(220, 60, 80, 90);
+        lblImagenUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_usuario2.png"))); // NOI18N
+        jPanel1.add(lblImagenUsuario);
+        lblImagenUsuario.setBounds(220, 60, 80, 90);
 
         txtContrasena.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtContrasena.setForeground(new java.awt.Color(102, 102, 102));
         txtContrasena.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtContrasena.setText("Contraseña");
         txtContrasena.setName(""); // NOI18N
+        txtContrasena.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtContrasenaMouseClicked(evt);
+            }
+        });
         jPanel1.add(txtContrasena);
         txtContrasena.setBounds(160, 220, 190, 30);
 
-        txtUsuario1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtUsuario1.setForeground(new java.awt.Color(102, 102, 102));
-        txtUsuario1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtUsuario1.setText("Usuario");
-        txtUsuario1.setName(""); // NOI18N
-        jPanel1.add(txtUsuario1);
-        txtUsuario1.setBounds(160, 170, 190, 30);
+        txtUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtUsuario.setForeground(new java.awt.Color(102, 102, 102));
+        txtUsuario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtUsuario.setText("Usuario");
+        txtUsuario.setName(""); // NOI18N
+        txtUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtUsuarioMouseClicked(evt);
+            }
+        });
+        jPanel1.add(txtUsuario);
+        txtUsuario.setBounds(160, 170, 190, 30);
 
-        btnIngresar.setBackground(new java.awt.Color(204, 204, 204));
+        btnIngresar.setBackground(new java.awt.Color(255, 145, 77));
         btnIngresar.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         btnIngresar.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresar.setText("Ingresar");
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnIngresar);
         btnIngresar.setBounds(190, 280, 130, 40);
 
@@ -88,6 +119,23 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuarioMouseClicked
+        this.txtUsuario.setText("");
+    }//GEN-LAST:event_txtUsuarioMouseClicked
+
+    private void txtContrasenaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtContrasenaMouseClicked
+        this.txtContrasena.setText("");
+    }//GEN-LAST:event_txtContrasenaMouseClicked
+
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+       menu.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btnIngresarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -127,10 +175,11 @@ public class Login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField barra;
     private javax.swing.JButton btnIngresar;
-    private javax.swing.JLabel iconoCentro;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblImagenUsuario;
+    private javax.swing.JLabel lblLogoCabecera;
     private javax.swing.JTextField txtContrasena;
-    private javax.swing.JTextField txtUsuario1;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

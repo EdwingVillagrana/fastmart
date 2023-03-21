@@ -2,6 +2,7 @@ package frames;
 
 
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 
 
@@ -16,12 +17,15 @@ import java.awt.Color;
  */
 public class MenuPrincipal extends javax.swing.JFrame {
 ConsultarVenta ConsultarVenta = new ConsultarVenta();
+ConsultarProductos consultarProductos = new ConsultarProductos();
+ConsultarProveedores consultarProveedores = new ConsultarProveedores();
 RegistrarUsuario registrarUsuario = new RegistrarUsuario();
 Venta venta = new Venta();
 RegistrarProducto registrarProducto = new RegistrarProducto();
 RegistrarCategoria  categoria = new RegistrarCategoria();
 RegistrarProveedor provedor = new RegistrarProveedor();
 Compra compra = new Compra();
+
 
 
 
@@ -55,6 +59,8 @@ Compra compra = new Compra();
         menuComprasCompra = new javax.swing.JMenuItem();
         menuConsultas = new javax.swing.JMenu();
         menuConsultasVentas = new javax.swing.JMenuItem();
+        menuConsultasProductos = new javax.swing.JMenuItem();
+        menuConsultasProveedores = new javax.swing.JMenuItem();
         menuMantenimiento = new javax.swing.JMenu();
         menuManenimientoEmpleado = new javax.swing.JMenuItem();
         menuManenimientoProducto = new javax.swing.JMenuItem();
@@ -133,6 +139,24 @@ Compra compra = new Compra();
             }
         });
         menuConsultas.add(menuConsultasVentas);
+
+        menuConsultasProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_producto.png"))); // NOI18N
+        menuConsultasProductos.setText("Consultar Productos");
+        menuConsultasProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuConsultasProductosActionPerformed(evt);
+            }
+        });
+        menuConsultas.add(menuConsultasProductos);
+
+        menuConsultasProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_añadirProveedor.png"))); // NOI18N
+        menuConsultasProveedores.setText("Consultar Proveedores");
+        menuConsultasProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuConsultasProveedoresActionPerformed(evt);
+            }
+        });
+        menuConsultas.add(menuConsultasProveedores);
 
         menu.add(menuConsultas);
 
@@ -216,7 +240,11 @@ Compra compra = new Compra();
     }//GEN-LAST:event_menuManenimientoProductoActionPerformed
 
     private void menuInicioSalirAplicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuInicioSalirAplicacionActionPerformed
-        // TODO add your handling code here:
+       int a = JOptionPane.YES_NO_OPTION;
+        int resultado = JOptionPane.showConfirmDialog(this,"¿DESEA CERRAR LA APLICACIÓN?", "SALIR", a);
+        if (resultado==0) {
+            System.exit(0);
+        } 
     }//GEN-LAST:event_menuInicioSalirAplicacionActionPerformed
 
     private void menuInicioCerrarSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuInicioCerrarSActionPerformed
@@ -230,6 +258,14 @@ Compra compra = new Compra();
     private void menuManenimientoCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoCategoriaActionPerformed
         categoria.setVisible(true);
     }//GEN-LAST:event_menuManenimientoCategoriaActionPerformed
+
+    private void menuConsultasProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasProductosActionPerformed
+        consultarProductos.setVisible(true);
+    }//GEN-LAST:event_menuConsultasProductosActionPerformed
+
+    private void menuConsultasProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasProveedoresActionPerformed
+       consultarProveedores.setVisible(true);
+    }//GEN-LAST:event_menuConsultasProveedoresActionPerformed
 
     /**
      * @param args the command line arguments
@@ -273,6 +309,8 @@ Compra compra = new Compra();
     private javax.swing.JMenu menuCompras;
     private javax.swing.JMenuItem menuComprasCompra;
     private javax.swing.JMenu menuConsultas;
+    private javax.swing.JMenuItem menuConsultasProductos;
+    private javax.swing.JMenuItem menuConsultasProveedores;
     private javax.swing.JMenuItem menuConsultasVentas;
     private javax.swing.JMenu menuInicio;
     private javax.swing.JMenuItem menuInicioCerrarS;

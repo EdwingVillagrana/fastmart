@@ -4,6 +4,8 @@
  */
 package frames;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Kevin Rios
@@ -202,23 +204,40 @@ public class RegistrarCategoria extends javax.swing.JFrame {
     }//GEN-LAST:event_FondoTituloActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        this.txtNombre.setText("");
-        this.txtDescripcion.setText("");
+        limpiarCampos();
 
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        limpiarCampos();
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:
+        validarCampos();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDescripcionActionPerformed
 
+    
+    private void limpiarCampos(){
+            this.txtNombre.setText("");
+            this.txtDescripcion.setText("");
+            }
+    
+    private boolean validarCampos(){
+        if (this.txtNombre.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Compleme el campo nombre", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }else if (this.txtDescripcion.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Compleme el campo descripción", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * @param args the command line arguments
      */

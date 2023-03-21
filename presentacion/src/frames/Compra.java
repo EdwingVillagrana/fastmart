@@ -399,7 +399,7 @@ public class Compra extends javax.swing.JFrame {
         jPanel3.add(lblFecha);
         lblFecha.setBounds(230, 13, 60, 20);
 
-        comboProveedores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboProveedores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
         jPanel3.add(comboProveedores);
         comboProveedores.setBounds(25, 35, 190, 22);
 

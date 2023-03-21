@@ -1,5 +1,7 @@
 package frames;
 
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -10,6 +12,7 @@ package frames;
  * @author Kevin Rios
  */
 public class RegistrarProducto extends javax.swing.JFrame {
+    
     /**
      * Creates new form RegistrarUsuario
      */
@@ -121,6 +124,11 @@ public class RegistrarProducto extends javax.swing.JFrame {
         lblPrecioCompra.setBounds(28, 120, 130, 20);
 
         txtVenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtVentaKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtVenta);
         txtVenta.setBounds(170, 155, 140, 22);
 
@@ -129,6 +137,11 @@ public class RegistrarProducto extends javax.swing.JFrame {
         txtNombre.setBounds(170, 60, 330, 22);
 
         txtCompra.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtCompra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCompraKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtCompra);
         txtCompra.setBounds(170, 120, 140, 22);
 
@@ -137,11 +150,11 @@ public class RegistrarProducto extends javax.swing.JFrame {
         jPanel2.add(lblPrecioVenta);
         lblPrecioVenta.setBounds(44, 155, 120, 20);
 
-        comboCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
         jPanel2.add(comboCategoria);
         comboCategoria.setBounds(170, 190, 240, 22);
 
-        comboProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
         jPanel2.add(comboProveedor);
         comboProveedor.setBounds(170, 90, 240, 22);
 
@@ -232,7 +245,10 @@ public class RegistrarProducto extends javax.swing.JFrame {
     }//GEN-LAST:event_FondoTituloActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:
+        if (validarCampos()) {
+            JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+            limpiarCampos();
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -240,11 +256,49 @@ public class RegistrarProducto extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        limpiarCampos();
+    
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtCompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCompraKeyTyped
+        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCompraKeyTyped
+
+    private void limpiarCampos(){
         this.txtNombre.setText("");
         this.txtCompra.setText("");
         this.txtVenta.setText("");
+        this.comboCategoria.setSelectedIndex(0);
+        this.comboProveedor.setSelectedIndex(0);
+    }
     
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    private boolean validarCampos(){
+        if (this.txtNombre.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Compleme el campo nombre", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }else if (this.txtCompra.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Compleme el campo precio compra", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }else if(this.txtVenta.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Compleme el campo precio venta", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }else if(this.comboCategoria.getSelectedIndex() == 0){
+            JOptionPane.showMessageDialog(null, "Seleccione la categoria", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }else if(this.comboProveedor.getSelectedIndex() == 0){
+            JOptionPane.showMessageDialog(null, "Seleccione el proveedor", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
+    private void txtVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtVentaKeyTyped
+        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtVentaKeyTyped
 
     /**
      * @param args the command line arguments

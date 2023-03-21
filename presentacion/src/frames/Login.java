@@ -4,6 +4,7 @@
  */
 package frames;
 
+import javax.swing.JOptionPane;
 /**
  *
  * @author Kevin Rios
@@ -16,6 +17,7 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.lblOcultar.setVisible(false);
         
     }
 
@@ -33,9 +35,11 @@ public class Login extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         barra = new javax.swing.JTextField();
         lblImagenUsuario = new javax.swing.JLabel();
-        txtContrasena = new javax.swing.JTextField();
         txtUsuario = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
         btnIngresar = new javax.swing.JButton();
+        lblOcultar = new javax.swing.JLabel();
+        lblVer = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -68,19 +72,6 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(lblImagenUsuario);
         lblImagenUsuario.setBounds(220, 60, 80, 90);
 
-        txtContrasena.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtContrasena.setForeground(new java.awt.Color(102, 102, 102));
-        txtContrasena.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtContrasena.setText("Contraseña");
-        txtContrasena.setName(""); // NOI18N
-        txtContrasena.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtContrasenaMouseClicked(evt);
-            }
-        });
-        jPanel1.add(txtContrasena);
-        txtContrasena.setBounds(160, 220, 190, 30);
-
         txtUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtUsuario.setForeground(new java.awt.Color(102, 102, 102));
         txtUsuario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -94,6 +85,18 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(txtUsuario);
         txtUsuario.setBounds(160, 170, 190, 30);
 
+        txtPassword.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtPassword.setForeground(new java.awt.Color(102, 102, 102));
+        txtPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtPassword.setText("Contraseña");
+        txtPassword.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtPasswordMouseClicked(evt);
+            }
+        });
+        jPanel1.add(txtPassword);
+        txtPassword.setBounds(160, 220, 190, 30);
+
         btnIngresar.setBackground(new java.awt.Color(255, 145, 77));
         btnIngresar.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         btnIngresar.setForeground(new java.awt.Color(255, 255, 255));
@@ -105,6 +108,24 @@ public class Login extends javax.swing.JFrame {
         });
         jPanel1.add(btnIngresar);
         btnIngresar.setBounds(190, 280, 130, 40);
+
+        lblOcultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_ocultarContrasena.png"))); // NOI18N
+        lblOcultar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblOcultarMouseClicked(evt);
+            }
+        });
+        jPanel1.add(lblOcultar);
+        lblOcultar.setBounds(360, 230, 20, 20);
+
+        lblVer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_verContrasena.png"))); // NOI18N
+        lblVer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblVerMouseClicked(evt);
+            }
+        });
+        jPanel1.add(lblVer);
+        lblVer.setBounds(360, 230, 20, 16);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -124,18 +145,35 @@ public class Login extends javax.swing.JFrame {
         this.txtUsuario.setText("");
     }//GEN-LAST:event_txtUsuarioMouseClicked
 
-    private void txtContrasenaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtContrasenaMouseClicked
-        this.txtContrasena.setText("");
-    }//GEN-LAST:event_txtContrasenaMouseClicked
-
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
        menu.setVisible(true);
        this.dispose();
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        this.dispose();
+        int a = JOptionPane.YES_NO_OPTION;
+        int resultado = JOptionPane.showConfirmDialog(this,"¿DESEA SALIR?", "SALIR", a);
+        if (resultado==0) {
+            System.exit(0);
+        }             
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void lblVerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblVerMouseClicked
+        this.lblVer.setVisible(false);
+        this.lblOcultar.setVisible(true);    
+        this.txtPassword.setEchoChar((char)0);
+     
+    }//GEN-LAST:event_lblVerMouseClicked
+
+    private void lblOcultarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblOcultarMouseClicked
+        this.lblVer.setVisible(true);
+        this.lblOcultar.setVisible(false);
+        this.txtPassword.setEchoChar('•');
+    }//GEN-LAST:event_lblOcultarMouseClicked
+
+    private void txtPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPasswordMouseClicked
+        this.txtPassword.setText("");
+    }//GEN-LAST:event_txtPasswordMouseClicked
 
     /**
      * @param args the command line arguments
@@ -179,7 +217,9 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblImagenUsuario;
     private javax.swing.JLabel lblLogoCabecera;
-    private javax.swing.JTextField txtContrasena;
+    private javax.swing.JLabel lblOcultar;
+    private javax.swing.JLabel lblVer;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

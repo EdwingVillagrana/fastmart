@@ -114,7 +114,7 @@ public class Venta extends javax.swing.JFrame {
             }
         });
         Fondo.add(btnSalir);
-        btnSalir.setBounds(710, 380, 110, 90);
+        btnSalir.setBounds(710, 270, 110, 90);
         Fondo.add(jSeparator1);
         jSeparator1.setBounds(0, 28, 720, 0);
 

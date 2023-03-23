@@ -6,11 +6,9 @@ package entidades;
 
 import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -20,51 +18,51 @@ import javax.persistence.Table;
  * @author EDW
  */
 @Entity
-@Table(name = "detalle_ventas")
-public class DetalleVenta implements Serializable{
-
+@Table(name = "detalle_compras")
+public class DetalleCompra implements Serializable{
+    
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_venta")
-    private Venta venta;
-
+    @JoinColumn(name = "id_compra")
+    private Compra compra;
+    
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto")
     private Producto producto;
-
+    
     @Column(name = "cantidad", nullable = false)
     private Long cantidad;
-
+    
     @Column(name = "precio", nullable = false)
     private Double precio;
 
-    public DetalleVenta() {
+    public DetalleCompra() {
     }
 
-    public DetalleVenta(Venta venta) {
-        this.venta = venta;
+    public DetalleCompra(Compra compra) {
+        this.compra = compra;
     }
 
-    public DetalleVenta(Producto producto, Long cantidad, Double precio) {
+    public DetalleCompra(Producto producto, Long cantidad, Double precio) {
         this.producto = producto;
         this.cantidad = cantidad;
         this.precio = precio;
     }
 
-    public DetalleVenta(Venta venta, Producto producto, Long cantidad, Double precio) {
-        this.venta = venta;
+    public DetalleCompra(Compra compra, Producto producto, Long cantidad, Double precio) {
+        this.compra = compra;
         this.producto = producto;
         this.cantidad = cantidad;
         this.precio = precio;
     }
 
-    public Venta getVenta() {
-        return venta;
+    public Compra getCompra() {
+        return compra;
     }
 
-    public void setVenta(Venta venta) {
-        this.venta = venta;
+    public void setCompra(Compra compra) {
+        this.compra = compra;
     }
 
     public Producto getProducto() {
@@ -93,7 +91,6 @@ public class DetalleVenta implements Serializable{
 
     @Override
     public String toString() {
-        return "DetalleVenta{" + "venta=" + venta + ", producto=" + producto + ", cantidad=" + cantidad + ", precio=" + precio + '}';
+        return "DetalleCompra{" + "compra=" + compra + ", producto=" + producto + ", cantidad=" + cantidad + ", precio=" + precio + '}';
     }
-
 }

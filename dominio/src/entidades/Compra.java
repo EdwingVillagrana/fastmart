@@ -5,9 +5,6 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,56 +12,58 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.sql.Date;
-import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
+
 /**
  *
  * @author EDW
  */
 @Entity
-@Table(name = "ventas")
-public class Venta implements Serializable {
-
+@Table(name = "compras")
+public class Compra implements Serializable{
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_venta")
+    @Column(name = "id_compra")
     private Long id;
-
+    
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
     
     @Column(name = "fecha")
-    private Date fechaDeVenta;
+    private Date fechaDeCompra;
     
     @Column(name = "total", nullable = false)
     private Double total;
     
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleVenta> productos = new ArrayList<>();
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleCompra> productos;
 
-    public Venta() {
+    public Compra() {
     }
 
-    public Venta(Long id) {
+    public Compra(Long id) {
         this.id = id;
     }
 
-    public Venta(Usuario usuario, Date fechaDeVenta, Double total, List<DetalleVenta> productos) {
+    public Compra(Usuario usuario, Date fechaDeCompra, Double total, List<DetalleCompra> detalles) {
         this.usuario = usuario;
-        this.fechaDeVenta = fechaDeVenta;
+        this.fechaDeCompra = fechaDeCompra;
         this.total = total;
-        this.productos = productos;
+        this.productos = detalles;
     }
 
-    public Venta(Long id, Usuario usuario, Date fechaDeVenta, Double total, List<DetalleVenta> productos) {
+    public Compra(Long id, Usuario usuario, Date fechaDeCompra, Double total, List<DetalleCompra> detalles) {
         this.id = id;
         this.usuario = usuario;
-        this.fechaDeVenta = fechaDeVenta;
+        this.fechaDeCompra = fechaDeCompra;
         this.total = total;
-        this.productos = productos;
+        this.productos = detalles;
     }
 
     public Long getId() {
@@ -79,16 +78,16 @@ public class Venta implements Serializable {
         return usuario;
     }
 
-    public Date getFechaDeVenta() {
-        return fechaDeVenta;
-    }
-
-    public void setFechaDeVenta(Date fechaDeVenta) {
-        this.fechaDeVenta = fechaDeVenta;
-    }
-
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Date getFechaDeCompra() {
+        return fechaDeCompra;
+    }
+
+    public void setFechaDeCompra(Date fechaDeCompra) {
+        this.fechaDeCompra = fechaDeCompra;
     }
 
     public Double getTotal() {
@@ -99,16 +98,15 @@ public class Venta implements Serializable {
         this.total = total;
     }
 
-    public List<DetalleVenta> getProductos() {
+    public List<DetalleCompra> getProductos() {
         return productos;
     }
 
-    public void setProductos(List<DetalleVenta> productos) {
+    public void setProductos(List<DetalleCompra> productos) {
         this.productos = productos;
     }
-
-    public void agregarDetalle(DetalleVenta detalleVenta){
-        productos.add(detalleVenta);
+    
+    public void agregarDetalle(DetalleCompra detalles){
+        productos.add(detalles);
     }
-     
 }

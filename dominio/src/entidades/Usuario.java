@@ -27,7 +27,7 @@ import org.eclipse.persistence.annotations.DiscriminatorClass;
  * @author EDW
  */
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuarios")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
 public class Usuario implements Serializable {

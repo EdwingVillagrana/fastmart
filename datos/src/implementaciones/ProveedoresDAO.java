@@ -23,11 +23,11 @@ import javax.persistence.TypedQuery;
  * conexión con la base de datos.
  *
  */
-public class ProveedorDAO implements IProveedores {
+public class ProveedoresDAO implements IProveedores {
 
     private final IConexion conexion;
 
-    public ProveedorDAO(IConexion conexion) {
+    public ProveedoresDAO(IConexion conexion) {
         this.conexion = conexion;
     }
 
@@ -47,7 +47,7 @@ public class ProveedorDAO implements IProveedores {
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            Logger.getLogger(ProveedorDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar el proveedor");
         }
     }
@@ -77,7 +77,7 @@ public class ProveedorDAO implements IProveedores {
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            Logger.getLogger(ProveedorDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos del proveedor.");
         }
     }
@@ -102,7 +102,7 @@ public class ProveedorDAO implements IProveedores {
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            Logger.getLogger(ProveedorDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos del proveedor.");
         }
     }
@@ -131,7 +131,7 @@ public class ProveedorDAO implements IProveedores {
             em.close();
             return proveedor;
         } catch (Exception e) {
-            Logger.getLogger(ProveedorDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }

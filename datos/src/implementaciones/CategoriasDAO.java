@@ -6,21 +6,21 @@ package implementaciones;
 
 import entidades.Categoria;
 import excepciones.PersistenciaException;
-import interfaces.ICategorias;
 import interfaces.IConexion;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import interfaces.ICategoriasDAO;
 
 /**
  *
  * @author Kevin Rios
  */
-public class CategoriaDAO implements ICategorias{
+public class CategoriasDAO implements ICategoriasDAO{
     private final IConexion conexion;
 
-    public CategoriaDAO(IConexion conexion) {
+    public CategoriasDAO(IConexion conexion) {
         this.conexion = conexion;
     }
 
@@ -40,7 +40,7 @@ public class CategoriaDAO implements ICategorias{
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            Logger.getLogger(CategoriaDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar la categoria");
         }
     }
@@ -67,7 +67,7 @@ public class CategoriaDAO implements ICategorias{
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            Logger.getLogger(CategoriaDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos de la categoria.");
         }
     }
@@ -92,7 +92,7 @@ public class CategoriaDAO implements ICategorias{
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            Logger.getLogger(CategoriaDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos de la categoria.");
         }
     }
@@ -121,7 +121,7 @@ public class CategoriaDAO implements ICategorias{
             em.close();
             return categoria;
         } catch (Exception e) {
-            Logger.getLogger(CategoriaDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }

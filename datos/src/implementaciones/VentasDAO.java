@@ -7,17 +7,17 @@ package implementaciones;
 import entidades.Venta;
 import excepciones.PersistenciaException;
 import interfaces.IConexion;
-import interfaces.IVentas;
 import java.util.Date;
 import javax.persistence.EntityManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import interfaces.IVentasDAO;
 
 /**
  *
  * @author Kevin Rios
  */
-public class VentasDAO implements IVentas{
+public class VentasDAO implements IVentasDAO{
     private final IConexion conexion;
 
     public VentasDAO(IConexion conexion) {
@@ -97,17 +97,9 @@ public class VentasDAO implements IVentas{
             throw new PersistenciaException("No fue posible eliminar los datos de la venta.");
         }
     }
-    
-    /**
-     * Busca las ventas en la base de datos por un periodo dado
-     * Metodo pendiente
-     * @param fecha1
-     * @param fecha2
-     * @return
-     * @throws PersistenciaException 
-     */
+
     @Override
-    public Venta consultarPorPeriodo(Date fecha1, Date fecha2) throws PersistenciaException {
+    public Venta consultarPorPeriodo(Date date, Date fechaFin) throws PersistenciaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

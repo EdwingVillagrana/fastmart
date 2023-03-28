@@ -7,11 +7,11 @@ package implementaciones;
 import entidades.Usuario;
 import excepciones.PersistenciaException;
 import interfaces.IConexion;
-import interfaces.IUsuarios;
 import javax.persistence.EntityManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.TypedQuery;
+import interfaces.IUsuariosDAO;
 
 /**
  * Implementa la interfaz IUsuarios que, a su vez, extiende de la interfaz
@@ -23,11 +23,11 @@ import javax.persistence.TypedQuery;
  * conexión con la base de datos.
  *
  */
-public class UsuarioDAO implements IUsuarios{
+public class UsuariosDAO implements IUsuariosDAO{
 
     private final IConexion conexion;
 
-    public UsuarioDAO(IConexion conexion) {
+    public UsuariosDAO(IConexion conexion) {
         this.conexion = conexion;
     }
     
@@ -48,7 +48,7 @@ public class UsuarioDAO implements IUsuarios{
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar al usuario");
         }
     }
@@ -82,7 +82,7 @@ public class UsuarioDAO implements IUsuarios{
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos del usuario.");
         }
     }
@@ -107,7 +107,7 @@ public class UsuarioDAO implements IUsuarios{
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos del usuario.");
         }
     }
@@ -136,7 +136,7 @@ public class UsuarioDAO implements IUsuarios{
             em.close();
             return usuario;
         } catch (Exception e) {
-            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }

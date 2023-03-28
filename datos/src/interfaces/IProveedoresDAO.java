@@ -16,7 +16,7 @@ import excepciones.PersistenciaException;
  * almacena las llaves primarias.
  *
  */
-public interface IProveedores extends IGenericaDAO<Proveedor, Long> {
+public interface IProveedoresDAO extends IGenericaDAO<Proveedor, Long> {
 
     public Proveedor consultarPorNombre(String nombre) throws PersistenciaException;
 }

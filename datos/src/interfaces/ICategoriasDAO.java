@@ -13,6 +13,6 @@ import excepciones.PersistenciaException;
  *
  * @author Kevin Rios
  */
-public interface ICategorias extends IGenericaDAO<Categoria, Long>{
+public interface ICategoriasDAO extends IGenericaDAO<Categoria, Long>{
     public Categoria consultarPorNombre(String nombre) throws PersistenciaException;
 }

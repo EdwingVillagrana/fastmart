@@ -4,13 +4,13 @@
  */
 package interfaces;
 
-import entidades.Usuario;
-import excepciones.PersistenciaException;
+import entidades.Proveedor;
+import excepciones.NegocioException;
 
 /**
  *
- * @author Kevin Rios
+ * @author EDW
  */
-public interface IUsuarios extends IGenericaDAO<Usuario, Long> {
-    public Usuario consultarPorNombre(String nombre) throws PersistenciaException;
+public interface IProveedoresNegocio extends IGenericaNegocio<Proveedor>{
+    public Proveedor consultarPorNombre(String nombre) throws NegocioException;
 }

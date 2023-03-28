@@ -7,11 +7,12 @@ package implementaciones;
 import entidades.Proveedor;
 import excepciones.PersistenciaException;
 import interfaces.IConexion;
-import interfaces.IProveedores;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import interfaces.IProveedoresDAO;
+import javax.persistence.NoResultException;
 
 /**
  * Implementa la interfaz IProveedores que, a su vez, extiende de la interfaz
@@ -23,7 +24,7 @@ import javax.persistence.TypedQuery;
  * conexión con la base de datos.
  *
  */
-public class ProveedoresDAO implements IProveedores {
+public class ProveedoresDAO implements IProveedoresDAO {
 
     private final IConexion conexion;
 
@@ -119,20 +120,24 @@ public class ProveedoresDAO implements IProveedores {
      */
     @Override
     public Proveedor consultarPorNombre(String nombre) throws PersistenciaException {
+        EntityManager em = null;
         try {
-            EntityManager em = this.conexion.crearConexion();
-            //Se utiliza una consulta JPQL para buscar el proveedor por su nombre
+            em = this.conexion.crearConexion();
             TypedQuery<Proveedor> query = em.createQuery("SELECT p FROM Proveedor p WHERE p.nombre = :nombre", Proveedor.class);
             query.setParameter("nombre", nombre);
             Proveedor proveedor = query.getSingleResult();
-            if (proveedor == null) {
-                throw new PersistenciaException("No se encontró al proveedor");
-            }
-            em.close();
             return proveedor;
+        } catch (NoResultException e) {
+            // Si no se encuentra ningún proveedor, asignamos null al proveedor
+            // y lo devolvemos en lugar de lanzar una excepción
+            return null;
         } catch (Exception e) {
             Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
     }
 

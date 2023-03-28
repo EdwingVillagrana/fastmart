@@ -7,11 +7,11 @@ package implementaciones;
 import entidades.Producto;
 import excepciones.PersistenciaException;
 import interfaces.IConexion;
-import interfaces.IProductos;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import interfaces.IProductosDAO;
 
 /**
  * Implementa la interfaz IProductos que, a su vez, extiende la interfaz 
@@ -23,11 +23,11 @@ import javax.persistence.TypedQuery;
  * con la base de datos.
  *
  */
-public class ProductoDAO implements IProductos{
+public class ProductosDAO implements IProductosDAO{
     
     private final IConexion conexion;
     
-    public ProductoDAO(IConexion conexion) {
+    public ProductosDAO(IConexion conexion) {
         this.conexion = conexion;
     }
 
@@ -47,7 +47,7 @@ public class ProductoDAO implements IProductos{
             em.getTransaction().commit();
             em.close();
         } catch(Exception e){
-            Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar el producto");
         }
     }
@@ -77,7 +77,7 @@ public class ProductoDAO implements IProductos{
             em.getTransaction().commit();
             em.close();
         } catch(Exception e){
-            Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos del producto.");
         }
         
@@ -103,7 +103,7 @@ public class ProductoDAO implements IProductos{
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
-            Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos del producto.");
         }
     }
@@ -132,7 +132,7 @@ public class ProductoDAO implements IProductos{
             em.close();
             return producto;
         } catch (Exception e) {
-            Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }

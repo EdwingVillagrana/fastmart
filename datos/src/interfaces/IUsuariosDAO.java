@@ -4,14 +4,13 @@
  */
 package interfaces;
 
-import entidades.Venta;
+import entidades.Usuario;
 import excepciones.PersistenciaException;
-import java.util.Date;
 
 /**
  *
  * @author Kevin Rios
  */
-public interface IVentas extends IGenericaDAO<Venta, Date>{
-    public Venta consultarPorPeriodo(Date date) throws PersistenciaException;
+public interface IUsuariosDAO extends IGenericaDAO<Usuario, Long> {
+    public Usuario consultarPorNombre(String nombre) throws PersistenciaException;
 }

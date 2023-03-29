@@ -47,7 +47,7 @@ public class VentasNegocio implements IVentasNegocio{
         try {
             ventasDAO.actualizar(entidad);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible agregar la información a la base de datos.", e);
+            throw new NegocioException("No fue posible actualizar la información a la base de datos.", e);
         }
     }
 
@@ -61,7 +61,7 @@ public class VentasNegocio implements IVentasNegocio{
         try {
             ventasDAO.agregar(entidad);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible agregar la información a la base de datos.", e);
+            throw new NegocioException("No fue posible eliminar la información a la base de datos.", e);
         }
     }
     

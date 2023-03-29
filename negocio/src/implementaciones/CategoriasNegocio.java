@@ -48,7 +48,7 @@ public class CategoriasNegocio implements ICategoriasNegocio{
         try {
             categoriasDAO.actualizar(entidad);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible eliminar la información de la base de datos.", e);
+            throw new NegocioException("No fue posible actualizar la información de la base de datos.", e);
         }
     }
 

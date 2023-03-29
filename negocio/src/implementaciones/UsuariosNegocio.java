@@ -47,7 +47,7 @@ public class UsuariosNegocio implements IUsuariosNegocio {
         try {
             usuariosDAO.actualizar(entidad);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible eliminar la información de la base de datos.", e);
+            throw new NegocioException("No fue posible actualizar la información de la base de datos.", e);
         }
     }
 

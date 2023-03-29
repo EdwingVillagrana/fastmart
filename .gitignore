@@ -28,3 +28,4 @@ hs_err_pid*
 /dominio/dist/
 /negocio/dist/
 /negocio/build/
+/datos/dist/

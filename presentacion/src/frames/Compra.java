@@ -128,9 +128,9 @@ public class Compra extends javax.swing.JFrame {
 
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
-        lblApartado.setText("Ventas");
+        lblApartado.setText("Compra");
         Fondo.add(lblApartado);
-        lblApartado.setBounds(60, 0, 60, 30);
+        lblApartado.setBounds(60, 0, 66, 30);
 
         jLabel3.setBackground(new java.awt.Color(0, 0, 0));
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N

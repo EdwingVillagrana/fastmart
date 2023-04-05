@@ -32,9 +32,9 @@ public class ProductosDAO implements IProductosDAO {
     }
 
     /**
-     * Agrega un producto a la base de datos.
+     * Agrega un productoGuardado a la base de datos.
      *
-     * @param producto El producto a agregar.
+     * @param producto El productoGuardado a agregar.
      * @throws PersistenciaException Si ocurre algún error en la operación de
      * persistencia.
      */
@@ -53,12 +53,12 @@ public class ProductosDAO implements IProductosDAO {
     }
 
     /**
-     * Actualiza los datos de un producto existente en la base de datos.
+     * Actualiza los datos de un productoGuardado existente en la base de datos.
      *
      * @param productoActualizado Objeto Producto con los datos actualizados del
-     * producto.
-     * @throws PersistenciaException Si no se puede actualizar el producto en la
-     * base de datos.
+ productoGuardado.
+     * @throws PersistenciaException Si no se puede actualizar el productoGuardado en la
+ base de datos.
      */
     @Override
     public void actualizar(Producto productoActualizado) throws PersistenciaException {
@@ -84,11 +84,11 @@ public class ProductosDAO implements IProductosDAO {
     }
 
     /**
-     * Elimina un producto de la base de datos.
+     * Elimina un productoGuardado de la base de datos.
      *
      * @param producto Producto a eliminar.
      * @throws PersistenciaException Si no se puede acceder a la base de datos o
-     * si no se encuentra la información del producto en la base de datos.
+ si no se encuentra la información del productoGuardado en la base de datos.
      */
     @Override
     public void eliminar(Producto producto) throws PersistenciaException {
@@ -114,7 +114,7 @@ public class ProductosDAO implements IProductosDAO {
      * una excepción PersistenciaException si no se encuentra ningún pproducto
      * con el nombre proporcionado.
      *
-     * @param nombre El nombre del producto a buscar
+     * @param nombre El nombre del productoGuardado a buscar
      * @return El objeto Producto correspondiente al nombre proporcionado
      * @throws PersistenciaException Si ocurre un error al realizar la consulta
      */
@@ -122,15 +122,15 @@ public class ProductosDAO implements IProductosDAO {
     public Producto consultarPorNombre(String nombre) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            //Se utiliza una consulta JPQL para buscar el producto por su nombre
+            //Se utiliza una consulta JPQL para buscar el productoGuardado por su nombre
             TypedQuery<Producto> query = em.createQuery("SELECT p FROM Producto p WHERE p.nombre = :nombre", Producto.class);
             query.setParameter("nombre", nombre);
-            Producto producto = query.getSingleResult();
-            if (producto == null) {
+            Producto productoGuardado = query.getSingleResult();
+            if (productoGuardado == null) {
                 throw new PersistenciaException("No se encontró al producto");
             }
             em.close();
-            return producto;
+            return productoGuardado;
         } catch (Exception e) {
             Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
@@ -156,7 +156,21 @@ public class ProductosDAO implements IProductosDAO {
 
     @Override
     public Producto consultarPorCodigo(Long codigo) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            em.getTransaction().begin();
+            TypedQuery<Producto> query = em.createQuery("SELECT p FROM Producto p WHERE p.codigo = :codigo", Producto.class);
+            query.setParameter("codigo", codigo);
+            Producto productoGuardado = query.getSingleResult();
+            if (productoGuardado == null) {
+                throw new PersistenciaException("No se encontró al producto");
+            }
+            em.close();
+            return productoGuardado;
+        } catch (Exception e) {
+            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
+        }
     }
 
 }

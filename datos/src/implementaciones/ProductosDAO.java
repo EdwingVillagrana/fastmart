@@ -14,19 +14,19 @@ import javax.persistence.TypedQuery;
 import interfaces.IProductosDAO;
 
 /**
- * Implementa la interfaz IProductos que, a su vez, extiende la interfaz 
- * IGenericaDAO, y se encarga de la persistencia de objetos Producto en una
- * base de datos. La clase tiene métodos para agregar, actualizar, eliminar y 
- * consultar productos en la base de datos, y utiliza el patrón DAO (Data
- * Access Object) para encapsular la lógica de acceso a los datos. La clase recibe
- * una instancia de IConexion en su constructor para establecer la conexión
- * con la base de datos.
+ * Implementa la interfaz IProductos que, a su vez, extiende la interfaz
+ * IGenericaDAO, y se encarga de la persistencia de objetos Producto en una base
+ * de datos. La clase tiene métodos para agregar, actualizar, eliminar y
+ * consultar productos en la base de datos, y utiliza el patrón DAO (Data Access
+ * Object) para encapsular la lógica de acceso a los datos. La clase recibe una
+ * instancia de IConexion en su constructor para establecer la conexión con la
+ * base de datos.
  *
  */
-public class ProductosDAO implements IProductosDAO{
-    
+public class ProductosDAO implements IProductosDAO {
+
     private final IConexion conexion;
-    
+
     public ProductosDAO(IConexion conexion) {
         this.conexion = conexion;
     }
@@ -40,13 +40,13 @@ public class ProductosDAO implements IProductosDAO{
      */
     @Override
     public void agregar(Producto producto) throws PersistenciaException {
-        try{
+        try {
             EntityManager em = this.conexion.crearConexion();
             em.getTransaction().begin();
             em.persist(producto);
             em.getTransaction().commit();
             em.close();
-        } catch(Exception e){
+        } catch (Exception e) {
             Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar el producto");
         }
@@ -55,10 +55,10 @@ public class ProductosDAO implements IProductosDAO{
     /**
      * Actualiza los datos de un producto existente en la base de datos.
      *
-     * @param productoActualizado Objeto Producto con los datos actualizados
-     * del producto.
-     * @throws PersistenciaException Si no se puede actualizar el producto en
-     * la base de datos.
+     * @param productoActualizado Objeto Producto con los datos actualizados del
+     * producto.
+     * @throws PersistenciaException Si no se puede actualizar el producto en la
+     * base de datos.
      */
     @Override
     public void actualizar(Producto productoActualizado) throws PersistenciaException {
@@ -76,11 +76,11 @@ public class ProductosDAO implements IProductosDAO{
             productoGuardado.setCategoria(productoActualizado.getCategoria());
             em.getTransaction().commit();
             em.close();
-        } catch(Exception e){
+        } catch (Exception e) {
             Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos del producto.");
         }
-        
+
     }
 
     /**
@@ -107,7 +107,7 @@ public class ProductosDAO implements IProductosDAO{
             throw new PersistenciaException("No fue posible eliminar los datos del producto.");
         }
     }
-    
+
     /**
      * Busca un producto en la base de datos por su nombre utilizando una
      * consulta JPQL. Se espera obtener un objeto de tipo Provducto. Se lanza
@@ -117,7 +117,7 @@ public class ProductosDAO implements IProductosDAO{
      * @param nombre El nombre del producto a buscar
      * @return El objeto Producto correspondiente al nombre proporcionado
      * @throws PersistenciaException Si ocurre un error al realizar la consulta
-     */    
+     */
     @Override
     public Producto consultarPorNombre(String nombre) throws PersistenciaException {
         try {
@@ -158,5 +158,5 @@ public class ProductosDAO implements IProductosDAO{
     public Producto consultarPorCodigo(Long codigo) throws PersistenciaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
 }

@@ -1,16 +1,16 @@
 package frames;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+
 
 /**
  *
  * @author Kevin Rios
  */
 public class Venta extends javax.swing.JFrame {
-
+CancelarImporte imp = new CancelarImporte();
     /**
      * Creates new form Venta
      */
@@ -288,6 +288,11 @@ public class Venta extends javax.swing.JFrame {
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_lupa.png"))); // NOI18N
         jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton3);
         jButton3.setBounds(190, 57, 30, 30);
 
@@ -449,13 +454,18 @@ public class Venta extends javax.swing.JFrame {
         jPanel4.add(txtTotal);
         txtTotal.setBounds(220, 5, 50, 30);
 
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_eliminar.png"))); // NOI18N
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_basurero.png"))); // NOI18N
         btnEliminar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         jPanel4.add(btnEliminar);
         btnEliminar.setBounds(340, 5, 30, 30);
 
         btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_agregar.png"))); // NOI18N
         btnAgregar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
         jPanel4.add(btnAgregar);
         btnAgregar.setBounds(300, 5, 30, 30);
 
@@ -493,12 +503,15 @@ public class Venta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
+        if (validarCampos()) {
+            System.out.println("venta realizada");
+        }
         
-       
+        
     }//GEN-LAST:event_btnGenerarVentaActionPerformed
 
     private void btnImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImporteActionPerformed
-        // TODO add your handling code here:
+      imp.setVisible(true);
     }//GEN-LAST:event_btnImporteActionPerformed
 
     private void txtNombreProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreProductoActionPerformed
@@ -549,6 +562,36 @@ public class Venta extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTotalActionPerformed
 
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try{
+            DefaultTableModel modelo = new DefaultTableModel();
+            this.tableArticulosCarrito.setModel(modelo);
+            
+            
+        }catch(Exception error){
+            System.out.println(error.getMessage());
+        }
+        
+        ConsultarProductos prod = new ConsultarProductos();
+        prod.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private boolean validarCampos(){
+        float importe = Float.parseFloat(this.txtImporte.getText());
+        float total = Float.parseFloat(this.txtTotalApagar.getText());
+        if (this.tableArticulosCarrito.getModel().getColumnCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Ingrese productos", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }else if(this.txtImporte.getText().equals("") ||  importe >= total) {
+            JOptionPane.showMessageDialog(null, "Ingrese el importe", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * @param args the command line arguments
      */

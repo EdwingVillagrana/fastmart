@@ -39,13 +39,14 @@ public class ConsultarProductos extends javax.swing.JFrame {
         lblApartado = new javax.swing.JLabel();
         lblLogoCabecera = new javax.swing.JLabel();
         FondoTitulo = new javax.swing.JTextField();
-        btnBuscar = new javax.swing.JButton();
+        btnSeleccionar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtBusqueda = new javax.swing.JTextField();
         lblCriterioBusqueda = new javax.swing.JLabel();
         radioCod = new javax.swing.JRadioButton();
         radioID = new javax.swing.JRadioButton();
         radioNombre = new javax.swing.JRadioButton();
+        btnBuscar1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -66,7 +67,7 @@ public class ConsultarProductos extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnSalir);
-        btnSalir.setBounds(480, 50, 100, 50);
+        btnSalir.setBounds(480, 50, 100, 40);
 
         tblProductos.setBackground(new java.awt.Color(163, 148, 132));
         tblProductos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -122,21 +123,21 @@ public class ConsultarProductos extends javax.swing.JFrame {
         jPanel1.add(FondoTitulo);
         FondoTitulo.setBounds(40, 0, 570, 30);
 
-        btnBuscar.setBackground(new java.awt.Color(255, 145, 77));
-        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_lupa.png"))); // NOI18N
-        btnBuscar.setText("Buscar");
-        btnBuscar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnBuscar.setInheritsPopupMenu(true);
-        btnBuscar.setName(""); // NOI18N
-        btnBuscar.setVerifyInputWhenFocusTarget(false);
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+        btnSeleccionar.setBackground(new java.awt.Color(255, 145, 77));
+        btnSeleccionar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSeleccionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_seleccionar.png"))); // NOI18N
+        btnSeleccionar.setText("Seleccionar Producto");
+        btnSeleccionar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnSeleccionar.setInheritsPopupMenu(true);
+        btnSeleccionar.setName(""); // NOI18N
+        btnSeleccionar.setVerifyInputWhenFocusTarget(false);
+        btnSeleccionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
+                btnSeleccionarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscar);
-        btnBuscar.setBounds(370, 50, 100, 50);
+        jPanel1.add(btnSeleccionar);
+        btnSeleccionar.setBounds(370, 100, 210, 30);
 
         jPanel2.setBackground(new java.awt.Color(0, 145, 155));
         jPanel2.setLayout(null);
@@ -169,6 +170,22 @@ public class ConsultarProductos extends javax.swing.JFrame {
         jPanel1.add(jPanel2);
         jPanel2.setBounds(10, 50, 350, 80);
 
+        btnBuscar1.setBackground(new java.awt.Color(255, 145, 77));
+        btnBuscar1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuscar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_lupa.png"))); // NOI18N
+        btnBuscar1.setText("Buscar");
+        btnBuscar1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnBuscar1.setInheritsPopupMenu(true);
+        btnBuscar1.setName(""); // NOI18N
+        btnBuscar1.setVerifyInputWhenFocusTarget(false);
+        btnBuscar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscar1);
+        btnBuscar1.setBounds(370, 50, 100, 40);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -197,9 +214,13 @@ public class ConsultarProductos extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+    private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnBuscarActionPerformed
+    }//GEN-LAST:event_btnSeleccionarActionPerformed
+
+    private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -241,9 +262,10 @@ public class ConsultarProductos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;
-    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscar1;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JButton btnSeleccionar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

@@ -44,25 +44,30 @@ public class Producto implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
+    
+    @Column(name = "codigo", nullable = false)
+    private Long codigo;
 
     public Producto() {
     }
 
-    public Producto(String nombre, Proveedor proveedor, Double precio_compra, Double precio_venta, Categoria categoria) {
+    public Producto(String nombre, Proveedor proveedor, Double precio_compra, Double precio_venta, Categoria categoria, Long codigo) {
         this.nombre = nombre;
         this.proveedor = proveedor;
         this.precio_compra = precio_compra;
         this.precio_venta = precio_venta;
         this.categoria = categoria;
+        this.codigo = codigo;
     }
 
-    public Producto(Long id, String nombre, Proveedor proveedor, Double precio_compra, Double precio_venta, Categoria categoria) {
+    public Producto(Long id, String nombre, Proveedor proveedor, Double precio_compra, Double precio_venta, Categoria categoria, Long codigo) {
         this.id = id;
         this.nombre = nombre;
         this.proveedor = proveedor;
         this.precio_compra = precio_compra;
         this.precio_venta = precio_venta;
         this.categoria = categoria;
+        this.codigo = codigo;
     }
 
     public Long getId() {
@@ -113,6 +118,14 @@ public class Producto implements Serializable {
         this.categoria = categoria;
     }
 
+    public Long getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Long codigo) {
+        this.codigo = codigo;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -137,7 +150,7 @@ public class Producto implements Serializable {
 
     @Override
     public String toString() {
-        return "Producto{" + "id=" + id + ", nombre=" + nombre + ", proveedor=" + proveedor + ", precio_compra=" + precio_compra + ", precio_venta=" + precio_venta + ", categoria=" + categoria + '}';
+        return "Producto{" + "id=" + id + ", nombre=" + nombre + ", proveedor=" + proveedor + ", precio_compra=" + precio_compra + ", precio_venta=" + precio_venta + ", categoria=" + categoria + ", codigo=" + codigo + '}';
     }
-    
+
 }

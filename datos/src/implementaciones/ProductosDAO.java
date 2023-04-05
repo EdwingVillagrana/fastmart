@@ -136,9 +136,27 @@ public class ProductosDAO implements IProductosDAO{
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }
+
+    @Override
+    public Producto consultarPorId(Long id) throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            em.getTransaction().begin();
+            Producto productoGuardado = em.find(Producto.class, id);
+            if (productoGuardado == null) {
+                throw new PersistenciaException("No se encontró al producto");
+            }
+            em.close();
+            return productoGuardado;
+        } catch (Exception e) {
+            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
+        }
+    }
+
+    @Override
+    public Producto consultarPorCodigo(Long codigo) throws PersistenciaException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
-     /**
-     * Falta agregar el método para consultar por codigo (para el codigo de barras)
-     * Falta agregar el método para consultar por ID 
-     */
 }

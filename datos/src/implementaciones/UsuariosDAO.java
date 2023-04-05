@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.TypedQuery;
 import interfaces.IUsuariosDAO;
+import javax.persistence.NoResultException;
 
 /**
  * Implementa la interfaz IUsuarios que, a su vez, extiende de la interfaz
@@ -56,7 +57,7 @@ public class UsuariosDAO implements IUsuariosDAO{
     /**
      * Actualiza los datos de un usuario existente en la base de datos.
      *
-     * @param usuarioActualizado Objeto Proveedor con los datos actualizados
+     * @param usuarioActualizado Objeto Usuario con los datos actualizados
      * del usuario.
      * @throws PersistenciaException Si no se puede actualizar el usuario en
      * la base de datos.
@@ -124,20 +125,25 @@ public class UsuariosDAO implements IUsuariosDAO{
      */
     @Override
     public Usuario consultarPorNombre(String nombre) throws PersistenciaException {
+        EntityManager em = null;
         try {
-            EntityManager em = this.conexion.crearConexion();
+            em = this.conexion.crearConexion();
             //Se utiliza una consulta JPQL para buscar el proveedor por su nombre
             TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u WHERE u.nombre = :nombre", Usuario.class);
             query.setParameter("nombre", nombre);
             Usuario usuario = query.getSingleResult();
-            if (usuario == null) {
-                throw new PersistenciaException("No se encontró el usuario");
-            }
-            em.close();
-            return usuario;
+            return usuario;                
+        } catch(NoResultException e){
+            //Si no encuentra ningún usuario, asignamos null al usuario
+            //y lo devolvemos en lugar de lanzar una excepción
+            return null;
         } catch (Exception e) {
             Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
+        } finally{
+            if(em != null && em.isOpen()){
+                em.close();
+            }
         }
     }
     

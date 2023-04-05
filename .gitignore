@@ -28,3 +28,7 @@ hs_err_pid*
 /dominio/dist/
 /negocio/dist/
 /negocio/build/
+/presentacion/dist/
+/datos/dist/
+/Proceso/nbproject/private/
+/Proceso/build/

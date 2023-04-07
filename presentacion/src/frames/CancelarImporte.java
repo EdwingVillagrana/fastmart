@@ -71,6 +71,11 @@ public class CancelarImporte extends javax.swing.JFrame {
         jLabel2.setBounds(80, 60, 50, 50);
 
         txtImporteIngresado.setText("0.0");
+        txtImporteIngresado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtImporteIngresadoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtImporteIngresado);
         txtImporteIngresado.setBounds(140, 80, 230, 22);
 
@@ -81,7 +86,7 @@ public class CancelarImporte extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnCancelar);
-        btnCancelar.setBounds(290, 110, 80, 22);
+        btnCancelar.setBounds(290, 110, 80, 25);
 
         btnAceptarImporte.setText("Aceptar");
         btnAceptarImporte.addActionListener(new java.awt.event.ActionListener() {
@@ -90,7 +95,7 @@ public class CancelarImporte extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnAceptarImporte);
-        btnAceptarImporte.setBounds(140, 110, 80, 22);
+        btnAceptarImporte.setBounds(140, 110, 80, 25);
 
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         FondoTitulo.addActionListener(new java.awt.event.ActionListener() {
@@ -131,6 +136,13 @@ public class CancelarImporte extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_btnAceptarImporteActionPerformed
+
+    private void txtImporteIngresadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtImporteIngresadoKeyTyped
+        // TODO add your handling code here:
+        if(txtImporteIngresado.getText().length() >= 8){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtImporteIngresadoKeyTyped
 
    
    private boolean validarCampos(){

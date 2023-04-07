@@ -67,7 +67,7 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
         lblApartado.setText("Registrar Categoria");
         jPanel1.add(lblApartado);
-        lblApartado.setBounds(60, 0, 164, 30);
+        lblApartado.setBounds(60, 0, 165, 30);
 
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
@@ -107,6 +107,11 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         lblNombre.setBounds(70, 73, 70, 20);
 
         txtNombre.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtNombre);
         txtNombre.setBounds(140, 72, 330, 22);
 
@@ -114,6 +119,11 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         txtDescripcion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDescripcionActionPerformed(evt);
+            }
+        });
+        txtDescripcion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDescripcionKeyTyped(evt);
             }
         });
         jPanel2.add(txtDescripcion);
@@ -220,6 +230,20 @@ public class RegistrarCategoria extends javax.swing.JFrame {
     private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDescripcionActionPerformed
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        if(txtNombre.getText().length() >= 20){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtDescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyTyped
+        // TODO add your handling code here:
+        if(txtDescripcion.getText().length() >= 20){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDescripcionKeyTyped
 
     
     private void limpiarCampos(){

@@ -6,6 +6,7 @@ package interfaces;
 
 import entidades.Categoria;
 import excepciones.PersistenciaException;
+import java.util.List;
 
 
 
@@ -15,4 +16,6 @@ import excepciones.PersistenciaException;
  */
 public interface ICategoriasDAO extends IGenericaDAO<Categoria, Long>{
     public Categoria consultarPorNombre(String nombre) throws PersistenciaException;
+    public Categoria consultarPorId(Long id) throws PersistenciaException;
+    public List<Categoria> consultarTodos() throws PersistenciaException;
 }

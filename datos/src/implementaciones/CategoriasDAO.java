@@ -12,12 +12,15 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import interfaces.ICategoriasDAO;
+import java.util.List;
+import javax.persistence.NoResultException;
 
 /**
  *
  * @author Kevin Rios
  */
-public class CategoriasDAO implements ICategoriasDAO{
+public class CategoriasDAO implements ICategoriasDAO {
+
     private final IConexion conexion;
 
     public CategoriasDAO(IConexion conexion) {
@@ -34,11 +37,18 @@ public class CategoriasDAO implements ICategoriasDAO{
     @Override
     public void agregar(Categoria categoria) throws PersistenciaException {
         try {
+            Categoria categoriaExistente = this.consultarPorNombre(categoria.getNombre());
+            if (categoriaExistente != null) {
+                throw new PersistenciaException("La categoría ya existe en la base de datos.");
+            }
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            em.persist(categoria);
-            em.getTransaction().commit();
-            em.close();
+            try {
+                em.getTransaction().begin();
+                em.persist(categoria);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
         } catch (Exception e) {
             Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar la categoria");
@@ -57,15 +67,17 @@ public class CategoriasDAO implements ICategoriasDAO{
     public void actualizar(Categoria categoriaActualizada) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            Categoria categoriaGuardada = em.find(Categoria.class, categoriaActualizada.getId());
-            if (categoriaGuardada == null) {
-                throw new PersistenciaException("No se encontró la categoria en la base de datos, por lo que no se pudo actualizar.");
+            try {
+                em.getTransaction().begin();
+                Categoria categoriaGuardada = em.find(Categoria.class, categoriaActualizada.getId());
+                if (categoriaGuardada == null) {
+                    throw new PersistenciaException("No se encontró la categoria en la base de datos, por lo que no se pudo actualizar.");
+                }
+                categoriaGuardada.setNombre(categoriaActualizada.getNombre());
+                em.getTransaction().commit();
+            } finally {
+                em.close();
             }
-            categoriaGuardada.setNombre(categoriaActualizada.getNombre());
-            categoriaGuardada.setDescripcion(categoriaActualizada.getDescripcion());
-            em.getTransaction().commit();
-            em.close();
         } catch (Exception e) {
             Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos de la categoria.");
@@ -83,20 +95,23 @@ public class CategoriasDAO implements ICategoriasDAO{
     public void eliminar(Categoria categoria) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            Categoria categoriaGuardada = em.find(Categoria.class, categoria.getId());
-            if (categoriaGuardada == null) {
-                throw new PersistenciaException("No se encontró la información de la categoria en la base de datos.");
+            try {
+                em.getTransaction().begin();
+                Categoria categoriaGuardada = em.find(Categoria.class, categoria.getId());
+                if (categoriaGuardada == null) {
+                    throw new PersistenciaException("No se encontró la información de la categoria en la base de datos.");
+                }
+                em.remove(categoriaGuardada);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
             }
-            em.remove(categoriaGuardada);
-            em.getTransaction().commit();
-            em.close();
         } catch (Exception e) {
             Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos de la categoria.");
         }
     }
- 
+
     /**
      * Busca una categoria en la base de datos por su nombre utilizando una
      * consulta JPQL. Se espera obtener un objeto de tipo Categoria. Se lanza
@@ -111,18 +126,61 @@ public class CategoriasDAO implements ICategoriasDAO{
     public Categoria consultarPorNombre(String nombre) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            //Se utiliza una consulta JPQL para buscar la categoria por su nombre
-            TypedQuery<Categoria> query = em.createQuery("SELECT c FROM Categoria c WHERE c.nombre = :nombre", Categoria.class);
-            query.setParameter("nombre", nombre);
-            Categoria categoria = query.getSingleResult();
-            if (categoria == null) {
-                throw new PersistenciaException("No se encontró la categoria");
+            try {
+                //Se utiliza una consulta JPQL para buscar la categoria por su nombre
+                TypedQuery<Categoria> query = em.createQuery("SELECT c FROM Categoria c WHERE c.nombre = :nombre", Categoria.class);
+                query.setParameter("nombre", nombre);
+                Categoria categoria = query.getSingleResult();
+                return categoria; // se devuelve la categoria encontrada
+            } catch (NoResultException e) {
+                // Si la consulta no encuentra resultados, se devuelve null
+                return null;
+            } finally {
+                em.close();
             }
-            em.close();
-            return categoria;
         } catch (Exception e) {
             Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }
+
+    @Override
+    public Categoria consultarPorId(Long id) throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                em.getTransaction().begin();
+                Categoria categoriaGuardada = em.find(Categoria.class, id);
+                em.getTransaction().commit();
+                return categoriaGuardada;
+            } catch (NoResultException e) {
+                //Si la consulta no encuentra resultados, devolvemos null
+                return null;
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
+        }
+    }
+
+    @Override
+    public List<Categoria> consultarTodos() throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                // Se utiliza una consulta JPQL para obtener todas las categorías
+                TypedQuery<Categoria> query = em.createQuery("SELECT c FROM Categoria c", Categoria.class);
+                List<Categoria> categorias = query.getResultList();
+                return categorias;
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
+        }
+    }
+
 }

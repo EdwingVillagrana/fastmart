@@ -2,6 +2,16 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="datosPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>entidades.Administrador</class>
+    <class>entidades.Categoria</class>
+    <class>entidades.Compra</class>
+    <class>entidades.DetalleCompra</class>
+    <class>entidades.DetalleVenta</class>
+    <class>entidades.Producto</class>
+    <class>entidades.Proveedor</class>
+    <class>entidades.Trabajador</class>
+    <class>entidades.Usuario</class>
+    <class>entidades.Venta</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/fastmart?autoReconnet=true&amp;useSSL=false&amp;useUnicode=true&amp;useJDBCCompilantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

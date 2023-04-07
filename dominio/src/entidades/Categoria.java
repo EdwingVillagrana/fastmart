@@ -28,22 +28,21 @@ public class Categoria implements Serializable {
 
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
-    
-    @Column(name = "descripcion", length = 255)
-    private String descripcion;
 
     public Categoria() {
+    }
+
+    public Categoria(Long id) {
+        this.id = id;
+    }
+
+    public Categoria(String nombre) {
+        this.nombre = nombre;
     }
 
     public Categoria(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-    }
-
-    public Categoria(Long id, String nombre, String descripcion) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
     }
 
     public Long getId() {
@@ -60,14 +59,6 @@ public class Categoria implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 
     @Override
@@ -94,8 +85,7 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return "Categoria{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + '}';
+        return "Categoria{" + "id=" + id + ", nombre=" + nombre + '}';
     }
-    
-    
+
 }

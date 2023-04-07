@@ -77,11 +77,11 @@ public class CategoriasNegocio implements ICategoriasNegocio{
         try {
             Categoria categoria = this.categoriasDAO.consultarPorNombre(nombre);
             if (categoria == null) {
-                throw new NegocioException("No se encontró al proveedor");
+                throw new NegocioException("No se encontró la categoría");
             }
             return categoria;
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible consultar la información en la base de datos.", e);
+            throw new NegocioException("No se encontró la categoría en la capa de negocio.", e);
         }
     }
 }

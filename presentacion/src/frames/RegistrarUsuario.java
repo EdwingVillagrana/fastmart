@@ -119,18 +119,38 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         lblEmail.setBounds(83, 140, 60, 20);
 
         txtPassword.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtPassword);
         txtPassword.setBounds(140, 180, 190, 22);
 
         txtNombre.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtNombre);
         txtNombre.setBounds(140, 70, 330, 22);
 
         txtDireccion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDireccionKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtDireccion);
         txtDireccion.setBounds(140, 100, 330, 30);
 
         txtEmail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEmailKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtEmail);
         txtEmail.setBounds(140, 140, 330, 30);
 
@@ -222,6 +242,11 @@ public class RegistrarUsuario extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
+        try{
+            
+        }catch(Exception e){
+            
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -235,6 +260,35 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         this.txtPassword.setText("");
     
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    //Si el nombre es mayor a 20 caracteres, el caracter 21+, desaparece.
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        if(txtNombre.getText().length() >= 20){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
+        // TODO add your handling code here:
+        if(txtDireccion.getText().length() >= 20){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDireccionKeyTyped
+
+    private void txtEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyTyped
+        // TODO add your handling code here:
+        if(txtEmail.getText().length() >= 20){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtEmailKeyTyped
+
+    private void txtPasswordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyTyped
+        // TODO add your handling code here:
+        if(txtPassword.getText().length() >= 20){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPasswordKeyTyped
 
     /**
      * @param args the command line arguments

@@ -133,6 +133,11 @@ public class RegistrarProducto extends javax.swing.JFrame {
         txtVenta.setBounds(170, 155, 140, 22);
 
         txtNombre.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtNombre);
         txtNombre.setBounds(170, 60, 330, 22);
 
@@ -295,10 +300,17 @@ public class RegistrarProducto extends javax.swing.JFrame {
     }
     
     private void txtVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtVentaKeyTyped
-        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.') {
+        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.' && txtVenta.getText().length() >= 6) {
             evt.consume();
         }
     }//GEN-LAST:event_txtVentaKeyTyped
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        if(txtNombre.getText().length() >= 20){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
 
     /**
      * @param args the command line arguments

@@ -81,6 +81,12 @@ public class RegistrarVenta extends javax.swing.JFrame {
 
         jLabel1.setText("Filtro:");
         Fondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 60, 50, 20));
+
+        Filtro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                FiltroKeyTyped(evt);
+            }
+        });
         Fondo.add(Filtro, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 60, 240, -1));
 
         jButton1.setText("Limpiar");
@@ -196,6 +202,13 @@ public class RegistrarVenta extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_CantidadKeyTyped
+
+    private void FiltroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FiltroKeyTyped
+        // TODO add your handling code here:
+        if(Filtro.getText().length() >= 20){
+            evt.consume();
+        }
+    }//GEN-LAST:event_FiltroKeyTyped
 
     /**
      * @param args the command line arguments

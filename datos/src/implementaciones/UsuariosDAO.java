@@ -12,26 +12,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.TypedQuery;
 import interfaces.IUsuariosDAO;
+import java.util.List;
 import javax.persistence.NoResultException;
 
 /**
  * Implementa la interfaz IUsuarios que, a su vez, extiende de la interfaz
- * IGenericaDAO, y se encarga de la persistencia de objetos Usuario en una
- * base de datos. La clase tiene métodos para agregar, actualizar, eliminar y
- * consultar usuarios en la base de datos, y utiliza el patrón DAO (Data
- * Access Object) para encapsular la lógica de acceso a los datos. La clase
- * recibe una instancia de IConexion en su constructor para establecer la
- * conexión con la base de datos.
+ * IGenericaDAO, y se encarga de la persistencia de objetos Usuario en una base
+ * de datos. La clase tiene métodos para agregar, actualizar, eliminar y
+ * consultar usuarios en la base de datos, y utiliza el patrón DAO (Data Access
+ * Object) para encapsular la lógica de acceso a los datos. La clase recibe una
+ * instancia de IConexion en su constructor para establecer la conexión con la
+ * base de datos.
  *
  */
-public class UsuariosDAO implements IUsuariosDAO{
+public class UsuariosDAO implements IUsuariosDAO {
 
     private final IConexion conexion;
 
     public UsuariosDAO(IConexion conexion) {
         this.conexion = conexion;
     }
-    
+
     /**
      * Agrega un usuario a la base de datos.
      *
@@ -39,7 +40,6 @@ public class UsuariosDAO implements IUsuariosDAO{
      * @throws PersistenciaException Si ocurre algún error en la operación de
      * persistencia.
      */
-
     @Override
     public void agregar(Usuario usuario) throws PersistenciaException {
         try {
@@ -57,10 +57,10 @@ public class UsuariosDAO implements IUsuariosDAO{
     /**
      * Actualiza los datos de un usuario existente en la base de datos.
      *
-     * @param usuarioActualizado Objeto Usuario con los datos actualizados
-     * del usuario.
-     * @throws PersistenciaException Si no se puede actualizar el usuario en
-     * la base de datos.
+     * @param usuarioActualizado Objeto Usuario con los datos actualizados del
+     * usuario.
+     * @throws PersistenciaException Si no se puede actualizar el usuario en la
+     * base de datos.
      */
     @Override
     public void actualizar(Usuario usuarioActualizado) throws PersistenciaException {
@@ -79,7 +79,8 @@ public class UsuariosDAO implements IUsuariosDAO{
             /**
              * Falta agregar el tipo de usuario en la entidad
              * usuarioGuardado.setTipo(usuarioActualizado.getTipo());
-             **/
+             *
+             */
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
@@ -87,7 +88,7 @@ public class UsuariosDAO implements IUsuariosDAO{
             throw new PersistenciaException("No fue posible actualizar los datos del usuario.");
         }
     }
-    
+
     /**
      * Elimina un usuario de la base de datos.
      *
@@ -112,12 +113,12 @@ public class UsuariosDAO implements IUsuariosDAO{
             throw new PersistenciaException("No fue posible eliminar los datos del usuario.");
         }
     }
-    
+
     /**
      * Busca un usuario en la base de datos por su nombre utilizando una
-     * consulta JPQL. Se espera obtener un objeto de tipo Usuario. Se lanza
-     * una excepción PersistenciaException si no se encuentra ningún usuario
-     * con el nombre proporcionado.
+     * consulta JPQL. Se espera obtener un objeto de tipo Usuario. Se lanza una
+     * excepción PersistenciaException si no se encuentra ningún usuario con el
+     * nombre proporcionado.
      *
      * @param nombre El nombre del usuario a buscar
      * @return El objeto Usuario correspondiente al nombre proporcionado
@@ -125,26 +126,62 @@ public class UsuariosDAO implements IUsuariosDAO{
      */
     @Override
     public Usuario consultarPorNombre(String nombre) throws PersistenciaException {
-        EntityManager em = null;
+
         try {
-            em = this.conexion.crearConexion();
-            //Se utiliza una consulta JPQL para buscar el proveedor por su nombre
-            TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u WHERE u.nombre = :nombre", Usuario.class);
-            query.setParameter("nombre", nombre);
-            Usuario usuario = query.getSingleResult();
-            return usuario;                
-        } catch(NoResultException e){
-            //Si no encuentra ningún usuario, asignamos null al usuario
-            //y lo devolvemos en lugar de lanzar una excepción
-            return null;
-        } catch (Exception e) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
-            throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
-        } finally{
-            if(em != null && em.isOpen()){
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                //Se utiliza una consulta JPQL para buscar el proveedor por su nombre
+                TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u WHERE u.nombre = :nombre", Usuario.class);
+                query.setParameter("nombre", nombre);
+                Usuario usuario = query.getSingleResult();
+                return usuario;
+            } catch (NoResultException e) {
+                //Si no encuentra ningún usuario, asignamos null al usuario
+                //y lo devolvemos en lugar de lanzar una excepción
+                return null;
+            } finally {
                 em.close();
             }
+        } catch (Exception e) {
+            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la lista de usuarios.");
         }
     }
-    
+
+    @Override
+    public Usuario consultarPorId(Long id) throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                em.getTransaction().begin();
+                Usuario usuarioGuardado = em.find(Usuario.class, id);
+                em.getTransaction().commit();
+                return usuarioGuardado;
+            } catch (NoResultException e) {
+                return null;
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la lista de usuarios.");
+        }
+    }
+
+    @Override
+    public List<Usuario> consultarTodos() throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
+                List<Usuario> usuarios = query.getResultList();
+                return usuarios;
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la lista de usuarios.");
+        }
+    }
 }

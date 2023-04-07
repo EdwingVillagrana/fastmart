@@ -17,5 +17,4 @@ import java.util.List;
 public interface ICategoriasDAO extends IGenericaDAO<Categoria, Long>{
     public Categoria consultarPorNombre(String nombre) throws PersistenciaException;
     public Categoria consultarPorId(Long id) throws PersistenciaException;
-    public List<Categoria> consultarTodos() throws PersistenciaException;
 }

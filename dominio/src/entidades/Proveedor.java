@@ -107,11 +107,11 @@ public class Proveedor implements Serializable {
         this.email = email;
     }
 
-    public List<Producto> getLista_productos() {
+    public List<Producto> getListaProductos() {
         return lista_productos;
     }
 
-    public void setLista_productos(List<Producto> lista_productos) {
+    public void setListaProductos(List<Producto> lista_productos) {
         this.lista_productos = lista_productos;
     }
 

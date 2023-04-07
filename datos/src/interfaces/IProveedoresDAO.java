@@ -17,6 +17,8 @@ import excepciones.PersistenciaException;
  *
  */
 public interface IProveedoresDAO extends IGenericaDAO<Proveedor, Long> {
-
+    
+    public Proveedor consultarPorId(Long id) throws PersistenciaException;
+    
     public Proveedor consultarPorNombre(String nombre) throws PersistenciaException;
 }

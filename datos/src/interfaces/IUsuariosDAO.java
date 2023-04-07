@@ -12,5 +12,8 @@ import excepciones.PersistenciaException;
  * @author Kevin Rios
  */
 public interface IUsuariosDAO extends IGenericaDAO<Usuario, Long> {
+    
+    public Usuario consultarPorId (Long id) throws PersistenciaException;
+    
     public Usuario consultarPorNombre(String nombre) throws PersistenciaException;
 }

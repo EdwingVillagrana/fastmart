@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import interfaces.IProveedoresDAO;
+import java.util.List;
 import javax.persistence.NoResultException;
 
 /**
@@ -42,11 +43,18 @@ public class ProveedoresDAO implements IProveedoresDAO {
     @Override
     public void agregar(Proveedor proveedor) throws PersistenciaException {
         try {
+            Proveedor proveedorExistente = this.consultarPorNombre(proveedor.getNombre());
+            if (proveedorExistente != null) {
+                throw new PersistenciaException("El proveedor ya existe en la base de datos.");
+            }
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            em.persist(proveedor);
-            em.getTransaction().commit();
-            em.close();
+            try {
+                em.getTransaction().begin();
+                em.persist(proveedor);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
         } catch (Exception e) {
             Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar el proveedor");
@@ -65,18 +73,21 @@ public class ProveedoresDAO implements IProveedoresDAO {
     public void actualizar(Proveedor proveedorActualizado) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            Proveedor proveedorGuardado = em.find(Proveedor.class, proveedorActualizado.getId());
-            if (proveedorGuardado == null) {
-                throw new PersistenciaException("No se encontró al proveedor en la base de datos, por lo que no se pudo actualizar.");
+            try {
+                em.getTransaction().begin();
+                Proveedor proveedorGuardado = em.find(Proveedor.class, proveedorActualizado.getId());
+                if (proveedorGuardado == null) {
+                    throw new PersistenciaException("No se encontró al proveedor en la base de datos, por lo que no se pudo actualizar.");
+                }
+                proveedorGuardado.setNombre(proveedorActualizado.getNombre());
+                proveedorGuardado.setTelefono(proveedorActualizado.getTelefono());
+                proveedorGuardado.setDireccion(proveedorActualizado.getDireccion());
+                proveedorGuardado.setEmail(proveedorActualizado.getEmail());
+                proveedorGuardado.setListaProductos(proveedorActualizado.getListaProductos());
+                em.getTransaction().commit();
+            } finally {
+                em.close();
             }
-            proveedorGuardado.setNombre(proveedorActualizado.getNombre());
-            proveedorGuardado.setTelefono(proveedorActualizado.getTelefono());
-            proveedorGuardado.setDireccion(proveedorActualizado.getDireccion());
-            proveedorGuardado.setEmail(proveedorActualizado.getEmail());
-            proveedorGuardado.setLista_productos(proveedorActualizado.getLista_productos());
-            em.getTransaction().commit();
-            em.close();
         } catch (Exception e) {
             Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos del proveedor.");
@@ -94,14 +105,17 @@ public class ProveedoresDAO implements IProveedoresDAO {
     public void eliminar(Proveedor proveedor) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            Proveedor proveedorGuardado = em.find(Proveedor.class, proveedor.getId());
-            if (proveedorGuardado == null) {
-                throw new PersistenciaException("No se encontró la información del proveedor en la base de datos.");
+            try {
+                em.getTransaction().begin();
+                Proveedor proveedorGuardado = em.find(Proveedor.class, proveedor.getId());
+                if (proveedorGuardado == null) {
+                    throw new PersistenciaException("No se encontró la información del proveedor en la base de datos.");
+                }
+                em.remove(proveedorGuardado);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
             }
-            em.remove(proveedorGuardado);
-            em.getTransaction().commit();
-            em.close();
         } catch (Exception e) {
             Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos del proveedor.");
@@ -120,25 +134,60 @@ public class ProveedoresDAO implements IProveedoresDAO {
      */
     @Override
     public Proveedor consultarPorNombre(String nombre) throws PersistenciaException {
-        EntityManager em = null;
         try {
-            em = this.conexion.crearConexion();
-            TypedQuery<Proveedor> query = em.createQuery("SELECT p FROM Proveedor p WHERE p.nombre = :nombre", Proveedor.class);
-            query.setParameter("nombre", nombre);
-            Proveedor proveedor = query.getSingleResult();
-            return proveedor;
-        } catch (NoResultException e) {
-            // Si no se encuentra ningún proveedor, asignamos null al proveedor
-            // y lo devolvemos en lugar de lanzar una excepción
-            return null;
-        } catch (Exception e) {
-            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
-            throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
-        } finally {
-            if (em != null && em.isOpen()) {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                TypedQuery<Proveedor> query = em.createQuery("SELECT p FROM Proveedor p WHERE p.nombre = :nombre", Proveedor.class);
+                query.setParameter("nombre", nombre);
+                Proveedor proveedor = query.getSingleResult();
+                return proveedor;
+            } catch (NoResultException e) {
+                // Si no se encuentra ningún proveedor, asignamos null al proveedor
+                // y lo devolvemos en lugar de lanzar una excepción
+                return null;
+            } finally {
                 em.close();
             }
+        } catch (Exception e) {
+            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la lista de proveedores.");
         }
     }
 
+    @Override
+    public Proveedor consultarPorId(Long id) throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                em.getTransaction().begin();
+                Proveedor proveedorGuardado = em.find(Proveedor.class, id);
+                em.getTransaction().commit();
+                return proveedorGuardado;
+            } catch (NoResultException e) {
+                return null;
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la lista de proveedores..");
+        }
+    }
+
+    @Override
+    public List<Proveedor> consultarTodos() throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                TypedQuery<Proveedor> query = em.createQuery("SELECT p FROM Proveedor p", Proveedor.class);
+                List<Proveedor> proveedores = query.getResultList();
+                return proveedores;
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la lista de proveedores.");
+        }
+    }
 }

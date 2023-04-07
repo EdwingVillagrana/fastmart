@@ -1,4 +1,4 @@
- /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -12,12 +12,14 @@ import javax.persistence.EntityManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import interfaces.IVentasDAO;
+import java.util.List;
 
 /**
  *
  * @author Kevin Rios
  */
-public class VentasDAO implements IVentasDAO{
+public class VentasDAO implements IVentasDAO {
+
     private final IConexion conexion;
 
     public VentasDAO(IConexion conexion) {
@@ -48,10 +50,10 @@ public class VentasDAO implements IVentasDAO{
     /**
      * Actualiza los datos de una venta existente en la base de datos.
      *
-     * @param ventaActualizada Objeto Venta con los datos actualizados
-     * d la venta.
-     * @throws PersistenciaException Si no se puede actualizar la venta en
-     * la base de datos.
+     * @param ventaActualizada Objeto Venta con los datos actualizados d la
+     * venta.
+     * @throws PersistenciaException Si no se puede actualizar la venta en la
+     * base de datos.
      */
     @Override
     public void actualizar(Venta ventaActualizada) throws PersistenciaException {
@@ -99,8 +101,32 @@ public class VentasDAO implements IVentasDAO{
     }
 
     @Override
-    public Venta consultarPorPeriodo(Date date, Date fechaFin) throws PersistenciaException {
+    public List<Venta> consultarPorPeriodo(Date date, Date fechaFin) throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                
+            } finally {
+            }
+            TypedQuery<Venta> query = em.createQuery("SELECT v FROM Venta v WHERE v.fechaDeVenta BETWEEN :startDate AND :endDate", Venta.class);
+            query.setParameter("startDate", date);
+            query.setParameter("endDate", fechaFin);
+            return query.getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al consultar ventas por periodo", ex);
+        }
+    }
+
+    @Override
+    public Venta consultarPorId(Long id) throws PersistenciaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
+    @Override
+    public List<Venta> consultarTodos() throws PersistenciaException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

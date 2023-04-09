@@ -1,42 +1,30 @@
 package frames;
 
-
+import entidades.Usuario;
 import java.awt.Color;
 import javax.swing.JOptionPane;
-
-
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Kevin Rios
  */
 public class MenuPrincipal extends javax.swing.JFrame {
-ConsultarVenta ConsultarVenta = new ConsultarVenta();
-ConsultarProductos consultarProductos = new ConsultarProductos();
-ConsultarProveedores consultarProveedores = new ConsultarProveedores();
-RegistrarUsuario registrarUsuario = new RegistrarUsuario();
-Venta venta = new Venta();
-RegistrarProducto registrarProducto = new RegistrarProducto();
-RegistrarCategoria  categoria = new RegistrarCategoria();
-RegistrarProveedor provedor = new RegistrarProveedor();
-Compra compra = new Compra();
-
-
-
-
+    private Usuario usuarioLogueado;
     /**
      * Creates new form MenuPrincipal
+     * @param usuarioLogueado
      */
-    public MenuPrincipal() {
-        initComponents();       
+    public MenuPrincipal(Usuario usuarioLogueado) {
+        initComponents();
         this.setLocationRelativeTo(null);
         
+        this.usuarioLogueado = usuarioLogueado;
         
+
     }
 
     /**
@@ -240,19 +228,19 @@ Compra compra = new Compra();
     }//GEN-LAST:event_menuManenimientoProductoActionPerformed
 
     private void menuInicioSalirAplicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuInicioSalirAplicacionActionPerformed
-       int a = JOptionPane.YES_NO_OPTION;
-        int resultado = JOptionPane.showConfirmDialog(this,"¿DESEA CERRAR LA APLICACIÓN?", "SALIR", a);
-        if (resultado==0) {
+        int a = JOptionPane.YES_NO_OPTION;
+        int resultado = JOptionPane.showConfirmDialog(this, "¿DESEA CERRAR LA APLICACIÓN?", "SALIR", a);
+        if (resultado == 0) {
             System.exit(0);
-        } 
+        }
     }//GEN-LAST:event_menuInicioSalirAplicacionActionPerformed
 
     private void menuInicioCerrarSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuInicioCerrarSActionPerformed
-      
+
     }//GEN-LAST:event_menuInicioCerrarSActionPerformed
 
     private void menuManenimientoProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoProveedorActionPerformed
-       provedor.setVisible(true);
+        provedor.setVisible(true);
     }//GEN-LAST:event_menuManenimientoProveedorActionPerformed
 
     private void menuManenimientoCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoCategoriaActionPerformed
@@ -264,7 +252,7 @@ Compra compra = new Compra();
     }//GEN-LAST:event_menuConsultasProductosActionPerformed
 
     private void menuConsultasProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasProveedoresActionPerformed
-       consultarProveedores.setVisible(true);
+        consultarProveedores.setVisible(true);
     }//GEN-LAST:event_menuConsultasProveedoresActionPerformed
 
     /**

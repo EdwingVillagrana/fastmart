@@ -1,22 +1,55 @@
 package frames;
 
+import entidades.DetalleVenta;
+import entidades.Producto;
+import entidades.Usuario;
+import entidades.Venta;
+import excepciones.NegocioException;
+import implementaciones.ProductosNegocio;
+import implementaciones.VentasNegocio;
+import interfaces.IConexion;
+import interfaces.IProductosNegocio;
+import interfaces.IVentasNegocio;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-
-
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
 
 /**
  *
  * @author Kevin Rios
  */
-public class Venta extends javax.swing.JFrame {
-CancelarImporte imp = new CancelarImporte();
+public class FrmVenta extends javax.swing.JFrame {
+
+    Double total = 0.0;
+    Usuario usuarioLogueado = null;
+    //Lista en donde se guardaran los productos     
+    List<DetalleVenta> listaProductos = new ArrayList<>();
+    IVentasNegocio iventasnegocio;
+    IProductosNegocio iproductosnegocio;
+    IConexion conexion;
+
+    CancelarImporte imp = new CancelarImporte();
+
     /**
      * Creates new form Venta
+     *
+     * @param conexion
+     * @param usuarioLogueado
      */
-    public Venta() {
+    public FrmVenta(IConexion conexion, Usuario usuarioLogueado) {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.conexion = conexion;
+        this.iventasnegocio = new VentasNegocio(this.conexion);
+
+        this.iproductosnegocio = new ProductosNegocio(this.conexion);
+
+        this.usuarioLogueado = usuarioLogueado;
     }
 
     /**
@@ -56,28 +89,21 @@ CancelarImporte imp = new CancelarImporte();
         lblStock = new javax.swing.JLabel();
         lblNombreProducto = new javax.swing.JLabel();
         txtStock = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        botonBuscar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         lblCambio = new javax.swing.JLabel();
         txtCambio = new javax.swing.JTextField();
         lblImporte = new javax.swing.JLabel();
         txtImporte = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        lblValorRenta = new javax.swing.JLabel();
         lblTotalApagar = new javax.swing.JLabel();
         txtTotalApagar = new javax.swing.JTextField();
-        txtIva = new javax.swing.JTextField();
-        txtSubtotal = new javax.swing.JTextField();
-        lblIVA = new javax.swing.JLabel();
-        lblSubTotal = new javax.swing.JLabel();
-        txtValorRenta6 = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        lblTotal = new javax.swing.JLabel();
         txtCantidad = new javax.swing.JTextField();
         lblCantidad = new javax.swing.JLabel();
-        txtTotal = new javax.swing.JTextField();
         btnEliminar = new javax.swing.JButton();
-        btnAgregar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnAgregar1 = new javax.swing.JButton();
         lblImagenSuper = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -148,7 +174,7 @@ CancelarImporte imp = new CancelarImporte();
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Cantidad");
         Fondo.add(jLabel6);
-        jLabel6.setBounds(210, 260, 50, 30);
+        jLabel6.setBounds(210, 260, 46, 30);
 
         jLabel7.setBackground(new java.awt.Color(153, 102, 0));
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -234,9 +260,9 @@ CancelarImporte imp = new CancelarImporte();
 
         txtNombreProducto.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtNombreProducto.setBorder(null);
-        txtNombreProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreProductoActionPerformed(evt);
+        txtNombreProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreProductoKeyTyped(evt);
             }
         });
         jPanel1.add(txtNombreProducto);
@@ -286,15 +312,20 @@ CancelarImporte imp = new CancelarImporte();
         jPanel1.add(txtStock);
         txtStock.setBounds(240, 112, 60, 20);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_lupa.png"))); // NOI18N
-        jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+        botonBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_lupa.png"))); // NOI18N
+        botonBuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        botonBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonBuscarMouseClicked(evt);
             }
         });
-        jPanel1.add(jButton3);
-        jButton3.setBounds(190, 57, 30, 30);
+        botonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonBuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(botonBuscar);
+        botonBuscar.setBounds(190, 57, 30, 30);
 
         Fondo.add(jPanel1);
         jPanel1.setBounds(50, 50, 430, 150);
@@ -346,11 +377,6 @@ CancelarImporte imp = new CancelarImporte();
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel2.setLayout(null);
 
-        lblValorRenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblValorRenta.setText("VALOR VENTA");
-        jPanel2.add(lblValorRenta);
-        lblValorRenta.setBounds(10, 10, 80, 20);
-
         lblTotalApagar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblTotalApagar.setText("TOTAL A PAGAR");
         jPanel2.add(lblTotalApagar);
@@ -369,62 +395,11 @@ CancelarImporte imp = new CancelarImporte();
         jPanel2.add(txtTotalApagar);
         txtTotalApagar.setBounds(270, 30, 100, 20);
 
-        txtIva.setEditable(false);
-        txtIva.setBackground(new java.awt.Color(204, 204, 204));
-        txtIva.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
-        txtIva.setText("0.00");
-        txtIva.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIvaActionPerformed(evt);
-            }
-        });
-        jPanel2.add(txtIva);
-        txtIva.setBounds(190, 30, 70, 20);
-
-        txtSubtotal.setEditable(false);
-        txtSubtotal.setBackground(new java.awt.Color(204, 204, 204));
-        txtSubtotal.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
-        txtSubtotal.setText("0.00");
-        txtSubtotal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSubtotalActionPerformed(evt);
-            }
-        });
-        jPanel2.add(txtSubtotal);
-        txtSubtotal.setBounds(100, 30, 70, 20);
-
-        lblIVA.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblIVA.setText("IVA");
-        jPanel2.add(lblIVA);
-        lblIVA.setBounds(190, 10, 30, 20);
-
-        lblSubTotal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblSubTotal.setText("SUB TOTAL");
-        jPanel2.add(lblSubTotal);
-        lblSubTotal.setBounds(100, 10, 70, 20);
-
-        txtValorRenta6.setEditable(false);
-        txtValorRenta6.setBackground(new java.awt.Color(204, 204, 204));
-        txtValorRenta6.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
-        txtValorRenta6.setText("0.00");
-        txtValorRenta6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtValorRenta6ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(txtValorRenta6);
-        txtValorRenta6.setBounds(10, 30, 80, 20);
-
         Fondo.add(jPanel2);
         jPanel2.setBounds(310, 480, 380, 60);
 
         jPanel4.setBackground(new java.awt.Color(0, 145, 155));
         jPanel4.setLayout(null);
-
-        lblTotal.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblTotal.setText("TOTAL:");
-        jPanel4.add(lblTotal);
-        lblTotal.setBounds(160, 10, 50, 20);
 
         txtCantidad.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtCantidad.setBorder(null);
@@ -441,33 +416,40 @@ CancelarImporte imp = new CancelarImporte();
         jPanel4.add(lblCantidad);
         lblCantidad.setBounds(10, 10, 90, 20);
 
-        txtTotal.setEditable(false);
-        txtTotal.setBackground(new java.awt.Color(204, 204, 204));
-        txtTotal.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        txtTotal.setText("0.00");
-        txtTotal.setBorder(null);
-        txtTotal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTotalActionPerformed(evt);
-            }
-        });
-        jPanel4.add(txtTotal);
-        txtTotal.setBounds(220, 5, 50, 30);
-
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_basurero.png"))); // NOI18N
         btnEliminar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
         jPanel4.add(btnEliminar);
         btnEliminar.setBounds(340, 5, 30, 30);
 
-        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_agregar.png"))); // NOI18N
-        btnAgregar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_agregar.png"))); // NOI18N
+        btnModificar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        btnModificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnModificarMouseClicked(evt);
             }
         });
-        jPanel4.add(btnAgregar);
-        btnAgregar.setBounds(300, 5, 30, 30);
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnModificar);
+        btnModificar.setBounds(380, 10, 30, 30);
+
+        btnAgregar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_agregar.png"))); // NOI18N
+        btnAgregar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        btnAgregar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregar1ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnAgregar1);
+        btnAgregar1.setBounds(300, 5, 30, 30);
 
         Fondo.add(jPanel4);
         jPanel4.setBounds(50, 205, 430, 40);
@@ -502,21 +484,44 @@ CancelarImporte imp = new CancelarImporte();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuActionPerformed
 
+    /**
+     * Este método regresa la fecha actual.
+     *
+     * @return Fecha actual.
+     */
+    public Date obtenerFecha() {
+        return Date.valueOf(LocalDate.now());
+
+    }
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
         if (validarCampos()) {
             System.out.println("venta realizada");
         }
-        
-        
+
+        Venta venta = new Venta(this.usuarioLogueado, obtenerFecha(), this.total, this.listaProductos);
+
+        /* Venta tiene: 
+        usuario (selecciona desde el inicio/log in)
+        fecha (fecha del sistema) -> Quitar, no lo vamos a modificar nosotros.
+        Total
+        listaProductos
+         */
+        try {
+            iventasnegocio.agregar(venta);
+            JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.OK_OPTION);
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGenerarVentaActionPerformed
 
     private void btnImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImporteActionPerformed
-      imp.setVisible(true);
+        imp.setVisible(true);
+        /*
+        Mostrar un JOptionpane en donde se agrega la cantidad con la que se va a pagar.
+        Si la cantidad < total, mostrar error. Si no se agrega el importe a la pantalla, se calcula el cambio y se muestra en pantalla.
+        Se activa el botón de generar venta
+         */
     }//GEN-LAST:event_btnImporteActionPerformed
-
-    private void txtNombreProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreProductoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreProductoActionPerformed
 
     private void txtPrecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioActionPerformed
         // TODO add your handling code here:
@@ -525,10 +530,6 @@ CancelarImporte imp = new CancelarImporte();
     private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoActionPerformed
-
-    private void txtStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtStockActionPerformed
 
     private void txtCambioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCambioActionPerformed
         // TODO add your handling code here:
@@ -542,103 +543,178 @@ CancelarImporte imp = new CancelarImporte();
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTotalApagarActionPerformed
 
-    private void txtIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIvaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIvaActionPerformed
-
-    private void txtSubtotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSubtotalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSubtotalActionPerformed
-
-    private void txtValorRenta6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorRenta6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtValorRenta6ActionPerformed
-
     private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCantidadActionPerformed
 
-    private void txtTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTotalActionPerformed
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        
-    }//GEN-LAST:event_btnAgregarActionPerformed
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        /*
+            Verificar que el txtNombre no este vacio, si esta vacio, "No has seleccionado un producto"
+            else, verificar el txtCantidad, si esta vacio o <= 0 "Cantidad erronea"
+            else, si cantidad > stock, "no hay tanto stock"
+            si todo esta bien, crear un nuevo objeto de detalleventa
+         */
+        try {
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        try{
-            DefaultTableModel modelo = new DefaultTableModel();
-            this.tableArticulosCarrito.setModel(modelo);
-            
-            
-        }catch(Exception error){
-            System.out.println(error.getMessage());
+            Producto productoNuevo = iproductosnegocio.consultarPorNombre(txtNombreProducto.getText());
+            Long productoCantidad = Long.parseLong(txtCantidad.toString());
+            Double productoPrecio = Double.parseDouble(txtPrecio.toString());
+
+            DetalleVenta dv = new DetalleVenta(productoNuevo, productoCantidad, productoPrecio);
+            listaProductos.add(dv);
+            calculaTotal();
+
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    public void calculaTotal() {
+        total = 0.0;
+        for (DetalleVenta detalleVenta : listaProductos) {
+            total += detalleVenta.getPrecio() * detalleVenta.getCantidad();
+        }
+
+    }
+
+    /**
+     * Este método es para la tabla del FrmVenta
+     * Se limpia la tabla
+     */
+    public void agregarProductoAlCarrito() {
+        tableArticulosCarrito.removeAll();
+
+        for (DetalleVenta detalleVenta : listaProductos) {
+            total += detalleVenta.getPrecio() * detalleVenta.getCantidad();
+            //tableArticulosCarrito.add("" + detalleVenta.getProducto().toString());
+
+        }
+    }
+    private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
+        //Producto productoRegistrado = iproductosnegocio.consultarporcodigo();
+        /*
+        verificar que no este vacio antes de consultar. si esta vacio enviar el joptionpane 
+        sino, realizar busqueda con el iproductosnegocio consultar por codigo
+        si regresa null -> mostrar joptionpane "producto no registrado"
+        !null -> llenar con los datos del producto 
+
+         */
+
+        txtNombreProducto.setText(productoRegistrado.getNombre());
+        txtPrecio.setText(productoRegistrado.getPrecio());
+        //Stock ¿? 
+
         ConsultarProductos prod = new ConsultarProductos();
         prod.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_botonBuscarActionPerformed
 
-    private boolean validarCampos(){
+    private void txtNombreProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreProductoKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreProductoKeyTyped
+
+    private void botonBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonBuscarMouseClicked
+        // TODO add your handling code here:
+        /*
+        Cuando se hace click al botón se tiene que verificar el cuadro de txtCodigo no este vacio
+        Si esta vacio: mostrar joptionpane: Esta vacio! requestFocus -> Solicita un requestFocus
+        si no esta vacio, se realiza la busqueda -> IVentasNegocio 
+        
+         */
+    }//GEN-LAST:event_botonBuscarMouseClicked
+
+    private void txtStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStockActionPerformed
+
+    private void btnAgregar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregar1ActionPerformed
+        // TODO add your handling code here:
+        /*
+        Si el producto ya esta agregado, actualizar el que ya esta agregado, si no se agrega a la lista.
+        Se actualiza/agrega y después se calcula el total.
+         */
+    }//GEN-LAST:event_btnAgregar1ActionPerformed
+
+    private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
+        // TODO add your handling code here:
+        /*
+        Si no hay nada seleccionado, joptionpane "no hay nada para modificar"
+        si hay algo seleccionado mostrar sus datos
+        se hace una busqueda en la listaProductos del producto seleccionado 
+         */
+
+    }//GEN-LAST:event_btnModificarMouseClicked
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        /*
+        Si no hay producto seleccionado que eliminar, joptionpane "No hay producto a eliminar", si no:
+        listaProducto.remove(:3);
+        
+        volver a cargar la tabla. :D
+         */
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private boolean validarCampos() {
         float importe = Float.parseFloat(this.txtImporte.getText());
         float total = Float.parseFloat(this.txtTotalApagar.getText());
         if (this.tableArticulosCarrito.getModel().getColumnCount() == 0) {
             JOptionPane.showMessageDialog(null, "Ingrese productos", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }else if(this.txtImporte.getText().equals("") ||  importe >= total) {
+        } else if (this.txtImporte.getText().equals("") || importe >= total) {
             JOptionPane.showMessageDialog(null, "Ingrese el importe", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
     }
-    
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Venta().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//               // new Venta().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Fondo;
     private javax.swing.JTextField FondoTitulo;
-    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton botonBuscar;
+    private javax.swing.JButton btnAgregar1;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGenerarVenta;
     private javax.swing.JButton btnImporte;
     private javax.swing.JButton btnMenu;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSalir;
     private com.toedter.calendar.JDateChooser dateFechaVenta;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
@@ -656,29 +732,21 @@ CancelarImporte imp = new CancelarImporte();
     private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblDatosProducto;
     private javax.swing.JLabel lblFecha;
-    private javax.swing.JLabel lblIVA;
     private javax.swing.JLabel lblImagenSuper;
     private javax.swing.JLabel lblImporte;
     private javax.swing.JLabel lblLogoCabecera;
     private javax.swing.JLabel lblNombreProducto;
     private javax.swing.JLabel lblPrecio;
     private javax.swing.JLabel lblStock;
-    private javax.swing.JLabel lblSubTotal;
-    private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel lblTotalApagar;
-    private javax.swing.JLabel lblValorRenta;
     private javax.swing.JTable tableArticulosCarrito;
     private javax.swing.JTextField txtCambio;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtImporte;
-    private javax.swing.JTextField txtIva;
     private javax.swing.JTextField txtNombreProducto;
     private javax.swing.JTextField txtPrecio;
     private javax.swing.JTextField txtStock;
-    private javax.swing.JTextField txtSubtotal;
-    private javax.swing.JTextField txtTotal;
     private javax.swing.JTextField txtTotalApagar;
-    private javax.swing.JTextField txtValorRenta6;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package frames;
 
 import javax.swing.JOptionPane;
@@ -11,6 +7,7 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
     MenuPrincipal menu = new MenuPrincipal();
+    
     /**
      * Creates new form Login
      */

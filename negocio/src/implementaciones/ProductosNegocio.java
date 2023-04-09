@@ -8,6 +8,7 @@ package implementaciones;
 import entidades.Producto;
 import excepciones.NegocioException;
 import excepciones.PersistenciaException;
+import interfaces.IConexion;
 import interfaces.IProductosDAO;
 import interfaces.IProductosNegocio;
 
@@ -18,8 +19,8 @@ import interfaces.IProductosNegocio;
 public class ProductosNegocio implements IProductosNegocio{
     private final IProductosDAO productosDAO;
 
-    public ProductosNegocio(IProductosDAO productosDAO) {
-        this.productosDAO = productosDAO;
+    public ProductosNegocio(IConexion conexion) {
+        this.productosDAO = new ProductosDAO(conexion);
     }        
     
     /**

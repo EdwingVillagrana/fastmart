@@ -19,8 +19,8 @@ public class ProveedoresNegocio implements IProveedoresNegocio {
 
     private final IProveedoresDAO proveedoresDAO;
 
-    public ProveedoresNegocio(IProveedoresDAO ProveedoresDAO) {
-        this.proveedoresDAO = ProveedoresDAO;
+    public ProveedoresNegocio() {
+        this.proveedoresDAO = new ProveedoresDAO(new Conexion());
     }
 
     /**

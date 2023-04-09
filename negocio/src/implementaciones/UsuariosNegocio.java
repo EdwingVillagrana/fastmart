@@ -20,8 +20,8 @@ public class UsuariosNegocio implements IUsuariosNegocio {
 
     private final IUsuariosDAO usuariosDAO;
 
-    public UsuariosNegocio(IUsuariosDAO usuariosDAO) {
-        this.usuariosDAO = usuariosDAO;
+    public UsuariosNegocio() {
+        this.usuariosDAO = new UsuariosDAO(new Conexion());
     }
 
     /**

@@ -20,18 +20,11 @@ import java.util.List;
 public class ProductosNegocio implements IProductosNegocio {
 
     private final IProductosDAO productosDAO;
-
-<<<<<<< Updated upstream
-    public ProductosNegocio(IConexion conexion) {
-        this.productosDAO = new ProductosDAO(conexion);
-    }        
     
-=======
-    public ProductosNegocio(IProductosDAO productosDAO) {
-        this.productosDAO = productosDAO;
+    public ProductosNegocio() {
+        this.productosDAO = new ProductosDAO(new Conexion());
     }
 
->>>>>>> Stashed changes
     /**
      * Agrega un nuevo producto a la base de datos.
      *

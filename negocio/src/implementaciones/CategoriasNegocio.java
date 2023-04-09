@@ -20,8 +20,8 @@ public class CategoriasNegocio implements ICategoriasNegocio {
 
     private final ICategoriasDAO categoriasDAO;
 
-    public CategoriasNegocio(ICategoriasDAO categoriasDAO) {
-        this.categoriasDAO = categoriasDAO;
+    public CategoriasNegocio() {
+        this.categoriasDAO = new CategoriasDAO(new Conexion());
     }
 
     /**

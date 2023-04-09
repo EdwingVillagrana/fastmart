@@ -22,7 +22,7 @@ public class ComprasNegocio implements IComprasNegocio {
     private final IComprasDAO comprasDAO;
 
     public ComprasNegocio(IComprasDAO comprasDAO) {
-        this.comprasDAO = comprasDAO;
+        this.comprasDAO = new ComprasDAO(new Conexion());
     }
 
     @Override

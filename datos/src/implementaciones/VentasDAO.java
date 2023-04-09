@@ -13,6 +13,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import interfaces.IVentasDAO;
 import java.util.List;
+import javax.persistence.NoResultException;
+import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import org.eclipse.persistence.internal.oxm.Root;
 
 /**
  *
@@ -101,32 +107,60 @@ public class VentasDAO implements IVentasDAO {
     }
 
     @Override
-    public List<Venta> consultarPorPeriodo(Date date, Date fechaFin) throws PersistenciaException {
+    public List<Venta> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
             try {
-                
+                String jpql = "SELECT v FROM Venta v WHERE v.fechaDeVenta BETWEEN :fechaInicio AND :fechaFin";
+                TypedQuery<Venta> query = em.createQuery(jpql, Venta.class);
+                query.setParameter("fechaInicio", fechaInicio, TemporalType.DATE);
+                query.setParameter("fechaFin", fechaFin, TemporalType.DATE);
+                return query.getResultList();
             } finally {
+                em.close();
             }
-            TypedQuery<Venta> query = em.createQuery("SELECT v FROM Venta v WHERE v.fechaDeVenta BETWEEN :startDate AND :endDate", Venta.class);
-            query.setParameter("startDate", date);
-            query.setParameter("endDate", fechaFin);
-            return query.getSingleResult();
-        } catch (NoResultException ex) {
-            return null;
-        } catch (Exception ex) {
-            throw new PersistenciaException("Error al consultar ventas por periodo", ex);
+
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al consultar ventas por periodo", e);
         }
     }
 
     @Override
     public Venta consultarPorId(Long id) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                em.getTransaction().begin();
+                Venta ventaGuardada = em.find(Venta.class, id);
+                em.getTransaction().commit();
+                return ventaGuardada;
+            } catch (NoResultException e) {
+                return null;
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
+        }
     }
 
     @Override
     public List<Venta> consultarTodos() throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                // Se utiliza una consulta JPQL para obtener todas las categorías
+                TypedQuery<Venta> query = em.createQuery("SELECT v FROM Venta v", Venta.class);
+                List<Venta> ventas = query.getResultList();
+                return ventas;
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
+        }
     }
 
 }

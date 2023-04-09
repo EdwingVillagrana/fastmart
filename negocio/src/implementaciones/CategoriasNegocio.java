@@ -10,78 +10,115 @@ import excepciones.NegocioException;
 import excepciones.PersistenciaException;
 import interfaces.ICategoriasDAO;
 import interfaces.ICategoriasNegocio;
+import java.util.List;
 
 /**
  *
  * @author guero
  */
-public class CategoriasNegocio implements ICategoriasNegocio{
-    
+public class CategoriasNegocio implements ICategoriasNegocio {
+
     private final ICategoriasDAO categoriasDAO;
 
     public CategoriasNegocio(ICategoriasDAO categoriasDAO) {
         this.categoriasDAO = categoriasDAO;
     }
-    
+
     /**
      * Agrega una nueva categoría en la base de datos.
-     * @param entidad Categoría a agregar.
+     *
+     * @param categoria Categoría a agregar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void agregar(Categoria entidad) throws NegocioException {
+    public void agregar(Categoria categoria) throws NegocioException {
         try {
-            categoriasDAO.agregar(entidad);
+            categoriasDAO.agregar(categoria);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible agregar la información a la base de datos.", e);
+            throw new NegocioException("Error al intentar agregar la categoría: ", e);
         }
     }
-    
+
     /**
      * Actualiza una categoría existente de la base de datos.
-     * @param entidad La categoría a actualizar.
+     *
+     * @param categoria La categoría a actualizar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
-
     @Override
-    public void actualizar(Categoria entidad) throws NegocioException {
+    public void actualizar(Categoria categoria) throws NegocioException {
         try {
-            categoriasDAO.actualizar(entidad);
+            categoriasDAO.actualizar(categoria);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible actualizar la información de la base de datos.", e);
+            throw new NegocioException("Error al intentar actualizar la categoría: ", e);
         }
     }
 
     /**
      * Elimina una categoría de la base de datos.
-     * @param entidad La categoría a eliminar.
+     *
+     * @param categoria La categoría a eliminar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void eliminar(Categoria entidad) throws NegocioException {
+    public void eliminar(Categoria categoria) throws NegocioException {
         try {
-            categoriasDAO.eliminar(entidad);
+            categoriasDAO.eliminar(categoria);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible eliminar la información de la base de datos.", e);
+            throw new NegocioException("Error al intentar eliminar la categoria: ", e);
         }
     }
 
     /**
      * Consulta una categoría por su nombre.
+     *
      * @param nombre El nombre de la categoría a buscar.
      * @return La categoría encontrada.
      * @throws NegocioException si ocurre un error en la capa de negocio.
      */
     @Override
     public Categoria consultarPorNombre(String nombre) throws NegocioException {
+        Categoria categoriaExistente = null;
         try {
-            Categoria categoria = this.categoriasDAO.consultarPorNombre(nombre);
-            if (categoria == null) {
+            categoriaExistente = this.categoriasDAO.consultarPorNombre(nombre);
+            if (categoriaExistente == null) {
                 throw new NegocioException("No se encontró la categoría");
             }
-            return categoria;
+            return categoriaExistente;
         } catch (PersistenciaException e) {
-            throw new NegocioException("No se encontró la categoría en la capa de negocio.", e);
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally{
+            return categoriaExistente;
+        }
+    }
+
+    @Override
+    public Categoria consultarPorId(Long id) throws NegocioException {
+        Categoria categoriaExistente = null;
+        try {
+            categoriaExistente = categoriasDAO.consultarPorId(id);
+            if (categoriaExistente == null) {
+                throw new NegocioException("No se encontró la categoría.");
+            }
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally {
+            return categoriaExistente;
+        }
+    }
+
+    @Override
+    public List<Categoria> consultarTodos() throws NegocioException {
+        List<Categoria> categorias = null;
+        try {
+            categorias = categoriasDAO.consultarTodos();
+            if (categorias == null) {
+                throw new NegocioException("No hay categorias registradas");
+            }
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally {
+            return categorias;
         }
     }
 }

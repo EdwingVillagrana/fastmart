@@ -6,6 +6,7 @@ package interfaces;
 
 import entidades.Usuario;
 import excepciones.PersistenciaException;
+import java.util.List;
 
 /**
  *
@@ -16,4 +17,6 @@ public interface IUsuariosDAO extends IGenericaDAO<Usuario, Long> {
     public Usuario consultarPorId (Long id) throws PersistenciaException;
     
     public Usuario consultarPorNombre(String nombre) throws PersistenciaException;
+    
+    public List<Usuario> consultarTodos() throws PersistenciaException;
 }

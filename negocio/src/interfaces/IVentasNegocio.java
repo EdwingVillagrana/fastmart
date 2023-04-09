@@ -8,11 +8,15 @@ package interfaces;
 import entidades.Venta;
 import excepciones.NegocioException;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author guero
  */
 public interface IVentasNegocio extends IGenericaNegocio<Venta> {
-    public Venta consultarPorPeriodo(Date date, Date fechaFin) throws NegocioException;
+
+    public Venta consultarPorId(Long id) throws NegocioException;
+
+    public List<Venta> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws NegocioException;
 }

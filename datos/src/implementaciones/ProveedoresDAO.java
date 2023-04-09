@@ -18,11 +18,7 @@ import javax.persistence.NoResultException;
 /**
  * Implementa la interfaz IProveedores que, a su vez, extiende de la interfaz
  * IGenericaDAO, y se encarga de la persistencia de objetos Proveedor en una
- * base de datos. La clase tiene métodos para agregar, actualizar, eliminar y
- * consultar proveedores en la base de datos, y utiliza el patrón DAO (Data
- * Access Object) para encapsular la lógica de acceso a los datos. La clase
- * recibe una instancia de IConexion en su constructor para establecer la
- * conexión con la base de datos.
+ * base de datos.
  *
  */
 public class ProveedoresDAO implements IProveedoresDAO {
@@ -57,17 +53,17 @@ public class ProveedoresDAO implements IProveedoresDAO {
             }
         } catch (Exception e) {
             Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
-            throw new PersistenciaException("No fue posible agregar el proveedor");
+            throw new PersistenciaException("No fue posible agregar al proveedor");
         }
     }
 
     /**
      * Actualiza los datos de un proveedor existente en la base de datos.
      *
-     * @param proveedorActualizado Objeto Proveedor con los datos actualizados
-     * del proveedor.
-     * @throws PersistenciaException Si no se puede actualizar el proveedor en
-     * la base de datos.
+     * @param proveedorActualizado Proveedor con los datos actualizados del
+     * proveedor.
+     * @throws PersistenciaException Si no se puede acceder a la base de datos o
+     * si no se encuentra la información del proveedor en la base de datos.
      */
     @Override
     public void actualizar(Proveedor proveedorActualizado) throws PersistenciaException {
@@ -122,15 +118,34 @@ public class ProveedoresDAO implements IProveedoresDAO {
         }
     }
 
+    @Override
+    public Proveedor consultarPorId(Long id) throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                em.getTransaction().begin();
+                Proveedor proveedorGuardado = em.find(Proveedor.class, id);
+                em.getTransaction().commit();
+                return proveedorGuardado;
+            } catch (NoResultException e) {
+                return null;
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la lista de proveedores..");
+        }
+    }
+
     /**
      * Busca un proveedor en la base de datos por su nombre utilizando una
-     * consulta JPQL. Se espera obtener un objeto de tipo Proveedor. Se lanza
-     * una excepción PersistenciaException si no se encuentra ningún proveedor
-     * con el nombre proporcionado.
+     * consulta JPQL.
      *
-     * @param nombre El nombre del proveedor a buscar
-     * @return El objeto Proveedor correspondiente al nombre proporcionado
-     * @throws PersistenciaException Si ocurre un error al realizar la consulta
+     * @param nombre El nombre del proveedor a buscar.
+     * @return Proveedor correspondiente al nombre proporcionado o null en caso
+     * de no encontrarse registrado en la base.
+     * @throws PersistenciaException Si ocurre un error al realizar la consulta.
      */
     @Override
     public Proveedor consultarPorNombre(String nombre) throws PersistenciaException {
@@ -154,26 +169,15 @@ public class ProveedoresDAO implements IProveedoresDAO {
         }
     }
 
-    @Override
-    public Proveedor consultarPorId(Long id) throws PersistenciaException {
-        try {
-            EntityManager em = this.conexion.crearConexion();
-            try {
-                em.getTransaction().begin();
-                Proveedor proveedorGuardado = em.find(Proveedor.class, id);
-                em.getTransaction().commit();
-                return proveedorGuardado;
-            } catch (NoResultException e) {
-                return null;
-            } finally {
-                em.close();
-            }
-        } catch (Exception e) {
-            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
-            throw new PersistenciaException("No fue posible consultar la lista de proveedores..");
-        }
-    }
-
+    /**
+     * Busca la lista de todos los proveedores en la base de datos, utilizando
+     * una consulta JPQL.
+     *
+     * @return Lista de proveedores correspondiente a todos los proveedores
+     * registrados en la base. Retorna una lista vacía en caso de no encontrarse
+     * registrado ningun proveedor
+     * @throws PersistenciaException Si ocurre un error al realizar la consulta.
+     */
     @Override
     public List<Proveedor> consultarTodos() throws PersistenciaException {
         try {
@@ -186,7 +190,7 @@ public class ProveedoresDAO implements IProveedoresDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la lista de proveedores.");
         }
     }

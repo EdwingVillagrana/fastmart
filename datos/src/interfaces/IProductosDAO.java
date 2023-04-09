@@ -14,6 +14,8 @@ import excepciones.PersistenciaException;
 public interface IProductosDAO extends IGenericaDAO<Producto, Long> {
 
     public Producto consultarPorNombre(String nombre) throws PersistenciaException;
+
     public Producto consultarPorId(Long id) throws PersistenciaException;
+
     public Producto consultarPorCodigo(Long codigo) throws PersistenciaException;
 }

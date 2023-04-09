@@ -11,76 +11,136 @@ import excepciones.PersistenciaException;
 import interfaces.IConexion;
 import interfaces.IProductosDAO;
 import interfaces.IProductosNegocio;
+import java.util.List;
 
 /**
  *
  * @author guero
  */
-public class ProductosNegocio implements IProductosNegocio{
+public class ProductosNegocio implements IProductosNegocio {
+
     private final IProductosDAO productosDAO;
 
+<<<<<<< Updated upstream
     public ProductosNegocio(IConexion conexion) {
         this.productosDAO = new ProductosDAO(conexion);
     }        
     
+=======
+    public ProductosNegocio(IProductosDAO productosDAO) {
+        this.productosDAO = productosDAO;
+    }
+
+>>>>>>> Stashed changes
     /**
      * Agrega un nuevo producto a la base de datos.
-     * @param entidad El producto a agregar.
+     *
+     * @param producto El producto a agregar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void agregar(Producto entidad) throws NegocioException {
+    public void agregar(Producto producto) throws NegocioException {
         try {
-            productosDAO.agregar(entidad);
+            productosDAO.agregar(producto);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible agregar la información a la base de datos.", e);
+            throw new NegocioException("Error al intentar agregar el producto: ", e);
         }
     }
 
     /**
      * Actualiza un producto existente en la base de datos.
-     * @param entidad El producto a actualizar.
+     *
+     * @param producto El producto a actualizar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void actualizar(Producto entidad) throws NegocioException {
+    public void actualizar(Producto producto) throws NegocioException {
         try {
-            productosDAO.actualizar(entidad);
+            productosDAO.actualizar(producto);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible actualizar la información de la base de datos.", e);
+            throw new NegocioException("Error al intentar actualizar el producto: ", e);
         }
     }
 
     /**
      * Elimina un producto de la base de datos.
-     * @param entidad El producto a eliminar.
+     *
+     * @param producto El producto a eliminar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void eliminar(Producto entidad) throws NegocioException {
+    public void eliminar(Producto producto) throws NegocioException {
         try {
-            productosDAO.actualizar(entidad);
+            productosDAO.actualizar(producto);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible eliminar la información de la base de datos.", e);
+            throw new NegocioException("Error al intentar eliminar el producto: ", e);
         }
     }
-    
+
     /**
      * Consulta un producto por su nombre.
+     *
      * @param nombre El nombre del producto a encontrar.
      * @return El producto encontrado.
      * @throws NegocioException si ocurre un error en la capa de negocio
      */
     @Override
     public Producto consultarPorNombre(String nombre) throws NegocioException {
+        Producto productoExistente = null;
         try {
-            Producto producto = this.productosDAO.consultarPorNombre(nombre);
-            if (producto == null) {
+            productoExistente = this.productosDAO.consultarPorNombre(nombre);
+            if (productoExistente == null) {
                 throw new NegocioException("No se encontró el producto");
             }
-            return producto;
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible consultar la información en la base de datos.", e);
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally{
+            return productoExistente;
+        }
+    }
+
+    @Override
+    public Producto consultarPorId(Long id) throws NegocioException {
+        Producto productoExistente = null;
+        try {
+            productoExistente = productosDAO.consultarPorId(id);
+            if (productoExistente == null) {
+                throw new NegocioException("No se encontró el producto");
+            }
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally {
+            return productoExistente;
+        }
+    }
+
+    @Override
+    public Producto consultarPorCodigo(Long codigo) throws NegocioException {
+        Producto productoExistente = null;
+        try {
+            productoExistente = productosDAO.consultarPorCodigo(codigo);
+            if (productoExistente == null) {
+                throw new NegocioException("No se encontró el producto");
+            }
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally {
+            return productoExistente;
+        }
+    }
+
+    @Override
+    public List<Producto> consultarTodos() throws NegocioException {
+        List<Producto> productos = null;
+        try {
+            productos = productosDAO.consultarTodos();
+            if (productos == null) {
+                throw new NegocioException("No hay productos registrados");
+            }
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally {
+            return productos;
         }
     }
 }

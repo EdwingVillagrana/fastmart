@@ -8,13 +8,13 @@ import entidades.Categoria;
 import excepciones.PersistenciaException;
 import java.util.List;
 
-
-
 /**
  *
  * @author Kevin Rios
  */
-public interface ICategoriasDAO extends IGenericaDAO<Categoria, Long>{
+public interface ICategoriasDAO extends IGenericaDAO<Categoria, Long> {
+
     public Categoria consultarPorNombre(String nombre) throws PersistenciaException;
+
     public Categoria consultarPorId(Long id) throws PersistenciaException;
 }

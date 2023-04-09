@@ -10,77 +10,105 @@ import excepciones.NegocioException;
 import excepciones.PersistenciaException;
 import interfaces.IUsuariosDAO;
 import interfaces.IUsuariosNegocio;
+import java.util.List;
 
 /**
  *
  * @author guero
  */
 public class UsuariosNegocio implements IUsuariosNegocio {
-    
+
     private final IUsuariosDAO usuariosDAO;
 
     public UsuariosNegocio(IUsuariosDAO usuariosDAO) {
         this.usuariosDAO = usuariosDAO;
     }
-        
+
     /**
      * Agrega un usuario nuevo en la base de datos.
-     * @param entidad El usuario a agregar.
+     *
+     * @param usuario El usuario a agregar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void agregar(Usuario entidad) throws NegocioException {
+    public void agregar(Usuario usuario) throws NegocioException {
         try {
-            usuariosDAO.agregar(entidad);
+            usuariosDAO.agregar(usuario);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible agregar la información a la base de datos.", e);
+            throw new NegocioException("Error al intentar agregar al usuario: ", e);
         }
     }
 
     /**
      * Actualiza un usuario existente de la base de datos.
-     * @param entidad El usuario a actualizar.
+     *
+     * @param usuario El usuario a actualizar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void actualizar(Usuario entidad) throws NegocioException {
+    public void actualizar(Usuario usuario) throws NegocioException {
         try {
-            usuariosDAO.actualizar(entidad);
+            usuariosDAO.actualizar(usuario);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible actualizar la información de la base de datos.", e);
+            throw new NegocioException("Error al intentar actualizar al usuario: ", e);
         }
     }
 
     /**
      * Elimina un usuario de la base de datos.
-     * @param entidad El usuario a eliminar.
+     *
+     * @param usuario El usuario a eliminar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void eliminar(Usuario entidad) throws NegocioException {
+    public void eliminar(Usuario usuario) throws NegocioException {
         try {
-            usuariosDAO.eliminar(entidad);
+            usuariosDAO.eliminar(usuario);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible eliminar los datos de la base de datos.", e);
+            throw new NegocioException("Error al intentar eliminar al usuario: ", e);
         }
     }
-    
+
     /**
      * Consulta un usuario por su nombre.
+     *
      * @param nombre El nombre del usuario a buscar.
      * @return El usuario encontrado.
      * @throws NegocioException si ocurre un error en la capa de negocio.
      */
     @Override
     public Usuario consultarPorNombre(String nombre) throws NegocioException {
+        Usuario usuarioExistente = null;
         try {
-            Usuario usuario = this.usuariosDAO.consultarPorNombre(nombre);
-            if (usuario == null) {
-                throw new NegocioException("No se encontró al proveedor");
-            }
-            return usuario;
+            usuarioExistente = this.usuariosDAO.consultarPorNombre(nombre);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible consultar la información en la base de datos.", e);
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally {
+            return usuarioExistente;
+        }
+    }
+
+    @Override
+    public Usuario consultarPorId(Long id) throws NegocioException {
+        Usuario usuarioExistente = null;
+        try {
+            usuarioExistente = usuariosDAO.consultarPorId(id);
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally {
+            return usuarioExistente;
+        }
+    }
+
+    @Override
+    public List<Usuario> consultarTodos() throws NegocioException {
+        List<Usuario> usuarios = null;
+        try {
+            usuarios = usuariosDAO.consultarTodos();
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally {
+            return usuarios;
         }
     }
 }

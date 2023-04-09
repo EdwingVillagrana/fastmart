@@ -22,6 +22,6 @@ public interface IGenericaDAO<T, K> {
     public void actualizar(T entidad) throws PersistenciaException;
 
     public void eliminar(T entidad) throws PersistenciaException;
-    
+
     public List<T> consultarTodos() throws PersistenciaException;
 }

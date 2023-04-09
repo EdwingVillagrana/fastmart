@@ -16,9 +16,6 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import org.eclipse.persistence.internal.oxm.Root;
 
 /**
  *
@@ -43,10 +40,13 @@ public class VentasDAO implements IVentasDAO {
     public void agregar(Venta venta) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            em.persist(venta);
-            em.getTransaction().commit();
-            em.close();
+            try {
+                em.getTransaction().begin();
+                em.persist(venta);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
         } catch (Exception e) {
             Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar la Venta");
@@ -65,16 +65,19 @@ public class VentasDAO implements IVentasDAO {
     public void actualizar(Venta ventaActualizada) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            Venta ventaGuardada = em.find(Venta.class, ventaActualizada.getId());
-            if (ventaGuardada == null) {
-                throw new PersistenciaException("No se encontró la venta en la base de datos, por lo que no se pudo actualizar.");
+            try {
+                em.getTransaction().begin();
+                Venta ventaGuardada = em.find(Venta.class, ventaActualizada.getId());
+                if (ventaGuardada == null) {
+                    throw new PersistenciaException("No se encontró la venta en la base de datos, por lo que no se pudo actualizar.");
+                }
+                ventaGuardada.setUsuario(ventaActualizada.getUsuario());
+                ventaGuardada.setFechaDeVenta(ventaActualizada.getFechaDeVenta());
+                ventaGuardada.setTotal(ventaActualizada.getTotal());
+                em.getTransaction().commit();
+            } finally {
+                em.close();
             }
-            ventaGuardada.setUsuario(ventaActualizada.getUsuario());
-            ventaGuardada.setFechaDeVenta(ventaActualizada.getFechaDeVenta());
-            ventaGuardada.setTotal(ventaActualizada.getTotal());
-            em.getTransaction().commit();
-            em.close();
         } catch (Exception e) {
             Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos de la venta.");
@@ -92,36 +95,20 @@ public class VentasDAO implements IVentasDAO {
     public void eliminar(Venta venta) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            Venta ventaGuardada = em.find(Venta.class, venta.getId());
-            if (ventaGuardada == null) {
-                throw new PersistenciaException("No se encontró la información de la venta en la base de datos.");
-            }
-            em.remove(ventaGuardada);
-            em.getTransaction().commit();
-            em.close();
-        } catch (Exception e) {
-            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
-            throw new PersistenciaException("No fue posible eliminar los datos de la venta.");
-        }
-    }
-
-    @Override
-    public List<Venta> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws PersistenciaException {
-        try {
-            EntityManager em = this.conexion.crearConexion();
             try {
-                String jpql = "SELECT v FROM Venta v WHERE v.fechaDeVenta BETWEEN :fechaInicio AND :fechaFin";
-                TypedQuery<Venta> query = em.createQuery(jpql, Venta.class);
-                query.setParameter("fechaInicio", fechaInicio, TemporalType.DATE);
-                query.setParameter("fechaFin", fechaFin, TemporalType.DATE);
-                return query.getResultList();
+                em.getTransaction().begin();
+                Venta ventaGuardada = em.find(Venta.class, venta.getId());
+                if (ventaGuardada == null) {
+                    throw new PersistenciaException("No se encontró la información de la venta en la base de datos.");
+                }
+                em.remove(ventaGuardada);
+                em.getTransaction().commit();
             } finally {
                 em.close();
             }
-
         } catch (Exception e) {
-            throw new PersistenciaException("Error al consultar ventas por periodo", e);
+            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible eliminar los datos de la venta.");
         }
     }
 
@@ -140,8 +127,27 @@ public class VentasDAO implements IVentasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
+        }
+    }
+
+    @Override
+    public List<Venta> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                String jpql = "SELECT v FROM Venta v WHERE v.fechaDeVenta BETWEEN :fechaInicio AND :fechaFin";
+                TypedQuery<Venta> query = em.createQuery(jpql, Venta.class);
+                query.setParameter("fechaInicio", fechaInicio, TemporalType.DATE);
+                query.setParameter("fechaFin", fechaFin, TemporalType.DATE);
+                return query.getResultList();
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("Error al consultar ventas por periodo", e);
         }
     }
 

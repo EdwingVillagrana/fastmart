@@ -9,6 +9,7 @@ import excepciones.NegocioException;
 import excepciones.PersistenciaException;
 import interfaces.IProveedoresDAO;
 import interfaces.IProveedoresNegocio;
+import java.util.List;
 
 /**
  *
@@ -25,45 +26,45 @@ public class ProveedoresNegocio implements IProveedoresNegocio {
     /**
      * Agrega un nuevo proveedor a la base de datos.
      *
-     * @param entidad el proveedor que se desea agregar.
+     * @param proveedor el proveedor que se desea agregar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void agregar(Proveedor entidad) throws NegocioException {
+    public void agregar(Proveedor proveedor) throws NegocioException {
         try {
-            proveedoresDAO.agregar(entidad);
+            proveedoresDAO.agregar(proveedor);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible agregar la información a la base de datos.", e);
+            throw new NegocioException("Error al intentar agregar al proveedor: ", e);
         }
     }
 
     /**
      * * Actualiza un proveedor existente en la base de datos.
      *
-     * @param entidad el proveedor a actualizar.
+     * @param proveedor el proveedor a actualizar.
      * @throws NegocioException si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void actualizar(Proveedor entidad) throws NegocioException {
+    public void actualizar(Proveedor proveedor) throws NegocioException {
         try {
-            proveedoresDAO.actualizar(entidad);
+            proveedoresDAO.actualizar(proveedor);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible eliminar la información de la base de datos.", e);
+            throw new NegocioException("Error al intentar actualizar al proveedor: ", e);
         }
     }
 
     /**
      * Elimina un proveedor de la base de datos.
      *
-     * @param entidad El proveedor a eliminar.
+     * @param proveedor El proveedor a eliminar.
      * @throws NegocioException Si ocurre un error en la capa de persistencia.
      */
     @Override
-    public void eliminar(Proveedor entidad) throws NegocioException {
+    public void eliminar(Proveedor proveedor) throws NegocioException {
         try {
-            proveedoresDAO.eliminar(entidad);
+            proveedoresDAO.eliminar(proveedor);
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible eliminar los datos de la base de datos.", e);
+            throw new NegocioException("Error al intentar eliminar al proveedor: ", e);
         }
     }
 
@@ -83,7 +84,31 @@ public class ProveedoresNegocio implements IProveedoresNegocio {
             }
             return proveedor;
         } catch (PersistenciaException e) {
-            throw new NegocioException("No fue posible consultar la información en la base de datos.", e);
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        }
+    }
+
+    @Override
+    public Proveedor consultarPorId(Long id) throws NegocioException {
+        Proveedor proveedorExistente = null;
+        try {
+            proveedorExistente = proveedoresDAO.consultarPorId(id);
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally {
+            return proveedorExistente;
+        }
+    }
+
+    @Override
+    public List<Proveedor> consultarTodos() throws NegocioException {
+        List<Proveedor> proveedores = null;
+        try {
+            proveedores = proveedoresDAO.consultarTodos();
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        } finally {
+            return proveedores;
         }
     }
 }

@@ -13,5 +13,9 @@ import excepciones.NegocioException;
  * @author guero
  */
 public interface IUsuariosNegocio extends IGenericaNegocio<Usuario> {
-        public Usuario consultarPorNombre(String nombre) throws NegocioException;
+
+    public Usuario consultarPorId(Long id) throws NegocioException;
+
+    public Usuario consultarPorNombre(String nombre) throws NegocioException;
+    
 }

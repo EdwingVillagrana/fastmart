@@ -13,7 +13,9 @@ import java.util.List;
  *
  * @author Kevin Rios
  */
-public interface IVentasDAO extends IGenericaDAO<Venta, Long>{
+public interface IVentasDAO extends IGenericaDAO<Venta, Long> {
+
     public Venta consultarPorId(Long id) throws PersistenciaException;
+
     public List<Venta> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws PersistenciaException;
 }

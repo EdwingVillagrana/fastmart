@@ -43,11 +43,18 @@ public class UsuariosDAO implements IUsuariosDAO {
     @Override
     public void agregar(Usuario usuario) throws PersistenciaException {
         try {
+            Usuario usuarioExistente = consultarPorNombre(usuario.getNombre());
+            if (usuarioExistente != null){
+                throw new PersistenciaException("El usuario ya se encuentra registrado en la base de datos.");
+            }
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            em.persist(usuario);
-            em.getTransaction().commit();
-            em.close();
+            try {
+                em.getTransaction().begin();
+                em.persist(usuario);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
         } catch (Exception e) {
             Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar al usuario");
@@ -66,23 +73,21 @@ public class UsuariosDAO implements IUsuariosDAO {
     public void actualizar(Usuario usuarioActualizado) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            Usuario usuarioGuardado = em.find(Usuario.class, usuarioActualizado.getId());
-            if (usuarioGuardado == null) {
-                throw new PersistenciaException("No se encontró al usuario en la base de datos, por lo que no se pudo actualizar.");
+            try {
+                em.getTransaction().begin();
+                Usuario usuarioGuardado = em.find(Usuario.class, usuarioActualizado.getId());
+                if (usuarioGuardado == null) {
+                    throw new PersistenciaException("No se encontró al usuario en la base de datos, por lo que no se pudo actualizar.");
+                }
+                usuarioGuardado.setNombre(usuarioActualizado.getNombre());
+                usuarioGuardado.setDireccion(usuarioActualizado.getDireccion());
+                usuarioGuardado.setTelefono(usuarioActualizado.getTelefono());
+                usuarioGuardado.setEmail(usuarioActualizado.getEmail());
+                usuarioGuardado.setPassword(usuarioActualizado.getPassword());
+                em.getTransaction().commit();
+            } finally {
+                em.close();
             }
-            usuarioGuardado.setNombre(usuarioActualizado.getNombre());
-            usuarioGuardado.setDireccion(usuarioActualizado.getDireccion());
-            usuarioGuardado.setTelefono(usuarioActualizado.getTelefono());
-            usuarioGuardado.setEmail(usuarioActualizado.getEmail());
-            usuarioGuardado.setPassword(usuarioActualizado.getPassword());
-            /**
-             * Falta agregar el tipo de usuario en la entidad
-             * usuarioGuardado.setTipo(usuarioActualizado.getTipo());
-             *
-             */
-            em.getTransaction().commit();
-            em.close();
         } catch (Exception e) {
             Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos del usuario.");
@@ -100,14 +105,17 @@ public class UsuariosDAO implements IUsuariosDAO {
     public void eliminar(Usuario usuario) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
-            em.getTransaction().begin();
-            Usuario usuarioGuardado = em.find(Usuario.class, usuario.getId());
-            if (usuarioGuardado == null) {
-                throw new PersistenciaException("No se encontró la información del usuario en la base de datos.");
+            try {
+                em.getTransaction().begin();
+                Usuario usuarioGuardado = em.find(Usuario.class, usuario.getId());
+                if (usuarioGuardado == null) {
+                    throw new PersistenciaException("No se encontró la información del usuario en la base de datos.");
+                }
+                em.remove(usuarioGuardado);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
             }
-            em.remove(usuarioGuardado);
-            em.getTransaction().commit();
-            em.close();
         } catch (Exception e) {
             Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos del usuario.");

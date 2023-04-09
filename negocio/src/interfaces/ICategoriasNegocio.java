@@ -13,5 +13,8 @@ import excepciones.NegocioException;
  * @author guero
  */
 public interface ICategoriasNegocio extends IGenericaNegocio<Categoria> {
-        public Categoria consultarPorNombre(String nombre) throws NegocioException;
+
+    public Categoria consultarPorId(Long id) throws NegocioException;
+
+    public Categoria consultarPorNombre(String nombre) throws NegocioException;
 }

@@ -11,6 +11,9 @@ import excepciones.NegocioException;
  *
  * @author EDW
  */
-public interface IProveedoresNegocio extends IGenericaNegocio<Proveedor>{
+public interface IProveedoresNegocio extends IGenericaNegocio<Proveedor> {
+
+    public Proveedor consultarPorId(Long id) throws NegocioException;
+
     public Proveedor consultarPorNombre(String nombre) throws NegocioException;
 }

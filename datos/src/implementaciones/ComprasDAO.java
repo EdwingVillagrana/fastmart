@@ -5,7 +5,8 @@
 package implementaciones;
 
 import entidades.Compra;
-import entidades.Proveedor;
+import static entidades.Producto_.proveedor;
+import entidades.Usuario;
 import excepciones.PersistenciaException;
 import interfaces.IComprasDAO;
 import interfaces.IConexion;
@@ -131,8 +132,22 @@ public class ComprasDAO implements IComprasDAO {
     }
 
     @Override
-    public List<Compra> consultarPorProveedor(Proveedor proveedor) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Compra> consultarPorUsuario(Usuario usuario) throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                em.getTransaction().begin();
+                TypedQuery<Compra> query = em.createQuery("SELECT c FROM Compra c WHERE c.usuario.id = :usuarioId", Compra.class);
+                query.setParameter("usuarioId", usuario.getId());
+                em.getTransaction().commit();
+                return query.getResultList();
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(ComprasDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("Error al consultar ventas por usuario", e);
+        }
     }
 
     @Override

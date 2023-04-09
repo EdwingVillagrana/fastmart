@@ -5,7 +5,7 @@
 package interfaces;
 
 import entidades.Compra;
-import entidades.Proveedor;
+import entidades.Usuario;
 import excepciones.PersistenciaException;
 import java.sql.Date;
 import java.util.List;
@@ -20,5 +20,5 @@ public interface IComprasDAO extends IGenericaDAO<Compra, Long> {
 
     public List<Compra> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws PersistenciaException;
 
-    public List<Compra> consultarPorProveedor(Proveedor proveedor) throws PersistenciaException;
+    public List<Compra> consultarPorUsuario(Usuario usuario) throws PersistenciaException;
 }

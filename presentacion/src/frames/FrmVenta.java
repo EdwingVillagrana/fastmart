@@ -7,7 +7,6 @@ import entidades.Venta;
 import excepciones.NegocioException;
 import implementaciones.ProductosNegocio;
 import implementaciones.VentasNegocio;
-import interfaces.IConexion;
 import interfaces.IProductosNegocio;
 import interfaces.IVentasNegocio;
 import java.util.ArrayList;
@@ -31,23 +30,20 @@ public class FrmVenta extends javax.swing.JFrame {
     List<DetalleVenta> listaProductos = new ArrayList<>();
     IVentasNegocio iventasnegocio;
     IProductosNegocio iproductosnegocio;
-    IConexion conexion;
 
     CancelarImporte imp = new CancelarImporte();
 
     /**
      * Creates new form Venta
      *
-     * @param conexion
      * @param usuarioLogueado
      */
-    public FrmVenta(IConexion conexion, Usuario usuarioLogueado) {
+    public FrmVenta(Usuario usuarioLogueado) {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.conexion = conexion;
-        this.iventasnegocio = new VentasNegocio(this.conexion);
+        this.iventasnegocio = new VentasNegocio();
 
-        this.iproductosnegocio = new ProductosNegocio(this.conexion);
+        this.iproductosnegocio = new ProductosNegocio();
 
         this.usuarioLogueado = usuarioLogueado;
     }

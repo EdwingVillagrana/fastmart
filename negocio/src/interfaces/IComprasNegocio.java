@@ -5,7 +5,7 @@
 package interfaces;
 
 import entidades.Compra;
-import entidades.Proveedor;
+import entidades.Usuario;
 import excepciones.NegocioException;
 import java.util.List;
 import java.sql.Date;
@@ -20,5 +20,5 @@ public interface IComprasNegocio extends IGenericaNegocio<Compra> {
 
     public List<Compra> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws NegocioException;
 
-    public List<Compra> consultarPorProveedor(Proveedor proveedor) throws NegocioException;
+    public List<Compra> consultarPorUsuario(Usuario usuario) throws NegocioException;
 }

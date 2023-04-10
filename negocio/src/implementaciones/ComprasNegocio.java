@@ -5,7 +5,7 @@
 package implementaciones;
 
 import entidades.Compra;
-import entidades.Proveedor;
+import entidades.Usuario;
 import excepciones.NegocioException;
 import excepciones.PersistenciaException;
 import interfaces.IComprasDAO;
@@ -21,7 +21,7 @@ public class ComprasNegocio implements IComprasNegocio {
 
     private final IComprasDAO comprasDAO;
 
-    public ComprasNegocio(IComprasDAO comprasDAO) {
+    public ComprasNegocio() {
         this.comprasDAO = new ComprasDAO(new Conexion());
     }
 
@@ -77,10 +77,10 @@ public class ComprasNegocio implements IComprasNegocio {
     }
 
     @Override
-    public List<Compra> consultarPorProveedor(Proveedor proveedor) throws NegocioException {
+    public List<Compra> consultarPorUsuario(Usuario usuario) throws NegocioException {
         List<Compra> compras = null;
         try {
-            compras = comprasDAO.consultarPorProveedor(proveedor);
+            compras = comprasDAO.consultarPorUsuario(usuario);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al realizar la consulta: ", e);
         } finally {

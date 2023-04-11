@@ -83,21 +83,19 @@ public class UsuariosNegocio implements IUsuariosNegocio {
             usuarioExistente = this.usuariosDAO.consultarPorNombre(nombre);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al realizar la consulta: ", e);
-        } finally {
-            return usuarioExistente;
         }
+        return usuarioExistente;
     }
 
     @Override
     public Usuario consultarPorId(Long id) throws NegocioException {
         Usuario usuarioExistente = null;
         try {
-            usuarioExistente = usuariosDAO.consultarPorId(id);
+            usuarioExistente = this.usuariosDAO.consultarPorId(id);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al realizar la consulta: ", e);
-        } finally {
-            return usuarioExistente;
         }
+        return usuarioExistente;
     }
 
     @Override
@@ -107,8 +105,18 @@ public class UsuariosNegocio implements IUsuariosNegocio {
             usuarios = usuariosDAO.consultarTodos();
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al realizar la consulta: ", e);
-        } finally {
-            return usuarios;
         }
+        return usuarios;
+    }
+
+    @Override
+    public Usuario consultarPorEmail(String email) throws NegocioException {
+        Usuario usuarioExistente = null;
+        try {
+            usuarioExistente = this.usuariosDAO.consultarPorEmail(email);
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al realizar la consulta: ", e);
+        }
+        return usuarioExistente;
     }
 }

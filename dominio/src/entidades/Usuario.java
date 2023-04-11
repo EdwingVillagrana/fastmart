@@ -37,19 +37,19 @@ public class Usuario implements Serializable {
     @Column(name = "id_usuario")
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 150)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
     
-    @Column(name = "direccion", nullable = false, length = 250)
+    @Column(name = "direccion", nullable = false, length = 100)
     private String direccion;
     
     @Column(name = "telefono", nullable = false, length = 10)
     private String telefono;
     
-    @Column(name = "email", nullable = false, length = 150)
+    @Column(name = "email", nullable = false, length = 70)
     private String email; 
     
-    @Column(name = "password", nullable = false, length = 50)
+    @Column(name = "password", nullable = false, length = 20)
     private String password;
     
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)

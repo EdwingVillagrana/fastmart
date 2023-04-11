@@ -18,4 +18,6 @@ public interface IUsuariosNegocio extends IGenericaNegocio<Usuario> {
 
     public Usuario consultarPorNombre(String nombre) throws NegocioException;
     
+    public Usuario consultarPorEmail (String email) throws NegocioException;
+    
 }

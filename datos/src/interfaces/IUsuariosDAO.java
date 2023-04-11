@@ -18,5 +18,7 @@ public interface IUsuariosDAO extends IGenericaDAO<Usuario, Long> {
     
     public Usuario consultarPorNombre(String nombre) throws PersistenciaException;
     
+    public Usuario consultarPorEmail(String email) throws PersistenciaException;
+    
     public List<Usuario> consultarTodos() throws PersistenciaException;
 }

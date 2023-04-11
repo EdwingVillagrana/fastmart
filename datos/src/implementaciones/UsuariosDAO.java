@@ -44,7 +44,7 @@ public class UsuariosDAO implements IUsuariosDAO {
     public void agregar(Usuario usuario) throws PersistenciaException {
         try {
             Usuario usuarioExistente = consultarPorNombre(usuario.getNombre());
-            if (usuarioExistente != null){
+            if (usuarioExistente != null) {
                 throw new PersistenciaException("El usuario ya se encuentra registrado en la base de datos.");
             }
             EntityManager em = this.conexion.crearConexion();
@@ -184,6 +184,29 @@ public class UsuariosDAO implements IUsuariosDAO {
                 TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
                 List<Usuario> usuarios = query.getResultList();
                 return usuarios;
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible consultar la lista de usuarios.");
+        }
+    }
+
+    @Override
+    public Usuario consultarPorEmail(String email) throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                //Se utiliza una consulta JPQL para buscar el proveedor por su nombre
+                TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class);
+                query.setParameter("email", email);
+                Usuario usuario = query.getSingleResult();
+                return usuario;
+            } catch (NoResultException e) {
+                //Si no encuentra ningún usuario, asignamos null al usuario
+                //y lo devolvemos en lugar de lanzar una excepción
+                return null;
             } finally {
                 em.close();
             }

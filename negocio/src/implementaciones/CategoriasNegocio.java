@@ -87,8 +87,6 @@ public class CategoriasNegocio implements ICategoriasNegocio {
             return categoriaExistente;
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al realizar la consulta: ", e);
-        } finally{
-            return categoriaExistente;
         }
     }
 
@@ -117,8 +115,7 @@ public class CategoriasNegocio implements ICategoriasNegocio {
             }
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al realizar la consulta: ", e);
-        } finally {
-            return categorias;
         }
+        return categorias;
     }
 }

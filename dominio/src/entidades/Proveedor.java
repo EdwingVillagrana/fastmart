@@ -5,6 +5,7 @@
 package entidades;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -56,6 +57,7 @@ public class Proveedor implements Serializable {
         this.direccion = direccion;
         this.telefono = telefono;
         this.email = email;
+        this.lista_productos = new ArrayList<>();
     }
 
     public Proveedor(Long id, String nombre, String direccion, String telefono, String email, List<Producto> lista_productos) {

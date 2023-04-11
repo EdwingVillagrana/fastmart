@@ -9,7 +9,6 @@ import implementaciones.ProductosNegocio;
 import implementaciones.VentasNegocio;
 import interfaces.IProductosNegocio;
 import interfaces.IVentasNegocio;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,19 +25,17 @@ import javax.swing.table.JTableHeader;
  * @author Kevin Rios
  */
 public class FrmVenta extends javax.swing.JFrame {
-    
-    Double importe = 0.0;
-    DefaultTableModel model;
-    Double cambio = 0.0;
-    Double total = 0.0;
-    Usuario usuarioLogueado = null;
-    //Lista en donde se guardaran los productos     
-    List<DetalleVenta> listaProductos = new ArrayList<>();
-    IVentasNegocio iventasnegocio;
-    IProductosNegocio iproductosnegocio;
-    
-    CancelarImporte imp = new CancelarImporte();
 
+    private Usuario usuarioLogueado = null;
+    private DefaultTableModel model;
+    private List<DetalleVenta> listaProductos = new ArrayList<>();
+    private IVentasNegocio iVentasNegocio;
+    private IProductosNegocio iProductosNegocio;
+    private Double importe = 0.0;
+    private Double cambio = 0.0;
+    private Double total = 0.0;
+
+    //Lista en donde se guardaran los productos     
     /**
      * Creates new form Venta
      *
@@ -47,15 +44,15 @@ public class FrmVenta extends javax.swing.JFrame {
     public FrmVenta(Usuario usuarioLogueado) {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.iventasnegocio = new VentasNegocio();
-        
-        this.iproductosnegocio = new ProductosNegocio();
+        this.iVentasNegocio = new VentasNegocio();
+
+        this.iProductosNegocio = new ProductosNegocio();
         this.usuarioLogueado = usuarioLogueado;
-        
+
         model = (DefaultTableModel) tableArticulosCarrito.getModel();
         JTableHeader header = tableArticulosCarrito.getTableHeader();
         header.setVisible(false);
-        
+
     }
 
     /**
@@ -107,7 +104,7 @@ public class FrmVenta extends javax.swing.JFrame {
         lblCantidad = new javax.swing.JLabel();
         btnEliminar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
-        btnAgregar1 = new javax.swing.JButton();
+        btnAgregarACarrito = new javax.swing.JButton();
         lblImagenSuper = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -200,7 +197,7 @@ public class FrmVenta extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Cantidad");
         Fondo.add(jLabel6);
-        jLabel6.setBounds(210, 260, 46, 30);
+        jLabel6.setBounds(210, 260, 50, 30);
 
         jLabel7.setBackground(new java.awt.Color(153, 102, 0));
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -217,11 +214,6 @@ public class FrmVenta extends javax.swing.JFrame {
         btnMenu.setBackground(new java.awt.Color(110, 88, 68));
         btnMenu.setForeground(new java.awt.Color(255, 255, 255));
         btnMenu.setText("🏠");
-        btnMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuActionPerformed(evt);
-            }
-        });
         Fondo.add(btnMenu);
         btnMenu.setBounds(0, 0, 50, 30);
 
@@ -418,15 +410,15 @@ public class FrmVenta extends javax.swing.JFrame {
         jPanel4.add(btnModificar);
         btnModificar.setBounds(380, 5, 30, 30);
 
-        btnAgregar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_agregar.png"))); // NOI18N
-        btnAgregar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        btnAgregar1.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregarACarrito.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_agregar.png"))); // NOI18N
+        btnAgregarACarrito.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        btnAgregarACarrito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregar1ActionPerformed(evt);
+                btnAgregarACarritoActionPerformed(evt);
             }
         });
-        jPanel4.add(btnAgregar1);
-        btnAgregar1.setBounds(300, 5, 30, 30);
+        jPanel4.add(btnAgregarACarrito);
+        btnAgregarACarrito.setBounds(300, 5, 30, 30);
 
         Fondo.add(jPanel4);
         jPanel4.setBounds(50, 205, 430, 40);
@@ -458,41 +450,25 @@ public class FrmVenta extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuActionPerformed
-
-    /**
-     * Este método regresa la fecha actual.
-     *
-     * @return Fecha actual.
-     */
-    public Date obtenerFecha() {
-        return Date.valueOf(LocalDate.now());
-        
-    }
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
         String error = validarCampos();
         if (error != null) {
             JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             Venta venta = new Venta(this.usuarioLogueado, obtenerFecha(), this.total, this.listaProductos);
-            
+
             try {
-                iventasnegocio.agregar(venta);
+                iVentasNegocio.agregar(venta);
                 JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.OK_OPTION);
             } catch (NegocioException ex) {
                 Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, ex, "Venta no registrada!", JOptionPane.ERROR_MESSAGE);
             }
         }
-        
+
 
     }//GEN-LAST:event_btnGenerarVentaActionPerformed
 
-    /**
-     * Método usado para pedirle el importe al usuario.
-     */
     private void btnImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImporteActionPerformed
 //        imp.setVisible(true);
         DlgImporte dlgImporte = new DlgImporte(this, true);
@@ -505,18 +481,17 @@ public class FrmVenta extends javax.swing.JFrame {
             }
         }
         importe = dlgImporte.obtenerImporte();
-        
+
         txtImporte.setText(importe.toString());
-        
+
         calculaCambio();
     }//GEN-LAST:event_btnImporteActionPerformed
-    
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        
+
         int cantidad = Integer.parseInt(txtCantidad.getText());
         int stock = Integer.parseInt(txtStock.getText());
-        
+
         try {
             if (txtNombreProducto.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "No has seleccionado un producto!");
@@ -526,10 +501,10 @@ public class FrmVenta extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Cantidad Errónea!!! (no hay tanto stock)");
             } else {
                 //Creando un objeto de detalleVenta
-                Producto productoNuevo = iproductosnegocio.consultarPorNombre(txtNombreProducto.getText());
+                Producto productoNuevo = iProductosNegocio.consultarPorNombre(txtNombreProducto.getText());
                 Long productoCantidad = Long.parseLong(txtCantidad.toString());
                 Double productoPrecio = Double.parseDouble(txtPrecio.toString());
-                
+
                 DetalleVenta dv = new DetalleVenta(productoNuevo, productoCantidad, productoPrecio);
                 listaProductos.add(dv);
                 calculaTotal();
@@ -538,60 +513,16 @@ public class FrmVenta extends javax.swing.JFrame {
             Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnModificarActionPerformed
-    
-    public void calculaCambio() {
-        if (importe < total) {
-            cambio = 0.0;
-        } else {
-            cambio = importe - total;
-            txtCambio.setText(cambio.toString());
-        }
-    }
-    
-    public void calculaTotal() {
-        total = 0.0;
-        for (DetalleVenta detalleVenta : listaProductos) {
-            total += detalleVenta.getPrecio() * detalleVenta.getCantidad();
-        }
-        
-    }
 
-    /**
-     * Este método es para la tabla del FrmVenta Se limpia la tabla
-     */
-    public void agregarProductoAlCarrito() {
-        tableArticulosCarrito.removeAll();
-        
-        for (DetalleVenta detalleVenta : listaProductos) {
-            String nombreProducto = detalleVenta.getProducto().getNombre();
-            Long cantidadProducto = detalleVenta.getCantidad();
-            Double precioProducto = detalleVenta.getPrecio();
-            Double subTotal = cantidadProducto * precioProducto;
-            //llenando la tabla.
-            Object[] fila = {nombreProducto, cantidadProducto, precioProducto, subTotal};
-            model.addRow(fila);
-        }
-    }
-
-    /**
-     * *
-     * Si el nombre es mayor a 100 caracteres, se eliminaran solos.
-     *
-     * @param evt
-     */
     private void txtNombreProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreProductoKeyTyped
-        // TODO add your handling code here:
+        
         if (txtNombreProducto.getText().length() > 100) {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreProductoKeyTyped
 
-    private void btnAgregar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregar1ActionPerformed
-        // TODO add your handling code here:
-        /*
-        Si el producto ya esta agregado, actualizar el que ya esta agregado, si no se agrega a la lista.
-        Se actualiza/agrega y después se calcula el total.
-         */
+    private void btnAgregarACarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarACarritoActionPerformed
+        
         Long productoAgregar = Long.parseLong(txtCodigo.getText());
         for (DetalleVenta Producto : listaProductos) {
             if (Objects.equals(Producto.getProducto().getCodigo(), productoAgregar)) {
@@ -601,16 +532,10 @@ public class FrmVenta extends javax.swing.JFrame {
                 listaProductos.add(Producto);
             }
         }
-    }//GEN-LAST:event_btnAgregar1ActionPerformed
+    }//GEN-LAST:event_btnAgregarACarritoActionPerformed
 
     private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
         // TODO add your handling code here:
-        /*
-        Si no hay nada seleccionado, joptionpane "no hay nada para modificar"
-        si hay algo seleccionado mostrar sus datos
-        se hace una busqueda en la listaProductos del producto seleccionado 
-         */
-        
         int indiceProducto = tableArticulosCarrito.getSelectedRow();
         if (tableArticulosCarrito.getSelectedRowCount() <= 0) {
             JOptionPane.showMessageDialog(null, "No hay nada seleccionado para modificar");
@@ -629,13 +554,7 @@ public class FrmVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnModificarMouseClicked
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-        /*
-        Si no hay producto seleccionado que eliminar, joptionpane "No hay producto a eliminar", si no:
-        listaProducto.remove(:3);
-        
-        volver a cargar la tabla. :D
-         */
+       
         if (tableArticulosCarrito.getSelectedRowCount() <= 0) {
             JOptionPane.showMessageDialog(null, "No hay nada seleccionado para eliminar!");
         } else {
@@ -660,26 +579,69 @@ public class FrmVenta extends javax.swing.JFrame {
             consultarProductos.setVisible(true);
             //Deberíamos mandarle el código en el constructor para que lo busque en cuanto se muestre la otra ventana.
         }    }//GEN-LAST:event_botonBuscarActionPerformed
-    
+
+    public void calculaCambio() {
+        if (importe < total) {
+            cambio = 0.0;
+        } else {
+            cambio = importe - total;
+            txtCambio.setText(cambio.toString());
+        }
+    }
+
+    public void calculaTotal() {
+        total = 0.0;
+        for (DetalleVenta detalleVenta : listaProductos) {
+            total += detalleVenta.getPrecio() * detalleVenta.getCantidad();
+        }
+
+    }
+
+    /**
+     * Este método es para la tabla del FrmVenta Se limpia la tabla
+     */
+    public void agregarProductoAlCarrito() {
+        tableArticulosCarrito.removeAll();
+
+        for (DetalleVenta detalleVenta : listaProductos) {
+            String nombreProducto = detalleVenta.getProducto().getNombre();
+            Long cantidadProducto = detalleVenta.getCantidad();
+            Double precioProducto = detalleVenta.getPrecio();
+            Double subTotal = cantidadProducto * precioProducto;
+            //llenando la tabla.
+            Object[] fila = {nombreProducto, cantidadProducto, precioProducto, subTotal};
+            model.addRow(fila);
+        }
+    }
+
+    /**
+     * Este método regresa la fecha actual.
+     *
+     * @return Fecha actual.
+     */
+    public Date obtenerFecha() {
+        return Date.valueOf(LocalDate.now());
+    }
+
     private String validarCampos() {
         /**
          * Lista de articulo que no esta vacía.
          */
-        
+
         if (listaProductos.isEmpty()) {
             return "La lista de productos no puede estar vacía";
         }
         if (importe < total) {
             return "El importe no puede ser menor al monto total";
         }
-        
+
         float importe = Float.parseFloat(this.txtImporte.getText());
         float total = Float.parseFloat(this.txtTotalApagar.getText());
         if (this.tableArticulosCarrito.getModel().getColumnCount() == 0) {
             JOptionPane.showMessageDialog(null, "Ingrese productos", "Advertencia", JOptionPane.WARNING_MESSAGE);
         } else if (this.txtImporte.getText().equals("") || importe >= total) {
             JOptionPane.showMessageDialog(null, "Ingrese el importe", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            
+
         }
         return "";
     }
@@ -724,7 +686,7 @@ public class FrmVenta extends javax.swing.JFrame {
     private javax.swing.JPanel Fondo;
     private javax.swing.JTextField FondoTitulo;
     private javax.swing.JButton botonBuscar;
-    private javax.swing.JButton btnAgregar1;
+    private javax.swing.JButton btnAgregarACarrito;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGenerarVenta;
     private javax.swing.JButton btnImporte;

@@ -1,13 +1,15 @@
 package frames;
 
+import entidades.Usuario;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author Kevin Rios
  */
 public class Login extends javax.swing.JFrame {
-    MenuPrincipal menu = new MenuPrincipal();
-    
+
+    private Usuario usuarioLogueado;
     /**
      * Creates new form Login
      */
@@ -15,7 +17,7 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.lblOcultar.setVisible(false);
-        
+
     }
 
     /**
@@ -153,23 +155,24 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsuarioMouseClicked
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-       menu.setVisible(true);
-       this.dispose();
+        MenuPrincipal menu = new MenuPrincipal(usuarioLogueado);
+        menu.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         int a = JOptionPane.YES_NO_OPTION;
-        int resultado = JOptionPane.showConfirmDialog(this,"¿DESEA SALIR?", "SALIR", a);
-        if (resultado==0) {
+        int resultado = JOptionPane.showConfirmDialog(this, "¿DESEA SALIR?", "SALIR", a);
+        if (resultado == 0) {
             System.exit(0);
-        }             
+        }
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void lblVerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblVerMouseClicked
         this.lblVer.setVisible(false);
-        this.lblOcultar.setVisible(true);    
-        this.txtPassword.setEchoChar((char)0);
-     
+        this.lblOcultar.setVisible(true);
+        this.txtPassword.setEchoChar((char) 0);
+
     }//GEN-LAST:event_lblVerMouseClicked
 
     private void lblOcultarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblOcultarMouseClicked
@@ -184,14 +187,14 @@ public class Login extends javax.swing.JFrame {
 
     private void txtPasswordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyTyped
         // TODO add your handling code here:
-        if(txtPassword.getText().length() >= 20){
+        if (txtPassword.getText().length() >= 20) {
             evt.consume();
         }
     }//GEN-LAST:event_txtPasswordKeyTyped
 
     private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
         // TODO add your handling code here:
-        if(txtUsuario.getText().length() >= 20){
+        if (txtUsuario.getText().length() >= 20) {
             evt.consume();
         }
     }//GEN-LAST:event_txtUsuarioKeyTyped

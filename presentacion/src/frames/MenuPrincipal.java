@@ -208,23 +208,24 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuVentasVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVentasVentaActionPerformed
-        venta.setVisible(true);
+
     }//GEN-LAST:event_menuVentasVentaActionPerformed
 
     private void menuComprasCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuComprasCompraActionPerformed
-        compra.setVisible(true);
+
     }//GEN-LAST:event_menuComprasCompraActionPerformed
 
     private void menuConsultasVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasVentasActionPerformed
-        ConsultarVenta.setVisible(true);
+
     }//GEN-LAST:event_menuConsultasVentasActionPerformed
 
     private void menuManenimientoEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoEmpleadoActionPerformed
-        registrarUsuario.setVisible(true);
+
     }//GEN-LAST:event_menuManenimientoEmpleadoActionPerformed
 
     private void menuManenimientoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoProductoActionPerformed
-        registrarProducto.setVisible(true);
+
+        
     }//GEN-LAST:event_menuManenimientoProductoActionPerformed
 
     private void menuInicioSalirAplicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuInicioSalirAplicacionActionPerformed
@@ -240,19 +241,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuInicioCerrarSActionPerformed
 
     private void menuManenimientoProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoProveedorActionPerformed
-        provedor.setVisible(true);
+
     }//GEN-LAST:event_menuManenimientoProveedorActionPerformed
 
     private void menuManenimientoCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoCategoriaActionPerformed
-        categoria.setVisible(true);
+
     }//GEN-LAST:event_menuManenimientoCategoriaActionPerformed
 
     private void menuConsultasProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasProductosActionPerformed
-        consultarProductos.setVisible(true);
+
+        
     }//GEN-LAST:event_menuConsultasProductosActionPerformed
 
     private void menuConsultasProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasProveedoresActionPerformed
-        consultarProveedores.setVisible(true);
+
     }//GEN-LAST:event_menuConsultasProveedoresActionPerformed
 
 //    /**

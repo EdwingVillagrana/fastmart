@@ -9,6 +9,7 @@ import implementaciones.ProductosNegocio;
 import implementaciones.VentasNegocio;
 import interfaces.IProductosNegocio;
 import interfaces.IVentasNegocio;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -16,15 +17,18 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Objects;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 /**
  *
  * @author Kevin Rios
  */
 public class FrmVenta extends javax.swing.JFrame {
-
+    
+    Double importe = 0.0;
+    DefaultTableModel model;
     Double cambio = 0.0;
     Double total = 0.0;
     Usuario usuarioLogueado = null;
@@ -32,7 +36,7 @@ public class FrmVenta extends javax.swing.JFrame {
     List<DetalleVenta> listaProductos = new ArrayList<>();
     IVentasNegocio iventasnegocio;
     IProductosNegocio iproductosnegocio;
-
+    
     CancelarImporte imp = new CancelarImporte();
 
     /**
@@ -44,9 +48,14 @@ public class FrmVenta extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.iventasnegocio = new VentasNegocio();
-
+        
         this.iproductosnegocio = new ProductosNegocio();
         this.usuarioLogueado = usuarioLogueado;
+        
+        model = (DefaultTableModel) tableArticulosCarrito.getModel();
+        JTableHeader header = tableArticulosCarrito.getTableHeader();
+        header.setVisible(false);
+        
     }
 
     /**
@@ -113,10 +122,32 @@ public class FrmVenta extends javax.swing.JFrame {
 
             },
             new String [] {
-
+                "Articulo", "Cantidad", "Precio", "Subtotal"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Long.class, java.lang.Double.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableArticulosCarrito.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tableArticulosCarrito);
+        if (tableArticulosCarrito.getColumnModel().getColumnCount() > 0) {
+            tableArticulosCarrito.getColumnModel().getColumn(0).setResizable(false);
+            tableArticulosCarrito.getColumnModel().getColumn(1).setResizable(false);
+            tableArticulosCarrito.getColumnModel().getColumn(2).setResizable(false);
+            tableArticulosCarrito.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         Fondo.add(jScrollPane1);
         jScrollPane1.setBounds(50, 290, 640, 180);
@@ -256,7 +287,7 @@ public class FrmVenta extends javax.swing.JFrame {
             }
         });
         jPanel1.add(txtNombreProducto);
-        txtNombreProducto.setBounds(30, 122, 170, 20);
+        txtNombreProducto.setBounds(30, 120, 170, 20);
 
         txtPrecio.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtPrecio.setBorder(null);
@@ -276,7 +307,7 @@ public class FrmVenta extends javax.swing.JFrame {
         lblNombreProducto.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblNombreProducto.setText("NOMBRE:");
         jPanel1.add(lblNombreProducto);
-        lblNombreProducto.setBounds(30, 100, 70, 20);
+        lblNombreProducto.setBounds(30, 90, 70, 20);
 
         txtStock.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtStock.setBorder(null);
@@ -285,9 +316,9 @@ public class FrmVenta extends javax.swing.JFrame {
 
         botonBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_lupa.png"))); // NOI18N
         botonBuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        botonBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                botonBuscarMouseClicked(evt);
+        botonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonBuscarActionPerformed(evt);
             }
         });
         jPanel1.add(botonBuscar);
@@ -311,7 +342,7 @@ public class FrmVenta extends javax.swing.JFrame {
         txtCambio.setForeground(new java.awt.Color(255, 255, 51));
         txtCambio.setText("0.00");
         jPanel3.add(txtCambio);
-        txtCambio.setBounds(130, 30, 100, 20);
+        txtCambio.setBounds(130, 30, 100, 30);
 
         lblImporte.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblImporte.setText("IMPORTE");
@@ -324,7 +355,7 @@ public class FrmVenta extends javax.swing.JFrame {
         txtImporte.setForeground(new java.awt.Color(255, 255, 255));
         txtImporte.setText("0.00");
         jPanel3.add(txtImporte);
-        txtImporte.setBounds(20, 30, 100, 20);
+        txtImporte.setBounds(20, 30, 100, 30);
 
         Fondo.add(jPanel3);
         jPanel3.setBounds(50, 480, 250, 60);
@@ -344,7 +375,7 @@ public class FrmVenta extends javax.swing.JFrame {
         txtTotalApagar.setForeground(new java.awt.Color(0, 255, 51));
         txtTotalApagar.setText("0.00");
         jPanel2.add(txtTotalApagar);
-        txtTotalApagar.setBounds(270, 30, 100, 20);
+        txtTotalApagar.setBounds(270, 30, 110, 30);
 
         Fondo.add(jPanel2);
         jPanel2.setBounds(310, 480, 380, 60);
@@ -420,6 +451,7 @@ public class FrmVenta extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -437,61 +469,54 @@ public class FrmVenta extends javax.swing.JFrame {
      */
     public Date obtenerFecha() {
         return Date.valueOf(LocalDate.now());
-
+        
     }
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
-        if (validarCampos()) {
-            System.out.println("venta realizada");
-        }
-
-        Venta venta = new Venta(this.usuarioLogueado, obtenerFecha(), this.total, this.listaProductos);
-
-        /* Venta tiene: 
-        usuario (selecciona desde el inicio/log in)
-        fecha (fecha del sistema) -> Quitar, no lo vamos a modificar nosotros.
-        Total
-        listaProductos
-         */
-        try {
-            iventasnegocio.agregar(venta);
-            JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.OK_OPTION);
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnGenerarVentaActionPerformed
-
-    private void btnImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImporteActionPerformed
-        imp.setVisible(true);
-        /*
-        Mostrar un JOptionpane en donde se agrega la cantidad con la que se va a pagar.
-        Si la cantidad < total, mostrar error. Si no se agrega el importe a la pantalla, se calcula el cambio y se muestra en pantalla.
-        Se activa el botón de generar venta
-         */
-        Double importe = Double.parseDouble(JOptionPane.showInputDialog("Ingrese cantidad con lo que se va a pagar: "));
-        if (importe <= -1) {
-            JOptionPane.showMessageDialog(null, "Ingresa un valor valido!");
+        String error = validarCampos();
+        if (error != null) {
+            JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            if (importe < total) {
-                JOptionPane.showMessageDialog(null, "Ingresa un valor valido!");
-            } else {
-                txtImporte.setText(importe.toString());
-                cambio = total - importe;
-                txtCambio.setText(cambio.toString());
+            Venta venta = new Venta(this.usuarioLogueado, obtenerFecha(), this.total, this.listaProductos);
+            
+            try {
+                iventasnegocio.agregar(venta);
+                JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.OK_OPTION);
+            } catch (NegocioException ex) {
+                Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex, "Venta no registrada!", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_btnImporteActionPerformed
+        
 
+    }//GEN-LAST:event_btnGenerarVentaActionPerformed
+
+    /**
+     * Método usado para pedirle el importe al usuario.
+     */
+    private void btnImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImporteActionPerformed
+//        imp.setVisible(true);
+        DlgImporte dlgImporte = new DlgImporte(this, true);
+        dlgImporte.setVisible(true);
+        while (dlgImporte.isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException io) {
+                io.printStackTrace();
+            }
+        }
+        importe = dlgImporte.obtenerImporte();
+        
+        txtImporte.setText(importe.toString());
+        
+        calculaCambio();
+    }//GEN-LAST:event_btnImporteActionPerformed
+    
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        /*
-            Verificar que el txtNombre no este vacio, si esta vacio, "No has seleccionado un producto"
-            else, verificar el txtCantidad, si esta vacio o <= 0 "Cantidad erronea"
-            else, si cantidad > stock, "no hay tanto stock"
-            si todo esta bien, crear un nuevo objeto de detalleventa
-         */
+        
         int cantidad = Integer.parseInt(txtCantidad.getText());
         int stock = Integer.parseInt(txtStock.getText());
-
+        
         try {
             if (txtNombreProducto.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "No has seleccionado un producto!");
@@ -504,7 +529,7 @@ public class FrmVenta extends javax.swing.JFrame {
                 Producto productoNuevo = iproductosnegocio.consultarPorNombre(txtNombreProducto.getText());
                 Long productoCantidad = Long.parseLong(txtCantidad.toString());
                 Double productoPrecio = Double.parseDouble(txtPrecio.toString());
-
+                
                 DetalleVenta dv = new DetalleVenta(productoNuevo, productoCantidad, productoPrecio);
                 listaProductos.add(dv);
                 calculaTotal();
@@ -513,13 +538,22 @@ public class FrmVenta extends javax.swing.JFrame {
             Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnModificarActionPerformed
-
+    
+    public void calculaCambio() {
+        if (importe < total) {
+            cambio = 0.0;
+        } else {
+            cambio = importe - total;
+            txtCambio.setText(cambio.toString());
+        }
+    }
+    
     public void calculaTotal() {
         total = 0.0;
         for (DetalleVenta detalleVenta : listaProductos) {
             total += detalleVenta.getPrecio() * detalleVenta.getCantidad();
         }
-
+        
     }
 
     /**
@@ -527,11 +561,15 @@ public class FrmVenta extends javax.swing.JFrame {
      */
     public void agregarProductoAlCarrito() {
         tableArticulosCarrito.removeAll();
-
+        
         for (DetalleVenta detalleVenta : listaProductos) {
-            total += detalleVenta.getPrecio() * detalleVenta.getCantidad();
-            //tableArticulosCarrito.add("" + detalleVenta.getProducto().toString());
-
+            String nombreProducto = detalleVenta.getProducto().getNombre();
+            Long cantidadProducto = detalleVenta.getCantidad();
+            Double precioProducto = detalleVenta.getPrecio();
+            Double subTotal = cantidadProducto * precioProducto;
+            //llenando la tabla.
+            Object[] fila = {nombreProducto, cantidadProducto, precioProducto, subTotal};
+            model.addRow(fila);
         }
     }
 
@@ -547,29 +585,6 @@ public class FrmVenta extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreProductoKeyTyped
-    /**
-     * *
-     * Método usado para buscar un producto, abre la ventan de
-     * ConsultarProductos cuando le dan click al botón buscar.
-     *
-     * @param evt
-     */
-    private void botonBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonBuscarMouseClicked
-        // TODO add your handling code here:
-        /*
-        Cuando se hace click al botón se tiene que verificar el cuadro de txtCodigo no este vacio
-        Si esta vacio: mostrar joptionpane: Esta vacio! requestFocus -> Solicita un requestFocus
-        si no esta vacio, se realiza la busqueda -> IVentasNegocio 
-         */
-        if (txtCodigo.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "El campo de código está vacío");
-        } else {
-            //Aquí se realiza la busqueda.
-            ConsultarProductos consultarProductos = new ConsultarProductos();
-            consultarProductos.setVisible(true);
-            //Deberíamos mandarle el código en el constructor para que lo busque en cuanto se muestre la otra ventana.
-        }
-    }//GEN-LAST:event_botonBuscarMouseClicked
 
     private void btnAgregar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregar1ActionPerformed
         // TODO add your handling code here:
@@ -595,7 +610,7 @@ public class FrmVenta extends javax.swing.JFrame {
         si hay algo seleccionado mostrar sus datos
         se hace una busqueda en la listaProductos del producto seleccionado 
          */
-
+        
         int indiceProducto = tableArticulosCarrito.getSelectedRow();
         if (tableArticulosCarrito.getSelectedRowCount() <= 0) {
             JOptionPane.showMessageDialog(null, "No hay nada seleccionado para modificar");
@@ -622,7 +637,7 @@ public class FrmVenta extends javax.swing.JFrame {
         volver a cargar la tabla. :D
          */
         if (tableArticulosCarrito.getSelectedRowCount() <= 0) {
-            JOptionPane.showMessageDialog(null, "No hay nada seleccionado para modificar");
+            JOptionPane.showMessageDialog(null, "No hay nada seleccionado para eliminar!");
         } else {
             int articuloEliminar = tableArticulosCarrito.getSelectedRow();
             //Esto me regresa el indice del producto seleccioando, se lo mando al array y que se elimine ese index? 
@@ -630,53 +645,80 @@ public class FrmVenta extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private boolean validarCampos() {
+    private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
+        // TODO add your handling code here:
+        /*
+        Cuando se hace click al botón se tiene que verificar el cuadro de txtCodigo no este vacio
+        Si esta vacio: mostrar joptionpane: Esta vacio! requestFocus -> Solicita un requestFocus
+        si no esta vacio, se realiza la busqueda -> IVentasNegocio 
+         */
+        if (txtCodigo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El campo de código está vacío");
+        } else {
+            //Aquí se realiza la busqueda.
+            ConsultarProductos consultarProductos = new ConsultarProductos();
+            consultarProductos.setVisible(true);
+            //Deberíamos mandarle el código en el constructor para que lo busque en cuanto se muestre la otra ventana.
+        }    }//GEN-LAST:event_botonBuscarActionPerformed
+    
+    private String validarCampos() {
+        /**
+         * Lista de articulo que no esta vacía.
+         */
+        
+        if (listaProductos.isEmpty()) {
+            return "La lista de productos no puede estar vacía";
+        }
+        if (importe < total) {
+            return "El importe no puede ser menor al monto total";
+        }
+        
         float importe = Float.parseFloat(this.txtImporte.getText());
         float total = Float.parseFloat(this.txtTotalApagar.getText());
         if (this.tableArticulosCarrito.getModel().getColumnCount() == 0) {
             JOptionPane.showMessageDialog(null, "Ingrese productos", "Advertencia", JOptionPane.WARNING_MESSAGE);
         } else if (this.txtImporte.getText().equals("") || importe >= total) {
             JOptionPane.showMessageDialog(null, "Ingrese el importe", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return false;
+            
         }
-        return true;
+        return "";
     }
 
     /**
      * @param args the command line arguments
      */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//               // new Venta().setVisible(true);
-//            }
-//        });
-//    }
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new FrmVenta(new Usuario()).setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Fondo;

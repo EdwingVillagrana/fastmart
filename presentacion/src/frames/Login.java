@@ -1,8 +1,11 @@
 package frames;
 
 import entidades.Usuario;
+import excepciones.NegocioException;
 import implementaciones.UsuariosNegocio;
 import interfaces.IUsuariosNegocio;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -10,9 +13,10 @@ import javax.swing.JOptionPane;
  * @author Kevin Rios
  */
 public class Login extends javax.swing.JFrame {
-
+    
     private Usuario usuarioLogueado;
     private IUsuariosNegocio usuariosNegocio;
+
     /**
      * Creates new form Login
      */
@@ -22,6 +26,7 @@ public class Login extends javax.swing.JFrame {
         this.lblOcultar.setVisible(false);
         usuariosNegocio = new UsuariosNegocio();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -141,11 +146,28 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+ * 
+ * @param evt 
+ */
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        MenuPrincipal menu = new MenuPrincipal(usuarioLogueado);
-        menu.setVisible(true);
-        this.dispose();
+        String usuarioSesion = txtUsuario.getText();
+        String passwordSesion = txtPassword.getText();
+        try {
+            Usuario usuarioRegistrado = usuariosNegocio.consultarPorEmail(usuarioSesion);
+            String contraseñaUR = usuarioRegistrado.getPassword();
+            
+            if (!passwordSesion.equals(contraseñaUR)) {
+                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta!");
+            } else {
+                MenuPrincipal frmP = new MenuPrincipal(usuarioLogueado);
+                frmP.setVisible(true);
+            }
+            
+        } catch (NegocioException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed

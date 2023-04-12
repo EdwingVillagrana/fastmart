@@ -5,11 +5,13 @@
 package implementaciones;
 
 import entidades.Compra;
+import entidades.DetalleCompra;
 import static entidades.Producto_.proveedor;
 import entidades.Usuario;
 import excepciones.PersistenciaException;
 import interfaces.IComprasDAO;
 import interfaces.IConexion;
+import interfaces.IProductosDAO;
 import java.sql.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,9 +28,11 @@ import javax.persistence.TypedQuery;
 public class ComprasDAO implements IComprasDAO {
 
     private final IConexion conexion;
+    private final IProductosDAO productosDAO;
 
     public ComprasDAO(IConexion conexion) {
         this.conexion = conexion;
+        productosDAO = new ProductosDAO(conexion);
     }
 
     @Override
@@ -38,6 +42,12 @@ public class ComprasDAO implements IComprasDAO {
             try {
                 em.getTransaction().begin();
                 em.persist(compra);
+                List<DetalleCompra> productosComprados = compra.getProductos();
+                for(DetalleCompra detalleCompra: productosComprados){
+                    Long idProducto = detalleCompra.getProducto().getId();
+                    Long cantidad = detalleCompra.getCantidad();
+                    productosDAO.actualizarStock(idProducto, cantidad, true);
+                }
                 em.getTransaction().commit();
             } finally {
                 em.close();

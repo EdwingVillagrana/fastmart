@@ -84,6 +84,7 @@ public class ProductosDAO implements IProductosDAO {
                 productoGuardado.setPrecio_compra(productoActualizado.getPrecio_compra());
                 productoGuardado.setPrecio_venta(productoActualizado.getPrecio_venta());
                 productoGuardado.setCategoria(productoActualizado.getCategoria());
+                em.merge(productoGuardado);
                 em.getTransaction().commit();
             } finally {
                 em.close();
@@ -94,6 +95,31 @@ public class ProductosDAO implements IProductosDAO {
         }
     }
 
+    @Override
+    public void actualizarStock(Long id, Long cantidad, boolean sumarStock) throws PersistenciaException {
+        try {
+            EntityManager em = this.conexion.crearConexion();
+            try {
+                em.getTransaction().begin();
+                Producto productoGuardado = consultarPorId(id);
+                if (productoGuardado == null) {
+                    throw new PersistenciaException("No se encontró el producto a actualizar.");
+                }
+                if (sumarStock) {
+                    productoGuardado.setStock(productoGuardado.getStock() + cantidad);
+                } else{
+                    productoGuardado.setStock(productoGuardado.getStock() - cantidad);
+                }
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
+            throw new PersistenciaException("No fue posible actualizar los datos del producto.");
+        }
+    }
+    
     /**
      * Elimina un productoGuardado de la base de datos.
      *

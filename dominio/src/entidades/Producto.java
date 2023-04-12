@@ -47,6 +47,9 @@ public class Producto implements Serializable {
     
     @Column(name = "codigo", nullable = false)
     private Long codigo;
+    
+    @Column(name = "stock", nullable = false)
+    private Long stock;
 
     public Producto() {
     }
@@ -58,9 +61,10 @@ public class Producto implements Serializable {
         this.precio_venta = precio_venta;
         this.categoria = categoria;
         this.codigo = codigo;
+        this.stock = 0L;
     }
 
-    public Producto(Long id, String nombre, Proveedor proveedor, Double precio_compra, Double precio_venta, Categoria categoria, Long codigo) {
+    public Producto(Long id, String nombre, Proveedor proveedor, Double precio_compra, Double precio_venta, Categoria categoria, Long codigo, Long stock) {
         this.id = id;
         this.nombre = nombre;
         this.proveedor = proveedor;
@@ -68,6 +72,7 @@ public class Producto implements Serializable {
         this.precio_venta = precio_venta;
         this.categoria = categoria;
         this.codigo = codigo;
+        this.stock = stock;
     }
 
     public Long getId() {
@@ -126,31 +131,11 @@ public class Producto implements Serializable {
         this.codigo = codigo;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        return hash;
+    public Long getStock() {
+        return stock;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Producto other = (Producto) obj;
-        return Objects.equals(this.id, other.id);
+    public void setStock(Long stock) {
+        this.stock = stock;
     }
-
-    @Override
-    public String toString() {
-        return "Producto{" + "id=" + id + ", nombre=" + nombre + ", proveedor=" + proveedor + ", precio_compra=" + precio_compra + ", precio_venta=" + precio_venta + ", categoria=" + categoria + ", codigo=" + codigo + '}';
-    }
-
 }

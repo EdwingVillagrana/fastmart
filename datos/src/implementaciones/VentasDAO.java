@@ -4,9 +4,11 @@
  */
 package implementaciones;
 
+import entidades.DetalleVenta;
 import entidades.Venta;
 import excepciones.PersistenciaException;
 import interfaces.IConexion;
+import interfaces.IProductosDAO;
 import java.util.Date;
 import javax.persistence.EntityManager;
 import java.util.logging.Level;
@@ -24,9 +26,11 @@ import javax.persistence.TypedQuery;
 public class VentasDAO implements IVentasDAO {
 
     private final IConexion conexion;
-
+    private final IProductosDAO productosDAO;
+    
     public VentasDAO(IConexion conexion) {
         this.conexion = conexion;
+        productosDAO = new ProductosDAO(conexion);
     }
 
     /**
@@ -43,6 +47,12 @@ public class VentasDAO implements IVentasDAO {
             try {
                 em.getTransaction().begin();
                 em.persist(venta);
+                List<DetalleVenta> productosVendidos = venta.getProductos();
+                for(DetalleVenta detalleVenta: productosVendidos){
+                    Long idProducto = detalleVenta.getProducto().getId();
+                    Long cantidad = detalleVenta.getCantidad();
+                    productosDAO.actualizarStock(idProducto, cantidad, false);
+                }
                 em.getTransaction().commit();
             } finally {
                 em.close();

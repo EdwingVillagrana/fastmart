@@ -20,7 +20,7 @@ import java.util.List;
 public class VentasNegocio implements IVentasNegocio {
 
     private final IVentasDAO ventasDAO;
-
+    
     public VentasNegocio() {
         this.ventasDAO = new VentasDAO(new Conexion());
     }

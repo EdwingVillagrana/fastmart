@@ -138,4 +138,8 @@ public class Producto implements Serializable {
     public void setStock(Long stock) {
         this.stock = stock;
     }
+    
+    public void actualizaStock(Long cantidadVendida){
+        this.stock -= cantidadVendida;
+    }
 }

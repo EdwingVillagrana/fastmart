@@ -32,14 +32,18 @@ public class FrmVenta extends javax.swing.JFrame {
     private List<DetalleVenta> listaProductos = new ArrayList<>();
     private IVentasNegocio ventasNegocio;
     private IProductosNegocio producotsNegocio;
+    
+    //Atributos que nos ayudarán para realizar la modificación de un producto que se encuentre en el carrito
+    private boolean seEstaModificando = false;
+    private int indiceEnModificacion = -1;
 
     //Instancia de tipo Producto que se usará cada vez que se realice una consulta
     private Producto productoActual = null;
 
     //Variables utilizadas para manejar los cálculos
-    private Double importe = 0.0;
-    private Double cambio = 0.0;
-    private Double total = 0.0;
+    private Double importe = 0.00;
+    private Double cambio = 0.00;
+    private Double total = 0.00;
 
     //Lista en donde se guardaran los productos     
     /**
@@ -103,7 +107,7 @@ public class FrmVenta extends javax.swing.JFrame {
         txtImporte = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         lblTotalApagar = new javax.swing.JLabel();
-        txtTotalApagar = new javax.swing.JTextField();
+        txtTotal = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         txtCantidad = new javax.swing.JTextField();
         lblCantidad = new javax.swing.JLabel();
@@ -276,16 +280,13 @@ public class FrmVenta extends javax.swing.JFrame {
         jPanel1.add(lblCodigo);
         lblCodigo.setBounds(30, 40, 70, 20);
 
+        txtNombreProducto.setEditable(false);
         txtNombreProducto.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtNombreProducto.setBorder(null);
-        txtNombreProducto.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNombreProductoKeyTyped(evt);
-            }
-        });
         jPanel1.add(txtNombreProducto);
         txtNombreProducto.setBounds(30, 120, 170, 20);
 
+        txtPrecio.setEditable(false);
         txtPrecio.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtPrecio.setBorder(null);
         jPanel1.add(txtPrecio);
@@ -306,6 +307,7 @@ public class FrmVenta extends javax.swing.JFrame {
         jPanel1.add(lblNombreProducto);
         lblNombreProducto.setBounds(30, 90, 70, 20);
 
+        txtStock.setEditable(false);
         txtStock.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtStock.setBorder(null);
         jPanel1.add(txtStock);
@@ -366,13 +368,13 @@ public class FrmVenta extends javax.swing.JFrame {
         jPanel2.add(lblTotalApagar);
         lblTotalApagar.setBounds(270, 10, 100, 20);
 
-        txtTotalApagar.setEditable(false);
-        txtTotalApagar.setBackground(new java.awt.Color(0, 0, 0));
-        txtTotalApagar.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
-        txtTotalApagar.setForeground(new java.awt.Color(0, 255, 51));
-        txtTotalApagar.setText("0.00");
-        jPanel2.add(txtTotalApagar);
-        txtTotalApagar.setBounds(270, 30, 110, 30);
+        txtTotal.setEditable(false);
+        txtTotal.setBackground(new java.awt.Color(0, 0, 0));
+        txtTotal.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
+        txtTotal.setForeground(new java.awt.Color(0, 255, 51));
+        txtTotal.setText("0.00");
+        jPanel2.add(txtTotal);
+        txtTotal.setBounds(270, 30, 110, 30);
 
         Fondo.add(jPanel2);
         jPanel2.setBounds(310, 480, 380, 60);
@@ -402,11 +404,6 @@ public class FrmVenta extends javax.swing.JFrame {
 
         btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_agregar.png"))); // NOI18N
         btnModificar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        btnModificar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnModificarMouseClicked(evt);
-            }
-        });
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarActionPerformed(evt);
@@ -456,7 +453,7 @@ public class FrmVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
-        String error = validarCampos();
+        String error = validarCamposParaGenerarVenta();
         if (error != null) {
             JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
@@ -465,6 +462,22 @@ public class FrmVenta extends javax.swing.JFrame {
             try {
                 ventasNegocio.agregar(venta);
                 JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.OK_OPTION);
+                //Recorremos la lista de articulos vendidos que se encuentra en la venta
+                for (DetalleVenta productoVendido : listaProductos){
+                    //Obtenemos tanto la cantidad de producto vendido como el id del producto
+                    Long cantidad = productoVendido.getCantidad();
+                    Long idProducto = productoVendido.getProducto().getId();
+                    
+                    //Recorremos la lista precargada hasta encontrar el artículo que coincida con el id del artículo vendido
+                    for (Producto productoPrecargado : productosRegistradosEnBase){
+                        //Una vez encontrado, actualizamos el stock, así no debemos consultar de nuevo la base de datos
+                        if (productoPrecargado.getId().equals(idProducto)){
+                            productoPrecargado.actualizaStock(cantidad);
+                            break;
+                        }
+                    }
+                }
+                reiniciarCampos();
             } catch (NegocioException ex) {
                 Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, ex, "Venta no registrada!", JOptionPane.ERROR_MESSAGE);
@@ -473,7 +486,6 @@ public class FrmVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGenerarVentaActionPerformed
 
     private void btnImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImporteActionPerformed
-//        imp.setVisible(true);
         DlgImporte dlgImporte = new DlgImporte(this, true);
         dlgImporte.setVisible(true);
         while (dlgImporte.isVisible()) {
@@ -491,105 +503,68 @@ public class FrmVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnImporteActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-
-        int cantidad = Integer.parseInt(txtCantidad.getText());
-        int stock = Integer.parseInt(txtStock.getText());
-
-        try {
-            if (txtNombreProducto.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No has seleccionado un producto!");
-            } else if (txtCantidad.getText().isEmpty() || cantidad <= 0) {
-                JOptionPane.showMessageDialog(null, "Cantidad Errónea!!");
-            } else if (cantidad > stock) {
-                JOptionPane.showMessageDialog(null, "Cantidad Errónea!!! (no hay tanto stock)");
-            } else {
-                //Creando un objeto de detalleVenta
-                Producto productoNuevo = producotsNegocio.consultarPorNombre(txtNombreProducto.getText());
-                Long productoCantidad = Long.parseLong(txtCantidad.toString());
-                Double productoPrecio = Double.parseDouble(txtPrecio.toString());
-
-                DetalleVenta dv = new DetalleVenta(productoNuevo, productoCantidad, productoPrecio);
-                listaProductos.add(dv);
-                calculaTotal();
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
+        int indiceSeleccionado = tableArticulosCarrito.getSelectedRow();
+        if (indiceSeleccionado == -1) {
+            JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun producto de la lista para modificar");
+        } else {
+            String nombre = listaProductos.get(indiceSeleccionado).getProducto().getNombre();
+            String cantidad = listaProductos.get(indiceSeleccionado).getCantidad().toString();
+            String stock = listaProductos.get(indiceSeleccionado).getProducto().getStock().toString();
+            String precio = listaProductos.get(indiceSeleccionado).getPrecio().toString();
+            indiceEnModificacion = indiceSeleccionado;
+            this.seEstaModificando = true;
+            
+            this.txtNombreProducto.setText(nombre);
+            this.txtStock.setText(stock);
+            this.txtCantidad.setText(cantidad);
+            this.txtPrecio.setText(precio);
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
-    private void txtNombreProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreProductoKeyTyped
-
-        if (txtNombreProducto.getText().length() > 100) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtNombreProductoKeyTyped
-
     private void btnAgregarACarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarACarritoActionPerformed
 
-        int indiceProductoSeleccionado = tableArticulosCarrito.getSelectedRow();
-        Boolean productoEnCarrito = false;
-
-        if (productoActual == null) {
-            JOptionPane.showMessageDialog(null, "No hay ningun producto para agregar al carrito.");
-        } else {
-            if (indiceProductoSeleccionado == -1) {
-                for (DetalleVenta producto : listaProductos) {
-                    if (Objects.equals(producto.getProducto().getCodigo(), productoActual)) {
-                        productoEnCarrito = true;
-                        break;
-                    }
-                }
+        String camposValidos = validarCamposParaAgregarProducto();
+        if (seEstaModificando) {
+            if (camposValidos != null) {
+                JOptionPane.showMessageDialog(null, camposValidos);
+            } else{
+                Long cantidad = Long.parseLong(this.txtCantidad.getText());
+                listaProductos.get(indiceEnModificacion).setCantidad(cantidad);
+                llenarTablaArticulosCarrito();
+                calculaTotal();
+                limpiarCamposDeProducto();
+                seEstaModificando = false;
+                indiceEnModificacion = -1;
             }
-
-            if (productoEnCarrito) {
-                JOptionPane.showMessageDialog(null, "El Producto que desea agregar ya está en la lista. Si desea modificarlo, seleccionelo en la lista de productos");
-            } else {
-                Long cantidad = Long.parseLong(txtCantidad.getText());
-                if (cantidad <= 0 || cantidad > productoActual.getStock()) {
-                    JOptionPane.showMessageDialog(null, "Error en la cantidad.");
-                } else {
-                    DetalleVenta agregarACarrito = new DetalleVenta(productoActual, cantidad, productoActual.getPrecio_venta());
-                    listaProductos.add(agregarACarrito);
-                    productoActual = null;
-                    calculaTotal();
-                    llenarTablaArticulosCarrito();
-                }
+        } else {
+            if (camposValidos != null) {
+                JOptionPane.showMessageDialog(null, camposValidos);
+            } else{
+                Long cantidad = Long.parseLong(this.txtCantidad.getText());
+                DetalleVenta nuevoProductoACarrito = new DetalleVenta(productoActual, cantidad, productoActual.getPrecio_venta());
+                listaProductos.add(nuevoProductoACarrito);
+                llenarTablaArticulosCarrito();
+                calculaTotal();
+                limpiarCamposDeProducto();
+                productoActual = null;
             }
         }
     }//GEN-LAST:event_btnAgregarACarritoActionPerformed
 
-    private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
-        // TODO add your handling code here:
-        int indiceProducto = tableArticulosCarrito.getSelectedRow();
-        if (tableArticulosCarrito.getSelectedRowCount() <= 0) {
-            JOptionPane.showMessageDialog(null, "No hay nada seleccionado para modificar");
-        } else {
-            String nombre = listaProductos.get(indiceProducto).getProducto().getNombre();
-//            Double stock = listaProductos.get(indiceProducto).getProducto().; 
-            //Stock: Guardar como atributo o tener una tabla stock con el producto y la cantidad
-            Double precio = listaProductos.get(indiceProducto).getPrecio();
-            Long codigo = listaProductos.get(indiceProducto).getProducto().getCodigo();
-            //Fecha se supone que lo vamos a quitar.
-            //Asignando el nombre, precio y código del producto a sus respectivos txt
-            txtNombreProducto.setText(nombre);
-            txtPrecio.setText(precio.toString());
-            txtCodigo.setText(codigo.toString());
-        }
-    }//GEN-LAST:event_btnModificarMouseClicked
-
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
 
-        if (tableArticulosCarrito.getSelectedRowCount() <= 0) {
-            JOptionPane.showMessageDialog(null, "No hay nada seleccionado para eliminar!");
+        int indiceSeleccionado = tableArticulosCarrito.getSelectedRow();
+        if (indiceSeleccionado == -1) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un artículo para poder eliminar");
         } else {
-            int articuloEliminar = tableArticulosCarrito.getSelectedRow();
-            //Esto me regresa el indice del producto seleccioando, se lo mando al array y que se elimine ese index? 
-            listaProductos.remove(articuloEliminar);
+            listaProductos.remove(indiceSeleccionado);
+            llenarTablaArticulosCarrito();
+            calculaTotal();
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
-        if (txtCodigo.getText().isEmpty()) {
+        if (txtCodigo.getText().isEmpty() || txtCodigo.getText().isBlank()) {
             JOptionPane.showMessageDialog(null, "El campo de código está vacío");
         } else {
             Long codigo = Long.parseLong(txtCodigo.getText());
@@ -603,6 +578,23 @@ public class FrmVenta extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_botonBuscarActionPerformed
+
+    public String validarCamposParaAgregarProducto() {
+
+        if (this.txtCantidad.getText().isEmpty() || this.txtCantidad.getText().isBlank()) {
+            return "El campo cantidad no puede estar vacío ni contener espacios";
+        } else {
+            Long cantidad = Long.parseLong(this.txtCantidad.getText());
+            Long stock = Long.parseLong(this.txtStock.getText());
+            if (cantidad <= 0) {
+                return "Debe agregar, al menos, un producto";
+            }
+            if (cantidad > stock) {
+                return "La cantidad no puede ser mayor al stock";
+            }
+        }
+        return null;
+    }
 
     public void consultarCodigo(Long codigo) {
         for (Producto productoRegistrado : productosRegistradosEnBase) {
@@ -627,12 +619,9 @@ public class FrmVenta extends javax.swing.JFrame {
         for (DetalleVenta detalleVenta : listaProductos) {
             total += detalleVenta.getPrecio() * detalleVenta.getCantidad();
         }
-
+        this.txtTotal.setText(total.toString());
     }
 
-    /**
-     * Este método es para la tabla del FrmVenta Se limpia la tabla
-     */
     public void llenarTablaArticulosCarrito() {
         tableArticulosCarrito.removeAll();
 
@@ -648,9 +637,9 @@ public class FrmVenta extends javax.swing.JFrame {
     }
 
     /**
-     * Este método regresa la fecha actual.
+     * Regresa la fecha actual del sistema.
      *
-     * @return Fecha actual.
+     * @return Fecha actual del sistema.
      */
     public Date obtenerFecha() {
         return Date.valueOf(LocalDate.now());
@@ -663,7 +652,7 @@ public class FrmVenta extends javax.swing.JFrame {
      * @return Un mensaje indicando el error o un mensaje vacío en caso de no
      * existir error.
      */
-    private String validarCampos() {
+    private String validarCamposParaGenerarVenta() {
 
         if (listaProductos.isEmpty()) {
             return "La lista de productos no puede estar vacía";
@@ -685,6 +674,23 @@ public class FrmVenta extends javax.swing.JFrame {
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    public void limpiarCamposDeProducto(){
+        this.txtCodigo.setText("");
+        this.txtNombreProducto.setText("");
+        this.txtStock.setText("");
+        this.txtCantidad.setText("");
+        this.txtPrecio.setText("");
+    }
+    
+    public void reiniciarCampos(){
+        this.listaProductos.clear();
+        this.productoActual = null;
+        this.cambio = 0.00;
+        this.importe = 0.00;
+        this.total = 0.00;
+        limpiarCamposDeProducto();
     }
 
     /**
@@ -765,6 +771,6 @@ public class FrmVenta extends javax.swing.JFrame {
     private javax.swing.JTextField txtNombreProducto;
     private javax.swing.JTextField txtPrecio;
     private javax.swing.JTextField txtStock;
-    private javax.swing.JTextField txtTotalApagar;
+    private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 }

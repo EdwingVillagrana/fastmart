@@ -6,7 +6,6 @@ package implementaciones;
 
 import entidades.Compra;
 import entidades.DetalleCompra;
-import static entidades.Producto_.proveedor;
 import entidades.Usuario;
 import excepciones.PersistenciaException;
 import interfaces.IComprasDAO;

@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class DlgImporte extends javax.swing.JDialog {
 
-    private Double importe = 0.0;
+    private Double importe = 0.00;
 
     /**
      * Creates new form DlgImporte

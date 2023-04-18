@@ -32,7 +32,7 @@ public class FrmVenta extends javax.swing.JFrame {
     private List<DetalleVenta> listaProductos = new ArrayList<>();
     private IVentasNegocio ventasNegocio;
     private IProductosNegocio producotsNegocio;
-    
+
     //Atributos que nos ayudarán para realizar la modificación de un producto que se encuentre en el carrito
     private boolean seEstaModificando = false;
     private int indiceEnModificacion = -1;
@@ -404,7 +404,7 @@ public class FrmVenta extends javax.swing.JFrame {
         jPanel4.add(lblCantidad);
         lblCantidad.setBounds(10, 10, 90, 20);
 
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_basurero_1.png"))); // NOI18N
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_basurero.png"))); // NOI18N
         btnEliminar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -481,35 +481,9 @@ public class FrmVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnCancelarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarVentaActionPerformed
-        String error = validarCamposParaGenerarVenta();
-        if (error != null) {
-            JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            Venta venta = new Venta(this.usuarioLogueado, obtenerFecha(), this.total, this.listaProductos);
-
-            try {
-                ventasNegocio.agregar(venta);
-                JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.OK_OPTION);
-                //Recorremos la lista de articulos vendidos que se encuentra en la venta
-                for (DetalleVenta productoVendido : listaProductos){
-                    //Obtenemos tanto la cantidad de producto vendido como el id del producto
-                    Long cantidad = productoVendido.getCantidad();
-                    Long idProducto = productoVendido.getProducto().getId();
-                    
-                    //Recorremos la lista precargada hasta encontrar el artículo que coincida con el id del artículo vendido
-                    for (Producto productoPrecargado : productosRegistradosEnBase){
-                        //Una vez encontrado, actualizamos el stock, así no debemos consultar de nuevo la base de datos
-                        if (productoPrecargado.getId().equals(idProducto)){
-                            productoPrecargado.actualizaStock(cantidad);
-                            break;
-                        }
-                    }
-                }
-                reiniciarCampos();
-            } catch (NegocioException ex) {
-                Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex, "Venta no registrada!", JOptionPane.ERROR_MESSAGE);
-            }
+        int confirmarEliminación = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea cancelar la venta?", "Cancelar venta", JOptionPane.YES_NO_OPTION);
+        if (confirmarEliminación == 0) {
+            reiniciarCampos();
         }
     }//GEN-LAST:event_btnCancelarVentaActionPerformed
 
@@ -541,7 +515,7 @@ public class FrmVenta extends javax.swing.JFrame {
             String precio = listaProductos.get(indiceSeleccionado).getPrecio().toString();
             indiceEnModificacion = indiceSeleccionado;
             this.seEstaModificando = true;
-            
+
             this.txtNombreProducto.setText(nombre);
             this.txtStock.setText(stock);
             this.txtCantidad.setText(cantidad);
@@ -550,12 +524,11 @@ public class FrmVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnAgregarACarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarACarritoActionPerformed
-
         String camposValidos = validarCamposParaAgregarProducto();
         if (seEstaModificando) {
             if (camposValidos != null) {
                 JOptionPane.showMessageDialog(null, camposValidos);
-            } else{
+            } else {
                 Long cantidad = Long.parseLong(this.txtCantidad.getText());
                 listaProductos.get(indiceEnModificacion).setCantidad(cantidad);
                 llenarTablaArticulosCarrito();
@@ -567,7 +540,7 @@ public class FrmVenta extends javax.swing.JFrame {
         } else {
             if (camposValidos != null) {
                 JOptionPane.showMessageDialog(null, camposValidos);
-            } else{
+            } else {
                 Long cantidad = Long.parseLong(this.txtCantidad.getText());
                 DetalleVenta nuevoProductoACarrito = new DetalleVenta(productoActual, cantidad, productoActual.getPrecio_venta());
                 listaProductos.add(nuevoProductoACarrito);
@@ -580,18 +553,57 @@ public class FrmVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarACarritoActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-
         int indiceSeleccionado = tableArticulosCarrito.getSelectedRow();
         if (indiceSeleccionado == -1) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un artículo para poder eliminar");
         } else {
-            listaProductos.remove(indiceSeleccionado);
-            llenarTablaArticulosCarrito();
-            calculaTotal();
+            int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el producto del carrito?", "Eliminar producto", JOptionPane.YES_NO_OPTION);
+            if (confirmaEliminacion == 0){
+                listaProductos.remove(indiceSeleccionado);
+                llenarTablaArticulosCarrito();
+                calculaTotal();
+            }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarCamposActionPerformed
+        limpiarCamposDeProducto();
+    }//GEN-LAST:event_btnLimpiarCamposActionPerformed
+
+    private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
+        String error = validarCamposParaGenerarVenta();
+        if (error != null) {
+            JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Venta venta = new Venta(this.usuarioLogueado, obtenerFecha(), this.total, this.listaProductos);
+
+            try {
+                ventasNegocio.agregar(venta);
+                JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.OK_OPTION);
+                //Recorremos la lista de articulos vendidos que se encuentra en la venta
+                for (DetalleVenta productoVendido : listaProductos) {
+                    //Obtenemos tanto la cantidad de producto vendido como el id del producto
+                    Long cantidad = productoVendido.getCantidad();
+                    Long idProducto = productoVendido.getProducto().getId();
+
+                    //Recorremos la lista precargada hasta encontrar el artículo que coincida con el id del artículo vendido
+                    for (Producto productoPrecargado : productosRegistradosEnBase) {
+                        //Una vez encontrado, actualizamos el stock, así no debemos consultar de nuevo la base de datos
+                        if (productoPrecargado.getId().equals(idProducto)) {
+                            productoPrecargado.actualizaStock(cantidad);
+                            break;
+                        }
+                    }
+                }
+                reiniciarCampos();
+            } catch (NegocioException ex) {
+                Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex, "Venta no registrada!", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnGenerarVentaActionPerformed
+
+    private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
         if (txtCodigo.getText().isEmpty() || txtCodigo.getText().isBlank()) {
             JOptionPane.showMessageDialog(null, "El campo de código está vacío");
         } else {
@@ -605,14 +617,6 @@ public class FrmVenta extends javax.swing.JFrame {
                 this.txtStock.setText(productoActual.getStock().toString());
             }
         }
-    }//GEN-LAST:event_btnLimpiarCamposActionPerformed
-
-    private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGenerarVentaActionPerformed
-
-    private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarProductoActionPerformed
 
     public String validarCamposParaAgregarProducto() {
@@ -711,16 +715,17 @@ public class FrmVenta extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    public void limpiarCamposDeProducto(){
+
+    public void limpiarCamposDeProducto() {
         this.txtCodigo.setText("");
         this.txtNombreProducto.setText("");
         this.txtStock.setText("");
         this.txtCantidad.setText("");
         this.txtPrecio.setText("");
+        productoActual = null;
     }
-    
-    public void reiniciarCampos(){
+
+    public void reiniciarCampos() {
         this.listaProductos.clear();
         this.productoActual = null;
         this.cambio = 0.00;

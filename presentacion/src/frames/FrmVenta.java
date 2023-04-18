@@ -87,7 +87,7 @@ public class FrmVenta extends javax.swing.JFrame {
         jTextField3 = new javax.swing.JTextField();
         btnMenu = new javax.swing.JButton();
         FondoTitulo = new javax.swing.JTextField();
-        btnGenerarVenta = new javax.swing.JButton();
+        btnCancelarVenta = new javax.swing.JButton();
         btnImporte = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         lblPrecio = new javax.swing.JLabel();
@@ -99,7 +99,8 @@ public class FrmVenta extends javax.swing.JFrame {
         lblStock = new javax.swing.JLabel();
         lblNombreProducto = new javax.swing.JLabel();
         txtStock = new javax.swing.JTextField();
-        botonBuscar = new javax.swing.JButton();
+        btnLimpiarCampos = new javax.swing.JButton();
+        btnBuscarProducto = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         lblCambio = new javax.swing.JLabel();
         txtCambio = new javax.swing.JTextField();
@@ -115,6 +116,7 @@ public class FrmVenta extends javax.swing.JFrame {
         btnModificar = new javax.swing.JButton();
         btnAgregarACarrito = new javax.swing.JButton();
         lblImagenSuper = new javax.swing.JLabel();
+        btnGenerarVenta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -172,7 +174,7 @@ public class FrmVenta extends javax.swing.JFrame {
             }
         });
         Fondo.add(btnSalir);
-        btnSalir.setBounds(710, 270, 110, 90);
+        btnSalir.setBounds(710, 350, 110, 90);
         Fondo.add(jSeparator1);
         jSeparator1.setBounds(0, 28, 720, 0);
 
@@ -230,21 +232,21 @@ public class FrmVenta extends javax.swing.JFrame {
         Fondo.add(FondoTitulo);
         FondoTitulo.setBounds(0, 0, 840, 30);
 
-        btnGenerarVenta.setBackground(new java.awt.Color(255, 145, 77));
-        btnGenerarVenta.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
-        btnGenerarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_monedas.png"))); // NOI18N
-        btnGenerarVenta.setText("Generar Venta");
-        btnGenerarVenta.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnGenerarVenta.setInheritsPopupMenu(true);
-        btnGenerarVenta.setName(""); // NOI18N
-        btnGenerarVenta.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnGenerarVenta.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelarVenta.setBackground(new java.awt.Color(255, 145, 77));
+        btnCancelarVenta.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
+        btnCancelarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_cancelarVenta.png"))); // NOI18N
+        btnCancelarVenta.setText("Cancelar Venta");
+        btnCancelarVenta.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCancelarVenta.setInheritsPopupMenu(true);
+        btnCancelarVenta.setName(""); // NOI18N
+        btnCancelarVenta.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCancelarVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerarVentaActionPerformed(evt);
+                btnCancelarVentaActionPerformed(evt);
             }
         });
-        Fondo.add(btnGenerarVenta);
-        btnGenerarVenta.setBounds(710, 50, 110, 90);
+        Fondo.add(btnCancelarVenta);
+        btnCancelarVenta.setBounds(710, 150, 110, 90);
 
         btnImporte.setBackground(new java.awt.Color(255, 145, 77));
         btnImporte.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -260,7 +262,7 @@ public class FrmVenta extends javax.swing.JFrame {
             }
         });
         Fondo.add(btnImporte);
-        btnImporte.setBounds(710, 160, 110, 90);
+        btnImporte.setBounds(710, 250, 110, 90);
 
         jPanel1.setBackground(new java.awt.Color(0, 145, 155));
         jPanel1.setLayout(null);
@@ -313,15 +315,25 @@ public class FrmVenta extends javax.swing.JFrame {
         jPanel1.add(txtStock);
         txtStock.setBounds(240, 112, 60, 20);
 
-        botonBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_lupa.png"))); // NOI18N
-        botonBuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        botonBuscar.addActionListener(new java.awt.event.ActionListener() {
+        btnLimpiarCampos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_borrarCampos.png"))); // NOI18N
+        btnLimpiarCampos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        btnLimpiarCampos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonBuscarActionPerformed(evt);
+                btnLimpiarCamposActionPerformed(evt);
             }
         });
-        jPanel1.add(botonBuscar);
-        botonBuscar.setBounds(190, 57, 30, 30);
+        jPanel1.add(btnLimpiarCampos);
+        btnLimpiarCampos.setBounds(240, 57, 40, 30);
+
+        btnBuscarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_lupa.png"))); // NOI18N
+        btnBuscarProducto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        btnBuscarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarProductoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscarProducto);
+        btnBuscarProducto.setBounds(190, 57, 40, 30);
 
         Fondo.add(jPanel1);
         jPanel1.setBounds(50, 50, 430, 150);
@@ -392,7 +404,7 @@ public class FrmVenta extends javax.swing.JFrame {
         jPanel4.add(lblCantidad);
         lblCantidad.setBounds(10, 10, 90, 20);
 
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_basurero.png"))); // NOI18N
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_basurero_1.png"))); // NOI18N
         btnEliminar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -402,7 +414,7 @@ public class FrmVenta extends javax.swing.JFrame {
         jPanel4.add(btnEliminar);
         btnEliminar.setBounds(340, 5, 30, 30);
 
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_agregar.png"))); // NOI18N
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_modificarVenta.png"))); // NOI18N
         btnModificar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -429,6 +441,22 @@ public class FrmVenta extends javax.swing.JFrame {
         Fondo.add(lblImagenSuper);
         lblImagenSuper.setBounds(490, 50, 200, 195);
 
+        btnGenerarVenta.setBackground(new java.awt.Color(255, 145, 77));
+        btnGenerarVenta.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
+        btnGenerarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_monedas.png"))); // NOI18N
+        btnGenerarVenta.setText("Generar Venta");
+        btnGenerarVenta.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGenerarVenta.setInheritsPopupMenu(true);
+        btnGenerarVenta.setName(""); // NOI18N
+        btnGenerarVenta.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGenerarVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarVentaActionPerformed(evt);
+            }
+        });
+        Fondo.add(btnGenerarVenta);
+        btnGenerarVenta.setBounds(710, 50, 110, 90);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -452,7 +480,7 @@ public class FrmVenta extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
+    private void btnCancelarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarVentaActionPerformed
         String error = validarCamposParaGenerarVenta();
         if (error != null) {
             JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
@@ -483,7 +511,7 @@ public class FrmVenta extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, ex, "Venta no registrada!", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_btnGenerarVentaActionPerformed
+    }//GEN-LAST:event_btnCancelarVentaActionPerformed
 
     private void btnImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImporteActionPerformed
         DlgImporte dlgImporte = new DlgImporte(this, true);
@@ -563,7 +591,7 @@ public class FrmVenta extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
+    private void btnLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarCamposActionPerformed
         if (txtCodigo.getText().isEmpty() || txtCodigo.getText().isBlank()) {
             JOptionPane.showMessageDialog(null, "El campo de código está vacío");
         } else {
@@ -577,7 +605,15 @@ public class FrmVenta extends javax.swing.JFrame {
                 this.txtStock.setText(productoActual.getStock().toString());
             }
         }
-    }//GEN-LAST:event_botonBuscarActionPerformed
+    }//GEN-LAST:event_btnLimpiarCamposActionPerformed
+
+    private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGenerarVentaActionPerformed
+
+    private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarProductoActionPerformed
 
     public String validarCamposParaAgregarProducto() {
 
@@ -732,11 +768,13 @@ public class FrmVenta extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Fondo;
     private javax.swing.JTextField FondoTitulo;
-    private javax.swing.JButton botonBuscar;
     private javax.swing.JButton btnAgregarACarrito;
+    private javax.swing.JButton btnBuscarProducto;
+    private javax.swing.JButton btnCancelarVenta;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGenerarVenta;
     private javax.swing.JButton btnImporte;
+    private javax.swing.JButton btnLimpiarCampos;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSalir;

@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  * @author Kevin Rios
  */
 public class Login extends javax.swing.JFrame {
-    
+
     private Usuario usuarioLogueado;
     private IUsuariosNegocio usuariosNegocio;
 
@@ -82,7 +82,13 @@ public class Login extends javax.swing.JFrame {
         txtUsuario.setForeground(new java.awt.Color(102, 102, 102));
         txtUsuario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtUsuario.setText("Usuario");
+        txtUsuario.setToolTipText("Usuario");
         txtUsuario.setName(""); // NOI18N
+        txtUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtUsuarioMouseClicked(evt);
+            }
+        });
         jPanel1.add(txtUsuario);
         txtUsuario.setBounds(160, 170, 190, 30);
 
@@ -90,6 +96,7 @@ public class Login extends javax.swing.JFrame {
         txtPassword.setForeground(new java.awt.Color(102, 102, 102));
         txtPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtPassword.setText("Contraseña");
+        txtPassword.setToolTipText("Contraseña");
         txtPassword.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txtPasswordMouseClicked(evt);
@@ -147,23 +154,24 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 /**
- * 
- * @param evt 
- */
+     *
+     * @param evt
+     */
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         String usuarioSesion = txtUsuario.getText();
         String passwordSesion = txtPassword.getText();
         try {
             Usuario usuarioRegistrado = usuariosNegocio.consultarPorEmail(usuarioSesion);
             String contraseñaUR = usuarioRegistrado.getPassword();
-            
+
             if (!passwordSesion.equals(contraseñaUR)) {
                 JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta!");
             } else {
+                this.dispose();
                 MenuPrincipal frmP = new MenuPrincipal(usuarioLogueado);
                 frmP.setVisible(true);
             }
-            
+
         } catch (NegocioException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -201,6 +209,11 @@ public class Login extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_txtPasswordKeyTyped
+
+    private void txtUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuarioMouseClicked
+        // TODO add your handling code here:
+        this.txtUsuario.setText("");
+    }//GEN-LAST:event_txtUsuarioMouseClicked
 
     /**
      * @param args the command line arguments

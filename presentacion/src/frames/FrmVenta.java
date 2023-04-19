@@ -689,7 +689,7 @@ public class FrmVenta extends javax.swing.JFrame {
     }
 
     public void llenarTablaArticulosCarrito() {
-        tableArticulosCarrito.removeAll();
+        model.setRowCount(0);
 
         for (DetalleVenta detalleVenta : listaProductos) {
             String nombreProducto = detalleVenta.getProducto().getNombre();

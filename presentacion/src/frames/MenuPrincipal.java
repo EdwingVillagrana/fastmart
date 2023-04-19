@@ -2,6 +2,8 @@ package frames;
 
 import entidades.Usuario;
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 
 /*
@@ -13,17 +15,19 @@ import javax.swing.JOptionPane;
  * @author Kevin Rios
  */
 public class MenuPrincipal extends javax.swing.JFrame {
+
     private Usuario usuarioLogueado;
+
     /**
      * Creates new form MenuPrincipal
+     *
      * @param usuarioLogueado
      */
     public MenuPrincipal(Usuario usuarioLogueado) {
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
         this.usuarioLogueado = usuarioLogueado;
-        
 
     }
 
@@ -208,7 +212,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuVentasVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVentasVentaActionPerformed
-
+        FrmVenta frmVenta = new FrmVenta(usuarioLogueado);
+        frmVenta.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // Aquí es donde se ejecutará el código cuando se cierre el FrmVenta
+                setVisible(true); // Hace visible el MenuPrincipal
+            }
+        });
+        frmVenta.setVisible(true);
+        setVisible(false); // Oculta el MenuPrincipal
     }//GEN-LAST:event_menuVentasVentaActionPerformed
 
     private void menuComprasCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuComprasCompraActionPerformed
@@ -225,7 +238,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void menuManenimientoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoProductoActionPerformed
 
-        
+
     }//GEN-LAST:event_menuManenimientoProductoActionPerformed
 
     private void menuInicioSalirAplicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuInicioSalirAplicacionActionPerformed
@@ -250,7 +263,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void menuConsultasProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasProductosActionPerformed
 
-        
+
     }//GEN-LAST:event_menuConsultasProductosActionPerformed
 
     private void menuConsultasProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasProveedoresActionPerformed

@@ -58,6 +58,7 @@ public class FrmVenta extends javax.swing.JFrame {
 
         this.producotsNegocio = new ProductosNegocio();
         this.usuarioLogueado = usuarioLogueado;
+        llenarListaDeProductosRegistrados();
 
         model = (DefaultTableModel) tableArticulosCarrito.getModel();
         JTableHeader header = tableArticulosCarrito.getTableHeader();
@@ -396,6 +397,11 @@ public class FrmVenta extends javax.swing.JFrame {
 
         txtCantidad.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtCantidad.setBorder(null);
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
         jPanel4.add(txtCantidad);
         txtCantidad.setBounds(90, 5, 60, 30);
 
@@ -541,13 +547,26 @@ public class FrmVenta extends javax.swing.JFrame {
             if (camposValidos != null) {
                 JOptionPane.showMessageDialog(null, camposValidos);
             } else {
-                Long cantidad = Long.parseLong(this.txtCantidad.getText());
-                DetalleVenta nuevoProductoACarrito = new DetalleVenta(productoActual, cantidad, productoActual.getPrecio_venta());
-                listaProductos.add(nuevoProductoACarrito);
-                llenarTablaArticulosCarrito();
-                calculaTotal();
-                limpiarCamposDeProducto();
-                productoActual = null;
+                boolean seEncuentraEnCarrito = false;
+                for (DetalleVenta d : listaProductos){
+                    if (d.getProducto().getId().equals(productoActual.getId())) {
+                        seEncuentraEnCarrito = true;
+                    }
+                }
+                if (seEncuentraEnCarrito) {
+                    JOptionPane.showMessageDialog(null, "El producto ya se encuentra en la lista, si desea modificarlo, seleccionelo y presione el botón modificar.");
+                    limpiarCamposDeProducto();
+                    productoActual = null;
+                } else{
+                    Long cantidad = Long.parseLong(this.txtCantidad.getText());
+                    DetalleVenta nuevoProductoACarrito = new DetalleVenta(productoActual, cantidad, productoActual.getPrecio_venta());
+                    listaProductos.add(nuevoProductoACarrito);
+                    llenarTablaArticulosCarrito();
+                    calculaTotal();
+                    limpiarCamposDeProducto();
+                    productoActual = null;
+                }
+                
             }
         }
     }//GEN-LAST:event_btnAgregarACarritoActionPerformed
@@ -618,6 +637,13 @@ public class FrmVenta extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnBuscarProductoActionPerformed
+
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE))) {
+            evt.consume(); // Elimina el carácter que no es del 0 al 9
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
 
     public String validarCamposParaAgregarProducto() {
 

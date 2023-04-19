@@ -125,7 +125,6 @@ public class FrmVenta extends javax.swing.JFrame {
         Fondo.setBackground(new java.awt.Color(255, 255, 255));
         Fondo.setLayout(null);
 
-        tableArticulosCarrito.setForeground(new java.awt.Color(102, 255, 102));
         tableArticulosCarrito.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -209,7 +208,7 @@ public class FrmVenta extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Cantidad");
         Fondo.add(jLabel6);
-        jLabel6.setBounds(210, 260, 50, 30);
+        jLabel6.setBounds(210, 260, 46, 30);
 
         jLabel7.setBackground(new java.awt.Color(153, 102, 0));
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N

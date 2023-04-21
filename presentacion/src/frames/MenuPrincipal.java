@@ -228,8 +228,23 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_menuComprasCompraActionPerformed
 
+    /**
+     * Se agregó la navegabilidad al formulario de consulta
+     * @param evt 
+     */
     private void menuConsultasVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasVentasActionPerformed
-
+       FrmConsultarVentas frmConsultarVentas = new FrmConsultarVentas(usuarioLogueado);
+       frmConsultarVentas.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // Aquí es donde se ejecutará el código cuando se cierre el FrmConsultarVentas
+                setVisible(true); // Hace visible el MenuPrincipal
+            }
+        });
+        frmConsultarVentas.setVisible(true);
+        setVisible(false); // Oculta el MenuPrincipal
+    
+               
     }//GEN-LAST:event_menuConsultasVentasActionPerformed
 
     private void menuManenimientoEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoEmpleadoActionPerformed

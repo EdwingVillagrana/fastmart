@@ -34,6 +34,7 @@ public class VentasDAO implements IVentasDAO {
     }
 
     /**
+     * FALTA CORREGIR ESTE MÉTODO, COMENTARIOS EN LA LINEA 52-54
      * Agrega una venta a la base de datos.
      *
      * @param venta La Venta a agregar.
@@ -48,7 +49,10 @@ public class VentasDAO implements IVentasDAO {
                 em.getTransaction().begin();
                 em.persist(venta);
                 List<DetalleVenta> productosVendidos = venta.getProductos();
-                for(DetalleVenta detalleVenta: productosVendidos){
+                // Falta corregir este método para que ingrese el ID de la venta a el Detalle de venta
+                // Tira el siguiente Error: Internal Exception: java.sql.SQLIntegrityConstraintViolationException: Column 'id_venta' cannot be null
+                // Al momento de hacer el query Insert Into detalle_ventas (cantidad, precio, id_producto, id_venta) VALUES (?, ?, ?, ?)
+                for(DetalleVenta detalleVenta: productosVendidos){                   
                     Long idProducto = detalleVenta.getProducto().getId();
                     Long cantidad = detalleVenta.getCantidad();
                     productosDAO.actualizarStock(idProducto, cantidad, false);

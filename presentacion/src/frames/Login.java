@@ -162,17 +162,18 @@ public class Login extends javax.swing.JFrame {
         String passwordSesion = txtPassword.getText();
         try {
             Usuario usuarioRegistrado = usuariosNegocio.consultarPorEmail(usuarioSesion);
-            String contraseñaUR = usuarioRegistrado.getPassword();
-            if (!passwordSesion.equals(contraseñaUR)) {
-                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta!");
+            if (usuarioRegistrado == null) {
+                JOptionPane.showMessageDialog(null, "Usuario y/o contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                this.dispose();
-                // Cambie la variable en la siguiente linea 
-                //estaba la de usuario logeado, pero creo que no tenia seteado al usuario, cambie esa variable por usuarioRegistrado
-                MenuPrincipal frmP = new MenuPrincipal(usuarioRegistrado);
-                frmP.setVisible(true);
+                String contraseñaUR = usuarioRegistrado.getPassword();
+                if (!passwordSesion.equals(contraseñaUR)) {
+                    JOptionPane.showMessageDialog(null, "Usuario y/o contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    this.dispose();
+                    FrmPrincipal framePrincipal = new FrmPrincipal(usuarioRegistrado);
+                    framePrincipal.setVisible(true);
+                }
             }
-
         } catch (NegocioException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }

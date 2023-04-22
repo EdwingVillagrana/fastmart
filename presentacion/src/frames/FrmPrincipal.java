@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  *
  * @author Kevin Rios
  */
-public class MenuPrincipal extends javax.swing.JFrame {
+public class FrmPrincipal extends javax.swing.JFrame {
 
     private Usuario usuarioLogueado;
 
@@ -23,7 +23,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
      *
      * @param usuarioLogueado
      */
-    public MenuPrincipal(Usuario usuarioLogueado) {
+    public FrmPrincipal(Usuario usuarioLogueado) {
         initComponents();
         this.setLocationRelativeTo(null);
 
@@ -217,11 +217,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
                 // Aquí es donde se ejecutará el código cuando se cierre el FrmVenta
-                setVisible(true); // Hace visible el MenuPrincipal
+                setVisible(true); // Hace visible el FrmPrincipal
             }
         });
         frmVenta.setVisible(true);
-        setVisible(false); // Oculta el MenuPrincipal
+        setVisible(false); // Oculta el FrmPrincipal
     }//GEN-LAST:event_menuVentasVentaActionPerformed
 
     private void menuComprasCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuComprasCompraActionPerformed
@@ -238,11 +238,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
                 // Aquí es donde se ejecutará el código cuando se cierre el FrmConsultarVentas
-                setVisible(true); // Hace visible el MenuPrincipal
+                setVisible(true); // Hace visible el FrmPrincipal
             }
         });
         frmConsultarVentas.setVisible(true);
-        setVisible(false); // Oculta el MenuPrincipal
+        setVisible(false); // Oculta el FrmPrincipal
     
                
     }//GEN-LAST:event_menuConsultasVentasActionPerformed
@@ -302,13 +302,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //        //</editor-fold>
@@ -316,7 +316,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 //        /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                new MenuPrincipal().setVisible(true);
+//                new FrmPrincipal().setVisible(true);
 //            }
 //        });
 //    }

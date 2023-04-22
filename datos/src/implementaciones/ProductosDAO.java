@@ -110,6 +110,7 @@ public class ProductosDAO implements IProductosDAO {
                 } else{
                     productoGuardado.setStock(productoGuardado.getStock() - cantidad);
                 }
+                em.merge(productoGuardado);
                 em.getTransaction().commit();
             } finally {
                 em.close();

@@ -28,7 +28,6 @@ public class FrmVenta extends javax.swing.JFrame {
 
     private Usuario usuarioLogueado = null;
     private DefaultTableModel model;
-    private List<Producto> productosRegistradosEnBase = new ArrayList<>();
     private List<DetalleVenta> listaProductos = new ArrayList<>();
     private IVentasNegocio ventasNegocio;
     private IProductosNegocio producotsNegocio;
@@ -58,7 +57,6 @@ public class FrmVenta extends javax.swing.JFrame {
 
         this.producotsNegocio = new ProductosNegocio();
         this.usuarioLogueado = usuarioLogueado;
-        llenarListaDeProductosRegistrados();
 
         model = (DefaultTableModel) tableArticulosCarrito.getModel();
         JTableHeader header = tableArticulosCarrito.getTableHeader();
@@ -597,23 +595,8 @@ public class FrmVenta extends javax.swing.JFrame {
 
             try {
                 ventasNegocio.agregar(venta);
-                JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.OK_OPTION);
-                //Recorremos la lista de articulos vendidos que se encuentra en la venta
-                for (DetalleVenta productoVendido : listaProductos) {
-                    //Obtenemos tanto la cantidad de producto vendido como el id del producto
-                    Long cantidad = productoVendido.getCantidad();
-                    Long idProducto = productoVendido.getProducto().getId();
-
-                    //Recorremos la lista precargada hasta encontrar el artículo que coincida con el id del artículo vendido
-                    for (Producto productoPrecargado : productosRegistradosEnBase) {
-                        //Una vez encontrado, actualizamos el stock, así no debemos consultar de nuevo la base de datos
-                        if (productoPrecargado.getId().equals(idProducto)) {
-                            productoPrecargado.actualizaStock(cantidad);
-                            break;
-                        }
-                    }
-                }
                 reiniciarCampos();
+                JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.INFORMATION_MESSAGE);
             } catch (NegocioException ex) {
                 Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, ex, "Venta no registrada!", JOptionPane.ERROR_MESSAGE);
@@ -662,11 +645,10 @@ public class FrmVenta extends javax.swing.JFrame {
     }
 
     public void consultarCodigo(Long codigo) {
-        for (Producto productoRegistrado : productosRegistradosEnBase) {
-            if (productoRegistrado.getCodigo().equals(codigo)) {
-                productoActual = productoRegistrado;
-                break;
-            }
+        try {
+            this.productoActual = producotsNegocio.consultarPorCodigo(codigo);
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
@@ -718,27 +700,13 @@ public class FrmVenta extends javax.swing.JFrame {
      * existir error.
      */
     private String validarCamposParaGenerarVenta() {
-
         if (listaProductos.isEmpty()) {
             return "La lista de productos no puede estar vacía";
         }
         if (importe < total) {
             return "El importe no puede ser menor al monto total";
         }
-        return "";
-    }
-
-    /**
-     * Carga el stock de productos que se encuentran en la base de datos. Este
-     * método se usa con el fin de no estar realizando consultas frecuentes a la
-     * base de datos.
-     */
-    public void llenarListaDeProductosRegistrados() {
-        try {
-            this.productosRegistradosEnBase = producotsNegocio.consultarTodos();
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        return null;
     }
 
     public void limpiarCamposDeProducto() {

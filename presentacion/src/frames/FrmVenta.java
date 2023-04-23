@@ -596,6 +596,8 @@ public class FrmVenta extends javax.swing.JFrame {
             try {
                 ventasNegocio.agregar(venta);
                 reiniciarCampos();
+                // Se agrego esta línea para limpiar los productos en el carrito al momento de generar la venta.
+                llenarTablaArticulosCarrito();
                 JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.INFORMATION_MESSAGE);
             } catch (NegocioException ex) {
                 Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
@@ -631,7 +633,9 @@ public class FrmVenta extends javax.swing.JFrame {
 
         if (this.txtCantidad.getText().isEmpty() || this.txtCantidad.getText().isBlank()) {
             return "El campo cantidad no puede estar vacío ni contener espacios";
-        } else {
+        }if (this.txtNombreProducto.getText().isEmpty() || this.txtNombreProducto.getText().isBlank()) {
+            return "Primero debe agregar un producto";
+        }else {
             Long cantidad = Long.parseLong(this.txtCantidad.getText());
             Long stock = Long.parseLong(this.txtStock.getText());
             if (cantidad <= 0) {
@@ -709,6 +713,7 @@ public class FrmVenta extends javax.swing.JFrame {
         return null;
     }
 
+   
     public void limpiarCamposDeProducto() {
         this.txtCodigo.setText("");
         this.txtNombreProducto.setText("");
@@ -724,6 +729,10 @@ public class FrmVenta extends javax.swing.JFrame {
         this.cambio = 0.00;
         this.importe = 0.00;
         this.total = 0.00;
+        // Se agregaron estas 3 lineas para limpiar los campos al generar la venta
+        this.txtCambio.setText("0.00");
+        this.txtImporte.setText("0.00");
+        this.txtTotal.setText("0.00");
         limpiarCamposDeProducto();
     }
 

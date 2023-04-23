@@ -5,8 +5,17 @@ package frames;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 import entidades.Usuario;
+import entidades.Venta;
+import excepciones.NegocioException;
+import implementaciones.VentasNegocio;
+import interfaces.IVentasNegocio;
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Kevin Rios
@@ -14,6 +23,10 @@ import javax.swing.JOptionPane;
 public class FrmConsultarVentas extends javax.swing.JFrame {
 
     private Usuario usuarioLogueado;
+    private IVentasNegocio ventasNegocio;
+    private DefaultTableModel model;
+    private List<Venta> listaVentas = new ArrayList<>();
+    
     
     /**
      * Creates new form ConsultarVenta
@@ -21,8 +34,9 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     public FrmConsultarVentas(Usuario usuarioLogeado) {
         initComponents();
         this.setLocationRelativeTo(null);
-        
         this.usuarioLogueado = usuarioLogeado;
+        this.ventasNegocio = new VentasNegocio();
+        model = (DefaultTableModel) this.tblVentas.getModel();
         
     }
 
@@ -70,8 +84,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         jPanel1.add(btnSalir);
         btnSalir.setBounds(480, 70, 100, 50);
 
-        tblVentas.setBackground(new java.awt.Color(163, 148, 132));
-        tblVentas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        tblVentas.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         tblVentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -183,8 +196,49 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        consultarPeriodo(this.dateInicio.getDate(),this.dateFin.getDate());
+        //consultarTodas();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    public void consultarPeriodo(Date fechaInicial, Date fechaFinal) {
+
+        try {
+            this.listaVentas = ventasNegocio.consultarPorPeriodo(fechaInicial, fechaFinal);
+ 
+            model.setRowCount(0);
+            for (Venta ventas : listaVentas) {
+                Long id_venta = ventas.getId();
+                Long id_usuario = ventas.getUsuario().getId();
+                String fecha = String.valueOf(ventas.getFechaDeVenta());
+                Double total = ventas.getTotal();
+                //llenando la tabla.
+                Object[] fila = {id_venta, id_usuario, fecha, total};
+                model.addRow(fila);
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void consultarTodas(){
+        try {
+            this.listaVentas = ventasNegocio.consultarTodos();
+            model.setRowCount(0);
+
+            for (Venta ventas : listaVentas) {
+                Long id_venta = ventas.getId();
+                Long id_usuario = ventas.getUsuario().getId();
+                String fecha = String.valueOf(ventas.getFechaDeVenta());
+                Double total = ventas.getTotal();
+                //llenando la tabla.
+                Object[] fila = {id_venta, id_usuario, fecha, total};
+                model.addRow(fila);
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
 //    /**
 //     * @param args the command line arguments
 //     */

@@ -186,7 +186,7 @@ public class FrmVenta extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Subtotal");
         Fondo.add(jLabel2);
-        jLabel2.setBounds(420, 260, 50, 30);
+        jLabel2.setBounds(590, 260, 50, 30);
 
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
@@ -199,21 +199,21 @@ public class FrmVenta extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Articulo");
         Fondo.add(jLabel3);
-        jLabel3.setBounds(60, 260, 50, 30);
+        jLabel3.setBounds(80, 260, 50, 30);
 
         jLabel6.setBackground(new java.awt.Color(153, 102, 0));
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Cantidad");
         Fondo.add(jLabel6);
-        jLabel6.setBounds(210, 260, 46, 30);
+        jLabel6.setBounds(310, 260, 50, 30);
 
         jLabel7.setBackground(new java.awt.Color(153, 102, 0));
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Precio");
         Fondo.add(jLabel7);
-        jLabel7.setBounds(320, 260, 50, 30);
+        jLabel7.setBounds(480, 260, 50, 30);
 
         jTextField3.setEditable(false);
         jTextField3.setBackground(new java.awt.Color(163, 148, 132));
@@ -311,7 +311,7 @@ public class FrmVenta extends javax.swing.JFrame {
         txtStock.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtStock.setBorder(null);
         jPanel1.add(txtStock);
-        txtStock.setBounds(240, 112, 60, 20);
+        txtStock.setBounds(240, 110, 60, 20);
 
         btnLimpiarCampos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_borrarCampos.png"))); // NOI18N
         btnLimpiarCampos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
@@ -545,7 +545,7 @@ public class FrmVenta extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, camposValidos);
             } else {
                 boolean seEncuentraEnCarrito = false;
-                for (DetalleVenta d : listaProductos){
+                for (DetalleVenta d : listaProductos) {
                     if (d.getProducto().getId().equals(productoActual.getId())) {
                         seEncuentraEnCarrito = true;
                     }
@@ -554,7 +554,7 @@ public class FrmVenta extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "El producto ya se encuentra en la lista, si desea modificarlo, seleccionelo y presione el botón modificar.");
                     limpiarCamposDeProducto();
                     productoActual = null;
-                } else{
+                } else {
                     Long cantidad = Long.parseLong(this.txtCantidad.getText());
                     DetalleVenta nuevoProductoACarrito = new DetalleVenta(productoActual, cantidad, productoActual.getPrecio_venta());
                     listaProductos.add(nuevoProductoACarrito);
@@ -563,7 +563,7 @@ public class FrmVenta extends javax.swing.JFrame {
                     limpiarCamposDeProducto();
                     productoActual = null;
                 }
-                
+
             }
         }
     }//GEN-LAST:event_btnAgregarACarritoActionPerformed
@@ -574,7 +574,7 @@ public class FrmVenta extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un artículo para poder eliminar");
         } else {
             int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el producto del carrito?", "Eliminar producto", JOptionPane.YES_NO_OPTION);
-            if (confirmaEliminacion == 0){
+            if (confirmaEliminacion == 0) {
                 listaProductos.remove(indiceSeleccionado);
                 llenarTablaArticulosCarrito();
                 calculaTotal();
@@ -633,9 +633,10 @@ public class FrmVenta extends javax.swing.JFrame {
 
         if (this.txtCantidad.getText().isEmpty() || this.txtCantidad.getText().isBlank()) {
             return "El campo cantidad no puede estar vacío ni contener espacios";
-        }if (this.txtNombreProducto.getText().isEmpty() || this.txtNombreProducto.getText().isBlank()) {
+        }
+        if (this.txtNombreProducto.getText().isEmpty() || this.txtNombreProducto.getText().isBlank()) {
             return "Primero debe agregar un producto";
-        }else {
+        } else {
             Long cantidad = Long.parseLong(this.txtCantidad.getText());
             Long stock = Long.parseLong(this.txtStock.getText());
             if (cantidad <= 0) {
@@ -713,7 +714,6 @@ public class FrmVenta extends javax.swing.JFrame {
         return null;
     }
 
-   
     public void limpiarCamposDeProducto() {
         this.txtCodigo.setText("");
         this.txtNombreProducto.setText("");
@@ -734,43 +734,9 @@ public class FrmVenta extends javax.swing.JFrame {
         this.txtImporte.setText("0.00");
         this.txtTotal.setText("0.00");
         limpiarCamposDeProducto();
+        llenarTablaArticulosCarrito();
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Venta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmVenta(new Usuario()).setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Fondo;

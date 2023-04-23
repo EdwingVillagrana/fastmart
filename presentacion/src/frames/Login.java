@@ -214,7 +214,7 @@ public class Login extends javax.swing.JFrame {
 
     private void txtUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuarioMouseClicked
         // TODO add your handling code here:
-        this.txtUsuario.setText("");
+                this.txtUsuario.setText("");
     }//GEN-LAST:event_txtUsuarioMouseClicked
 
     /**

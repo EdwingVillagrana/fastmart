@@ -4,6 +4,7 @@ import entidades.Usuario;
 import excepciones.NegocioException;
 import implementaciones.UsuariosNegocio;
 import interfaces.IUsuariosNegocio;
+import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -12,7 +13,7 @@ import javax.swing.JOptionPane;
  *
  * @author Kevin Rios
  */
-public class Login extends javax.swing.JFrame {
+public class FrmLogin extends javax.swing.JFrame {
 
     private Usuario usuarioLogueado;
     private IUsuariosNegocio usuariosNegocio;
@@ -20,11 +21,20 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-    public Login() {
+    public FrmLogin() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.lblOcultar.setVisible(false);
         usuariosNegocio = new UsuariosNegocio();
+
+        //Configuramos la caja de contraseña
+        this.txtPassword.setEchoChar('*');
+        this.txtPassword.setText("Contraseña");
+        this.txtPassword.setForeground(Color.GRAY);
+
+        //Configuramos la caja de correo
+        this.txtCorreo.setText("Correo");
+        this.txtCorreo.setForeground(Color.GRAY);
     }
 
     /**
@@ -41,7 +51,7 @@ public class Login extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         barra = new javax.swing.JTextField();
         lblImagenUsuario = new javax.swing.JLabel();
-        txtUsuario = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
         btnIngresar = new javax.swing.JButton();
         lblOcultar = new javax.swing.JLabel();
@@ -78,28 +88,37 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(lblImagenUsuario);
         lblImagenUsuario.setBounds(220, 60, 80, 90);
 
-        txtUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtUsuario.setForeground(new java.awt.Color(102, 102, 102));
-        txtUsuario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtUsuario.setText("Usuario");
-        txtUsuario.setToolTipText("Usuario");
-        txtUsuario.setName(""); // NOI18N
-        txtUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtUsuarioMouseClicked(evt);
+        txtCorreo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtCorreo.setForeground(new java.awt.Color(102, 102, 102));
+        txtCorreo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCorreo.setToolTipText("Usuario");
+        txtCorreo.setName(""); // NOI18N
+        txtCorreo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtCorreoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCorreoFocusLost(evt);
             }
         });
-        jPanel1.add(txtUsuario);
-        txtUsuario.setBounds(160, 170, 190, 30);
+        txtCorreo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreoKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtCorreo);
+        txtCorreo.setBounds(160, 170, 190, 30);
 
         txtPassword.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtPassword.setForeground(new java.awt.Color(102, 102, 102));
         txtPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtPassword.setText("Contraseña");
         txtPassword.setToolTipText("Contraseña");
-        txtPassword.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtPasswordMouseClicked(evt);
+        txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtPasswordFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPasswordFocusLost(evt);
             }
         });
         txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -158,7 +177,7 @@ public class Login extends javax.swing.JFrame {
      * @param evt
      */
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        String usuarioSesion = txtUsuario.getText();
+        String usuarioSesion = txtCorreo.getText();
         String passwordSesion = txtPassword.getText();
         try {
             Usuario usuarioRegistrado = usuariosNegocio.consultarPorEmail(usuarioSesion);
@@ -175,7 +194,7 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         } catch (NegocioException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FrmLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_btnIngresarActionPerformed
@@ -201,21 +220,45 @@ public class Login extends javax.swing.JFrame {
         this.txtPassword.setEchoChar('•');
     }//GEN-LAST:event_lblOcultarMouseClicked
 
-    private void txtPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPasswordMouseClicked
-        this.txtPassword.setText("");
-    }//GEN-LAST:event_txtPasswordMouseClicked
-
     private void txtPasswordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyTyped
-        // TODO add your handling code here:
-        if (txtPassword.getText().length() >= 20) {
+        if (txtPassword.getText().length() > 20) {
             evt.consume();
         }
     }//GEN-LAST:event_txtPasswordKeyTyped
 
-    private void txtUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuarioMouseClicked
-        // TODO add your handling code here:
-                this.txtUsuario.setText("");
-    }//GEN-LAST:event_txtUsuarioMouseClicked
+    private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
+        if (new String(txtPassword.getPassword()).equals("Contraseña")) {
+            txtPassword.setText("");
+            txtPassword.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_txtPasswordFocusGained
+
+    private void txtPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusLost
+        if (new String(txtPassword.getPassword()).equals("")) {
+            txtPassword.setText("Contraseña");
+            txtPassword.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_txtPasswordFocusLost
+
+    private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
+        if (txtCorreo.getText().length() > 70) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCorreoKeyTyped
+
+    private void txtCorreoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoFocusGained
+        if (txtCorreo.getText().equals("Correo")) {
+            txtCorreo.setText("");
+            txtCorreo.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_txtCorreoFocusGained
+
+    private void txtCorreoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoFocusLost
+        if (txtCorreo.getText().equals("")) {
+            txtCorreo.setText("Correo");
+            txtCorreo.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_txtCorreoFocusLost
 
     /**
      * @param args the command line arguments
@@ -234,20 +277,21 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new FrmLogin().setVisible(true);
             }
         });
     }
@@ -261,7 +305,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogoCabecera;
     private javax.swing.JLabel lblOcultar;
     private javax.swing.JLabel lblVer;
+    private javax.swing.JTextField txtCorreo;
     private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

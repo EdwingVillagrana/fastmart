@@ -37,7 +37,6 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         this.usuarioLogueado = usuarioLogeado;
         this.ventasNegocio = new VentasNegocio();
         model = (DefaultTableModel) this.tblVentas.getModel();
-        
     }
 
     /**
@@ -197,14 +196,13 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         consultarPeriodo(this.dateInicio.getDate(),this.dateFin.getDate());
-        //consultarTodas();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     public void consultarPeriodo(Date fechaInicial, Date fechaFinal) {
 
         try {
             this.listaVentas = ventasNegocio.consultarPorPeriodo(fechaInicial, fechaFinal);
- 
+            System.out.println(listaVentas);
             model.setRowCount(0);
             for (Venta ventas : listaVentas) {
                 Long id_venta = ventas.getId();

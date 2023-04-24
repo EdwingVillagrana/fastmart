@@ -5,6 +5,7 @@ import excepciones.NegocioException;
 import implementaciones.UsuariosNegocio;
 import interfaces.IUsuariosNegocio;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -172,36 +173,13 @@ public class FrmLogin extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-/**
-     *
-     * @param evt
-     */
-    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        String usuarioSesion = txtCorreo.getText();
-        String passwordSesion = txtPassword.getText();
-        try {
-            Usuario usuarioRegistrado = usuariosNegocio.consultarPorEmail(usuarioSesion);
-            if (usuarioRegistrado == null) {
-                JOptionPane.showMessageDialog(null, "Usuario y/o contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                String contraseñaUR = usuarioRegistrado.getPassword();
-                if (!passwordSesion.equals(contraseñaUR)) {
-                    JOptionPane.showMessageDialog(null, "Usuario y/o contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    this.dispose();
-                    FrmPrincipal framePrincipal = new FrmPrincipal(usuarioRegistrado);
-                    framePrincipal.setVisible(true);
-                }
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmLogin.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        iniciarSesion();
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        int a = JOptionPane.YES_NO_OPTION;
-        int resultado = JOptionPane.showConfirmDialog(this, "¿DESEA SALIR?", "SALIR", a);
+        int resultado = JOptionPane.showConfirmDialog(this, "¿Desea salir?", "Salir", JOptionPane.YES_NO_OPTION);
         if (resultado == 0) {
             System.exit(0);
         }
@@ -217,12 +195,14 @@ public class FrmLogin extends javax.swing.JFrame {
     private void lblOcultarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblOcultarMouseClicked
         this.lblVer.setVisible(true);
         this.lblOcultar.setVisible(false);
-        this.txtPassword.setEchoChar('•');
+        this.txtPassword.setEchoChar('*');
     }//GEN-LAST:event_lblOcultarMouseClicked
 
     private void txtPasswordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyTyped
         if (txtPassword.getText().length() > 20) {
             evt.consume();
+        } else if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            iniciarSesion();
         }
     }//GEN-LAST:event_txtPasswordKeyTyped
 
@@ -243,6 +223,8 @@ public class FrmLogin extends javax.swing.JFrame {
     private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
         if (txtCorreo.getText().length() > 70) {
             evt.consume();
+        } else if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtPassword.requestFocus();
         }
     }//GEN-LAST:event_txtCorreoKeyTyped
 
@@ -260,6 +242,27 @@ public class FrmLogin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCorreoFocusLost
 
+    public void iniciarSesion(){
+        String usuarioSesion = txtCorreo.getText();
+        String passwordSesion = txtPassword.getText();
+        try {
+            Usuario usuarioRegistrado = usuariosNegocio.consultarPorEmail(usuarioSesion);
+            if (usuarioRegistrado == null) {
+                JOptionPane.showMessageDialog(null, "Usuario y/o contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                String contraseñaUR = usuarioRegistrado.getPassword();
+                if (!passwordSesion.equals(contraseñaUR)) {
+                    JOptionPane.showMessageDialog(null, "Usuario y/o contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    this.dispose();
+                    FrmPrincipal framePrincipal = new FrmPrincipal(usuarioRegistrado);
+                    framePrincipal.setVisible(true);
+                }
+            }
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * @param args the command line arguments
      */

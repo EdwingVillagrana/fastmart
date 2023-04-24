@@ -156,7 +156,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         menuMantenimiento.setText("Mantenimiento");
 
         menuManenimientoEmpleado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_añadirEmpleado.png"))); // NOI18N
-        menuManenimientoEmpleado.setText("Añadir Empleado");
+        menuManenimientoEmpleado.setText("Añadir Usuario");
         menuManenimientoEmpleado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuManenimientoEmpleadoActionPerformed(evt);

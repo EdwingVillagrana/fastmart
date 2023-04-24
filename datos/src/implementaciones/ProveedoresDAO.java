@@ -32,9 +32,9 @@ public class ProveedoresDAO implements IProveedoresDAO {
     /**
      * Agrega un proveedor a la base de datos.
      *
-     * @param proveedor El proveedor a agregar.
-     * @throws PersistenciaException Si ocurre algún error en la operación de
-     * persistencia.
+     * @param proveedor Objeto Proveedor a agregar.
+     * @throws PersistenciaException Si ocurre un error al agregar la
+     * información en la base de datos.
      */
     @Override
     public void agregar(Proveedor proveedor) throws PersistenciaException {
@@ -60,10 +60,10 @@ public class ProveedoresDAO implements IProveedoresDAO {
     /**
      * Actualiza los datos de un proveedor existente en la base de datos.
      *
-     * @param proveedorActualizado Proveedor con los datos actualizados del
-     * proveedor.
-     * @throws PersistenciaException Si no se puede acceder a la base de datos o
-     * si no se encuentra la información del proveedor en la base de datos.
+     * @param proveedorActualizado Objeto Proveedor con los datos actualizados
+     * del proveedor.
+     * @throws PersistenciaException Si no se puede actualizar el proveedor en
+     * la base de datos.
      */
     @Override
     public void actualizar(Proveedor proveedorActualizado) throws PersistenciaException {
@@ -93,9 +93,9 @@ public class ProveedoresDAO implements IProveedoresDAO {
     /**
      * Elimina un proveedor de la base de datos.
      *
-     * @param proveedor Proveedor a eliminar.
-     * @throws PersistenciaException Si no se puede acceder a la base de datos o
-     * si no se encuentra la información del proveedor en la base de datos.
+     * @param proveedor Objeto Proveedor a eliminar.
+     * @throws PersistenciaException Si no se puede eliminar al proveedor en la
+     * base de datos.
      */
     @Override
     public void eliminar(Proveedor proveedor) throws PersistenciaException {
@@ -118,6 +118,16 @@ public class ProveedoresDAO implements IProveedoresDAO {
         }
     }
 
+    /**
+     * Consulta un proveedor por su ID en la base de datos.
+     *
+     * @param id ID del proveedor a consultar.
+     * @return Objeto de tipo Proveedor con la información del proveedor
+     * consultado. Devuelve null si no se encuentra ningun proveedor con el ID
+     * especificado.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public Proveedor consultarPorId(Long id) throws PersistenciaException {
         try {
@@ -143,8 +153,9 @@ public class ProveedoresDAO implements IProveedoresDAO {
      * consulta JPQL.
      *
      * @param nombre El nombre del proveedor a buscar.
-     * @return Proveedor correspondiente al nombre proporcionado o null en caso
-     * de no encontrarse registrado en la base.
+     * @return Objeto de tipo Proveedor con la información del proveedor
+     * consultado. Devuelve null si no se encuentra ningun proveedor con el
+     * nombre especificado.
      * @throws PersistenciaException Si ocurre un error al realizar la consulta.
      */
     @Override
@@ -170,13 +181,12 @@ public class ProveedoresDAO implements IProveedoresDAO {
     }
 
     /**
-     * Busca la lista de todos los proveedores en la base de datos, utilizando
-     * una consulta JPQL.
+     * Consulta la lista de todas los proveedores en la base de datos.
      *
-     * @return Lista de proveedores correspondiente a todos los proveedores
-     * registrados en la base. Retorna una lista vacía en caso de no encontrarse
-     * registrado ningun proveedor
-     * @throws PersistenciaException Si ocurre un error al realizar la consulta.
+     * @return Lista con todas los proveedores registrados en la base. Una lista
+     * vacía en caso de no encontrar ningun proveedor registrado.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
      */
     @Override
     public List<Proveedor> consultarTodos() throws PersistenciaException {

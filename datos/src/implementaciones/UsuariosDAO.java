@@ -36,9 +36,9 @@ public class UsuariosDAO implements IUsuariosDAO {
     /**
      * Agrega un usuario a la base de datos.
      *
-     * @param usuario El usuario a agregar.
-     * @throws PersistenciaException Si ocurre algún error en la operación de
-     * persistencia.
+     * @param usuario Objeto usuario a agregar.
+     * @throws PersistenciaException Si ocurre un error al agregar la
+     * información en la base de datos.
      */
     @Override
     public void agregar(Usuario usuario) throws PersistenciaException {
@@ -66,8 +66,8 @@ public class UsuariosDAO implements IUsuariosDAO {
      *
      * @param usuarioActualizado Objeto Usuario con los datos actualizados del
      * usuario.
-     * @throws PersistenciaException Si no se puede actualizar el usuario en la
-     * base de datos.
+     * @throws PersistenciaException Si ocurre un error al actualizar la
+     * información en la base de datos.
      */
     @Override
     public void actualizar(Usuario usuarioActualizado) throws PersistenciaException {
@@ -97,9 +97,9 @@ public class UsuariosDAO implements IUsuariosDAO {
     /**
      * Elimina un usuario de la base de datos.
      *
-     * @param usuario Usuario a eliminar.
-     * @throws PersistenciaException Si no se puede acceder a la base de datos o
-     * si no se encuentra la información del usuario en la base de datos.
+     * @param usuario Objeto Usuario a eliminar.
+     * @throws PersistenciaException Si ocurre un error al eliminar la
+     * información de la base de datos.
      */
     @Override
     public void eliminar(Usuario usuario) throws PersistenciaException {
@@ -124,12 +124,12 @@ public class UsuariosDAO implements IUsuariosDAO {
 
     /**
      * Busca un usuario en la base de datos por su nombre utilizando una
-     * consulta JPQL. Se espera obtener un objeto de tipo Usuario. Se lanza una
-     * excepción PersistenciaException si no se encuentra ningún usuario con el
-     * nombre proporcionado.
+     * consulta JPQL.
      *
-     * @param nombre El nombre del usuario a buscar
-     * @return El objeto Usuario correspondiente al nombre proporcionado
+     * @param nombre El nombre del usuario a buscar.
+     * @return Objeto de tipo Usuario con la información del usuario consultado.
+     * Devuelve null si no se encuentra ningun usuario con el nombre
+     * especificado.
      * @throws PersistenciaException Si ocurre un error al realizar la consulta
      */
     @Override
@@ -156,6 +156,15 @@ public class UsuariosDAO implements IUsuariosDAO {
         }
     }
 
+    /**
+     * Consulta un usuario por su ID en la base de datos.
+     *
+     * @param id ID del usuario a consultar.
+     * @return Objeto de tipo Usuario con la información del usuario consultado.
+     * Devuelve null si no se encuentra ningun usuario con el ID especificado.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public Usuario consultarPorId(Long id) throws PersistenciaException {
         try {
@@ -176,6 +185,14 @@ public class UsuariosDAO implements IUsuariosDAO {
         }
     }
 
+    /**
+     * Consulta la lista de todos los usuarios en la base de datos.
+     *
+     * @return Lista con todos los usuarios registrados en la base. Una lista
+     * vacía en caso de no encontrar ningun usuario registrado.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public List<Usuario> consultarTodos() throws PersistenciaException {
         try {
@@ -193,12 +210,22 @@ public class UsuariosDAO implements IUsuariosDAO {
         }
     }
 
+    /**
+     * Busca un usuario en la base de datos por su email utilizando una consulta
+     * JPQL.
+     *
+     * @param email El email del usuario a buscar.
+     * @return Objeto de tipo Usuario con la información del usuario consultado.
+     * Devuelve null si no se encuentra ningun usuario con el email
+     * especificado.
+     * @throws PersistenciaException Si ocurre un error al realizar la consulta
+     */
     @Override
     public Usuario consultarPorEmail(String email) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
             try {
-                //Se utiliza una consulta JPQL para buscar el proveedor por su nombre
+                //Se utiliza una consulta JPQL para buscar el usuario por su email.
                 TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class);
                 query.setParameter("email", email);
                 Usuario usuario = query.getSingleResult();

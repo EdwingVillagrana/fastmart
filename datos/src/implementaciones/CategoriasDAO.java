@@ -30,9 +30,9 @@ public class CategoriasDAO implements ICategoriasDAO {
     /**
      * Agrega una categoria a la base de datos.
      *
-     * @param categoria La Categoria a agregar.
-     * @throws PersistenciaException Si ocurre algún error en la operación de
-     * persistencia.
+     * @param categoria Objeto Categoria a agregar.
+     * @throws PersistenciaException Si ocurre un error al agregar la
+     * información en la base de datos.
      */
     @Override
     public void agregar(Categoria categoria) throws PersistenciaException {
@@ -59,7 +59,7 @@ public class CategoriasDAO implements ICategoriasDAO {
      * Actualiza los datos de una categoria existente en la base de datos.
      *
      * @param categoriaActualizada Objeto Categoria con los datos actualizados
-     * del proveedor.
+     * de la categoría.
      * @throws PersistenciaException Si no se puede actualizar la categoria en
      * la base de datos.
      */
@@ -85,7 +85,7 @@ public class CategoriasDAO implements ICategoriasDAO {
     }
 
     /**
-     * Elimina un proveedor de la base de datos.
+     * Elimina una categoría de la base de datos.
      *
      * @param categoria Categoria a eliminar.
      * @throws PersistenciaException Si no se puede acceder a la base de datos o
@@ -114,12 +114,12 @@ public class CategoriasDAO implements ICategoriasDAO {
 
     /**
      * Busca una categoria en la base de datos por su nombre utilizando una
-     * consulta JPQL. Se espera obtener un objeto de tipo Categoria. Se lanza
-     * una excepción PersistenciaException si no se encuentra ningúna Categoria
-     * con el nombre proporcionado.
+     * consulta JPQL.
      *
      * @param nombre El nombre de la categoria a buscar
-     * @return El objeto Categoria correspondiente al nombre proporcionado
+     * @return Objeto de tipo Categoria con la información de la categoría
+     * consultada. Devuelve null si no se encuentra ninguna categoría con el
+     * nombre especificado.
      * @throws PersistenciaException Si ocurre un error al realizar la consulta
      */
     @Override
@@ -144,6 +144,16 @@ public class CategoriasDAO implements ICategoriasDAO {
         }
     }
 
+    /**
+     * Consulta una categoría por su ID en la base de datos.
+     *
+     * @param id ID de la categoría a consultar.
+     * @return Objeto de tipo Categoria con la información de la categoría
+     * consultada. Devuelve null si no se encuentra ninguna categoría con el ID
+     * especificado.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public Categoria consultarPorId(Long id) throws PersistenciaException {
         try {
@@ -165,6 +175,14 @@ public class CategoriasDAO implements ICategoriasDAO {
         }
     }
 
+    /**
+     * Consulta la lista de todas las categorías en la base de datos.
+     *
+     * @return Lista con todas las categorías registradas en la base. Una lista
+     * vacía en caso de no encontrar ninguna categoría registrada.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public List<Categoria> consultarTodos() throws PersistenciaException {
         try {

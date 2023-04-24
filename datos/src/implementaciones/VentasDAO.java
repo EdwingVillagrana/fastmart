@@ -27,19 +27,20 @@ public class VentasDAO implements IVentasDAO {
 
     private final IConexion conexion;
     private final IProductosDAO productosDAO;
-    
+
     public VentasDAO(IConexion conexion) {
         this.conexion = conexion;
         productosDAO = new ProductosDAO(conexion);
     }
 
     /**
-     * FALTA CORREGIR ESTE MÉTODO, COMENTARIOS EN LA LINEA 52-54
-     * Agrega una venta a la base de datos.
+     * Agrega una venta a la base de datos y actualiza el stock de cada uno de
+     * los productos que se encuentra en la lista de DetalleVenta que contiene
+     * la venta.
      *
-     * @param venta La Venta a agregar.
-     * @throws PersistenciaException Si ocurre algún error en la operación de
-     * persistencia.
+     * @param venta Objeto Venta a agregar.
+     * @throws PersistenciaException Si ocurre un error al agregar la
+     * información en la base de datos.
      */
     @Override
     public void agregar(Venta venta) throws PersistenciaException {
@@ -49,11 +50,17 @@ public class VentasDAO implements IVentasDAO {
                 em.getTransaction().begin();
                 em.persist(venta);
                 List<DetalleVenta> productosVendidos = venta.getProductos();
-                
-                for(DetalleVenta detalleVenta: productosVendidos){                   
+                /*
+                Recorremos la lista de DetalleVenta que tiene la venta para obtener sus datos,
+                setearle la venta previamente persistida para que tenga un ID y así poder
+                relacionarlas directamente en la base de datos. También se actualiza el stock de
+                cada uno de los productos incluídos en la lista.
+                 */
+                for (DetalleVenta detalleVenta : productosVendidos) {
                     Long idProducto = detalleVenta.getProducto().getId();
                     Long cantidad = detalleVenta.getCantidad();
                     detalleVenta.setVenta(venta);
+                    //Si no se persiste no se queda guardada la información en la base.
                     em.persist(detalleVenta);
                     productosDAO.actualizarStock(idProducto, cantidad, false);
                 }
@@ -70,10 +77,10 @@ public class VentasDAO implements IVentasDAO {
     /**
      * Actualiza los datos de una venta existente en la base de datos.
      *
-     * @param ventaActualizada Objeto Venta con los datos actualizados d la
+     * @param ventaActualizada Objeto Venta con los datos actualizados de la
      * venta.
-     * @throws PersistenciaException Si no se puede actualizar la venta en la
-     * base de datos.
+     * @throws PersistenciaException Si ocurre un error al actualizar la
+     * información en la base de datos.
      */
     @Override
     public void actualizar(Venta ventaActualizada) throws PersistenciaException {
@@ -101,9 +108,9 @@ public class VentasDAO implements IVentasDAO {
     /**
      * Elimina una venta de la base de datos.
      *
-     * @param venta Venta a eliminar.
-     * @throws PersistenciaException Si no se puede acceder a la base de datos o
-     * si no se encuentra la información de la venta en la base de datos.
+     * @param venta Objeto Venta a eliminar.
+     * @throws PersistenciaException Si ocurre un error al eliminar la
+     * información en la base de datos.
      */
     @Override
     public void eliminar(Venta venta) throws PersistenciaException {
@@ -126,6 +133,15 @@ public class VentasDAO implements IVentasDAO {
         }
     }
 
+    /**
+     * Consulta una venta por su ID.
+     *
+     * @param id ID de la venta a consultar.
+     * @return Objeto de tipo Venta con la información de la venta consultada.
+     * Devuelve null si no encuentra ninguna venta con el ID especificado.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public Venta consultarPorId(Long id) throws PersistenciaException {
         try {
@@ -146,6 +162,19 @@ public class VentasDAO implements IVentasDAO {
         }
     }
 
+    /**
+     * Consulta la lista de ventas que se encuentran dentro de un periodo.
+     *
+     * @param fechaInicio Objeto de tipo SQLDate con la fecha de inicio de
+     * búsqueda del periodo.
+     * @param fechaFin Objeto de tipo SQLDate con la fecha de finalización de
+     * búsqueda del periodo.
+     * @return Lista con todas las venta registradas en la base en el periodo
+     * indicado. Una lista vacía en caso de no encontrar ninguna venta
+     * registrada.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public List<Venta> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws PersistenciaException {
         try {
@@ -165,6 +194,14 @@ public class VentasDAO implements IVentasDAO {
         }
     }
 
+    /**
+     * Consulta la lista de todas las venta en la base de datos.
+     *
+     * @return Lista con todas las ventas registradas en la base. Una lista
+     * vacía en caso de no encontrar ninguna venta registrada.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public List<Venta> consultarTodos() throws PersistenciaException {
         try {

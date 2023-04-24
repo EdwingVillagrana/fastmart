@@ -34,6 +34,15 @@ public class ComprasDAO implements IComprasDAO {
         productosDAO = new ProductosDAO(conexion);
     }
 
+    /**
+     * Agrega una compra a la base de datos y actualiza el stock de cada uno de
+     * los productos que se encuentra en la lista de DetalleCompra que contiene
+     * la compra.
+     *
+     * @param compra Objeto Compra a agregar.
+     * @throws PersistenciaException Si ocurre un error al agregar la
+     * información a la base de datos.
+     */
     @Override
     public void agregar(Compra compra) throws PersistenciaException {
         try {
@@ -42,7 +51,7 @@ public class ComprasDAO implements IComprasDAO {
                 em.getTransaction().begin();
                 em.persist(compra);
                 List<DetalleCompra> productosComprados = compra.getProductos();
-                for(DetalleCompra detalleCompra: productosComprados){
+                for (DetalleCompra detalleCompra : productosComprados) {
                     Long idProducto = detalleCompra.getProducto().getId();
                     Long cantidad = detalleCompra.getCantidad();
                     productosDAO.actualizarStock(idProducto, cantidad, true);
@@ -57,6 +66,14 @@ public class ComprasDAO implements IComprasDAO {
         }
     }
 
+    /**
+     * Actualiza los datos de una compra existente en la base de datos.
+     *
+     * @param compraActualizada Objeto Compra con los datos actualizados de la
+     * compra.
+     * @throws PersistenciaException Si ocurre un error al actualizar la
+     * información en la base de datos.
+     */
     @Override
     public void actualizar(Compra compraActualizada) throws PersistenciaException {
         try {
@@ -80,6 +97,13 @@ public class ComprasDAO implements IComprasDAO {
         }
     }
 
+    /**
+     * Elimina una compra de la base de datos.
+     *
+     * @param compra Objeto Compra a eliminar
+     * @throws PersistenciaException Si ocurre un error al eliminar la
+     * información de la base de datos.
+     */
     @Override
     public void eliminar(Compra compra) throws PersistenciaException {
         try {
@@ -101,6 +125,15 @@ public class ComprasDAO implements IComprasDAO {
         }
     }
 
+    /**
+     * Consulta una compra por su ID.
+     *
+     * @param id ID de la compra a consultar.
+     * @return Objeto de tipo Compra con la información de la compra consultada.
+     * Devuelve null si no encuentra ninguna compra con el ID especificado.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public Compra consultarPorId(Long id) throws PersistenciaException {
         try {
@@ -121,6 +154,19 @@ public class ComprasDAO implements IComprasDAO {
         }
     }
 
+    /**
+     * Consulta la lista de compras que se encuentran dentro de un periodo.
+     *
+     * @param fechaInicio Objeto de tipo SQLDate con la fecha de inicio de
+     * búsqueda del periodo.
+     * @param fechaFin Objeto de tipo SQLDate con la fecha de finalización de
+     * búsqueda del periodo.
+     * @return Lista con todas las compras registradas en la base en el periodo
+     * indicado. Una lista vacía en caso de no encontrar ninguna compra
+     * registrada.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public List<Compra> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws PersistenciaException {
         try {
@@ -140,6 +186,16 @@ public class ComprasDAO implements IComprasDAO {
         }
     }
 
+    /**
+     * Consulta la lista de compras realizadas por un usuario.
+     *
+     * @param usuario Objeto de tipo Usuario con la información del usuario.
+     * @return Lista con todas las compras registradas en la base realizadas por
+     * el usuario indicado. Una lista vacía en caso de no encontrar ninguna
+     * compra registrada.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public List<Compra> consultarPorUsuario(Usuario usuario) throws PersistenciaException {
         try {
@@ -159,6 +215,14 @@ public class ComprasDAO implements IComprasDAO {
         }
     }
 
+    /**
+     * Consulta la lista de todas las compras en la base de datos.
+     *
+     * @return Lista con todas las compras registradas en la base. Una lista
+     * vacía en caso de no encontrar ninguna compra registrada.
+     * @throws PersistenciaException Si ocurre algún error en la base de datos
+     * durante la consulta.
+     */
     @Override
     public List<Compra> consultarTodos() throws PersistenciaException {
         try {

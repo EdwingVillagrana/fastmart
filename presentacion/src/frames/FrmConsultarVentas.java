@@ -29,6 +29,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     private Date fechaInicio;
     private Date fechaFinal;
     
+    
     private Long idVenta;
     private Long idUsuario;
     private String fecha;
@@ -275,13 +276,26 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPorPeriodoActionPerformed
 
     private void btnVerDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerDetallesActionPerformed
+        
         DefaultTableModel modelo = (DefaultTableModel) tblVentas.getModel();
         int indiceFilaSeleccionada = tblVentas.getSelectedRow();
-        idVenta = (Long)modelo.getValueAt(indiceFilaSeleccionada, 0);
-        idUsuario = (Long)modelo.getValueAt(indiceFilaSeleccionada, 1);
-        fecha = (String)modelo.getValueAt(indiceFilaSeleccionada, 2);
-        total = (Double)modelo.getValueAt(indiceFilaSeleccionada, 3);
-        System.out.println(idVenta + " " + idUsuario + " " + fecha + " " + total);
+        if (indiceFilaSeleccionada==-1) {
+            JOptionPane.showMessageDialog(null, "Seleccione una venta", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            DlgMostarVenta dlgVenta = new DlgMostarVenta(this, true);
+            idVenta = (Long)modelo.getValueAt(indiceFilaSeleccionada, 0);
+            idUsuario = (Long)modelo.getValueAt(indiceFilaSeleccionada, 1);
+            fecha = (String)modelo.getValueAt(indiceFilaSeleccionada, 2);
+            total = (Double)modelo.getValueAt(indiceFilaSeleccionada, 3);
+            System.out.println(idVenta + " " + idUsuario + " " + fecha + " " + total);
+            dlgVenta.setIdVenta(idVenta);
+            dlgVenta.setIdUsuario(idUsuario);
+            dlgVenta.setFecha(fecha);
+            dlgVenta.setTotal(total);
+            dlgVenta.setVisible(true);
+        }
+        
+        
     }//GEN-LAST:event_btnVerDetallesActionPerformed
 
     

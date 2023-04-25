@@ -587,7 +587,9 @@ public class FrmVenta extends javax.swing.JFrame {
             if (confirmaEliminacion == 0) {
                 listaProductos.remove(indiceSeleccionado);
                 llenarTablaArticulosCarrito();
+                
                 calculaTotal();
+                calculaCambio();
             }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed

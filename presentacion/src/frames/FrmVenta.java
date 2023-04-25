@@ -484,10 +484,15 @@ public class FrmVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnCancelarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarVentaActionPerformed
-        int confirmarEliminación = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea cancelar la venta?", "Cancelar venta", JOptionPane.YES_NO_OPTION);
-        if (confirmarEliminación == 0) {
-            reiniciarCampos();
+        if (listaProductos.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El carrito está vacío!!", "Carrito vacío", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            int confirmarEliminación = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea cancelar la venta?", "Cancelar venta", JOptionPane.YES_NO_OPTION);
+            if (confirmarEliminación == 0) {
+                reiniciarCampos();
+            }
         }
+
     }//GEN-LAST:event_btnCancelarVentaActionPerformed
 
     private void btnImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImporteActionPerformed
@@ -510,7 +515,7 @@ public class FrmVenta extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int indiceSeleccionado = tableArticulosCarrito.getSelectedRow();
         if (indiceSeleccionado == -1) {
-            JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun producto de la lista para modificar");
+            JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun producto de la lista para modificar","No se puede hacer la modificación!", JOptionPane.INFORMATION_MESSAGE);
         } else {
             String nombre = listaProductos.get(indiceSeleccionado).getProducto().getNombre();
             String cantidad = listaProductos.get(indiceSeleccionado).getCantidad().toString();
@@ -551,7 +556,7 @@ public class FrmVenta extends javax.swing.JFrame {
                     }
                 }
                 if (seEncuentraEnCarrito) {
-                    JOptionPane.showMessageDialog(null, "El producto ya se encuentra en la lista, si desea modificarlo, seleccionelo y presione el botón modificar.");
+                    JOptionPane.showMessageDialog(null, "El producto ya se encuentra en la lista, si desea modificarlo, seleccionelo y presione el botón modificar.","El producto ya se encuentra en la lista!",JOptionPane.INFORMATION_MESSAGE);
                     limpiarCamposDeProducto();
                     productoActual = null;
                 } else {
@@ -571,7 +576,7 @@ public class FrmVenta extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int indiceSeleccionado = tableArticulosCarrito.getSelectedRow();
         if (indiceSeleccionado == -1) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un artículo para poder eliminar");
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un artículo para poder eliminar","No hay un articulo seleccionado!!",JOptionPane.INFORMATION_MESSAGE);
         } else {
             int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el producto del carrito?", "Eliminar producto", JOptionPane.YES_NO_OPTION);
             if (confirmaEliminacion == 0) {
@@ -589,7 +594,7 @@ public class FrmVenta extends javax.swing.JFrame {
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
         String error = validarCamposParaGenerarVenta();
         if (error != null) {
-            JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, error, "No se puede generar la venta", JOptionPane.ERROR_MESSAGE);
         } else {
             Venta venta = new Venta(this.usuarioLogueado, obtenerFecha(), this.total, this.listaProductos);
 
@@ -608,7 +613,7 @@ public class FrmVenta extends javax.swing.JFrame {
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
         if (txtCodigo.getText().isEmpty() || txtCodigo.getText().isBlank()) {
-            JOptionPane.showMessageDialog(null, "El campo de código está vacío");
+            JOptionPane.showMessageDialog(null, "El campo de código está vacío","Falta código!", JOptionPane.INFORMATION_MESSAGE);
         } else {
             Long codigo = Long.parseLong(txtCodigo.getText());
             consultarCodigo(codigo);

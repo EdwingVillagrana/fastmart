@@ -12,7 +12,7 @@ import interfaces.IVentasNegocio;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +26,13 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     private IVentasNegocio ventasNegocio;
     private DefaultTableModel model;
     private List<Venta> listaVentas = new ArrayList<>();
+    private Date fechaInicio;
+    private Date fechaFinal;
+    
+    private Long idVenta;
+    private Long idUsuario;
+    private String fecha;
+    private Double total;
     
     
     /**
@@ -52,15 +59,16 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblVentas = new javax.swing.JTable();
-        dateFin = new com.toedter.calendar.JDateChooser();
-        lblFecha = new javax.swing.JLabel();
         lblSeleccionarFecha = new javax.swing.JLabel();
-        dateInicio = new com.toedter.calendar.JDateChooser();
         btnMenu = new javax.swing.JButton();
         lblApartado = new javax.swing.JLabel();
         lblLogoCabecera = new javax.swing.JLabel();
         FondoTitulo = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
+        txtBuscarPorID = new javax.swing.JTextField();
+        btnMostrarTodas = new javax.swing.JButton();
+        btnPorPeriodo = new javax.swing.JButton();
+        btnVerDetalles = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -81,7 +89,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnSalir);
-        btnSalir.setBounds(480, 70, 100, 50);
+        btnSalir.setBounds(520, 70, 110, 40);
 
         tblVentas.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         tblVentas.setModel(new javax.swing.table.DefaultTableModel(
@@ -103,21 +111,12 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblVentas);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 150, 570, 250);
-        jPanel1.add(dateFin);
-        dateFin.setBounds(210, 90, 140, 20);
-
-        lblFecha.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblFecha.setText("hasta");
-        jPanel1.add(lblFecha);
-        lblFecha.setBounds(160, 90, 40, 14);
+        jScrollPane1.setBounds(10, 130, 620, 250);
 
         lblSeleccionarFecha.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        lblSeleccionarFecha.setText("Seleccione fecha:");
+        lblSeleccionarFecha.setText("Introduzca ID:");
         jPanel1.add(lblSeleccionarFecha);
-        lblSeleccionarFecha.setBounds(10, 60, 120, 14);
-        jPanel1.add(dateInicio);
-        dateInicio.setBounds(10, 90, 140, 20);
+        lblSeleccionarFecha.setBounds(10, 70, 120, 14);
 
         btnMenu.setBackground(new java.awt.Color(110, 88, 68));
         btnMenu.setForeground(new java.awt.Color(255, 255, 255));
@@ -139,7 +138,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
         jPanel1.add(lblLogoCabecera);
-        lblLogoCabecera.setBounds(200, 0, 190, 30);
+        lblLogoCabecera.setBounds(230, 0, 190, 30);
 
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         FondoTitulo.addActionListener(new java.awt.event.ActionListener() {
@@ -148,7 +147,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
             }
         });
         jPanel1.add(FondoTitulo);
-        FondoTitulo.setBounds(40, 0, 570, 30);
+        FondoTitulo.setBounds(40, 0, 610, 30);
 
         btnBuscar.setBackground(new java.awt.Color(255, 145, 77));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -164,18 +163,63 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBuscar);
-        btnBuscar.setBounds(370, 70, 100, 50);
+        btnBuscar.setBounds(160, 70, 110, 40);
+
+        txtBuscarPorID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarPorIDKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtBuscarPorID);
+        txtBuscarPorID.setBounds(10, 88, 140, 22);
+
+        btnMostrarTodas.setBackground(new java.awt.Color(255, 145, 77));
+        btnMostrarTodas.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnMostrarTodas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_listarVentas.png"))); // NOI18N
+        btnMostrarTodas.setText("Listar");
+        btnMostrarTodas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarTodasActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnMostrarTodas);
+        btnMostrarTodas.setBounds(280, 70, 110, 40);
+
+        btnPorPeriodo.setBackground(new java.awt.Color(255, 145, 77));
+        btnPorPeriodo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnPorPeriodo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_consultarPorPeriodoo.png"))); // NOI18N
+        btnPorPeriodo.setText("Período");
+        btnPorPeriodo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPorPeriodo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnPorPeriodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPorPeriodoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnPorPeriodo);
+        btnPorPeriodo.setBounds(400, 70, 110, 40);
+
+        btnVerDetalles.setBackground(new java.awt.Color(255, 145, 77));
+        btnVerDetalles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_mirarVenta.PNG"))); // NOI18N
+        btnVerDetalles.setText("Detalles de Venta");
+        btnVerDetalles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerDetallesActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnVerDetalles);
+        btnVerDetalles.setBounds(450, 390, 180, 40);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -195,14 +239,55 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        consultarPeriodo(this.dateInicio.getDate(),this.dateFin.getDate());
+        if (txtBuscarPorID.getText().isEmpty() || txtBuscarPorID.getText().isBlank()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un ID","Error", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            consultarPorId(Long.parseLong(txtBuscarPorID.getText()));
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    public void consultarPeriodo(Date fechaInicial, Date fechaFinal) {
+    private void btnMostrarTodasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarTodasActionPerformed
+        consultarTodas();
+    }//GEN-LAST:event_btnMostrarTodasActionPerformed
 
+    private void txtBuscarPorIDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarPorIDKeyTyped
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE))) {
+            evt.consume(); // Elimina el carácter que no es del 0 al 9
+        }
+    }//GEN-LAST:event_txtBuscarPorIDKeyTyped
+
+    private void btnPorPeriodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorPeriodoActionPerformed
+            DlgFechaSelector dlgFechaS = new DlgFechaSelector(this, true);
+        dlgFechaS.setVisible(true);
+        while (dlgFechaS.isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException io) {
+                io.printStackTrace();
+            }
+        }
+        
+        fechaInicio = dlgFechaS.obtenerFechaInicio();
+        fechaFinal = dlgFechaS.obtenerFechaFinal();
+        System.out.println(fechaInicio + " " + fechaFinal);
+        consultarPeriodo(fechaInicio, fechaFinal);
+    }//GEN-LAST:event_btnPorPeriodoActionPerformed
+
+    private void btnVerDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerDetallesActionPerformed
+        DefaultTableModel modelo = (DefaultTableModel) tblVentas.getModel();
+        int indiceFilaSeleccionada = tblVentas.getSelectedRow();
+        idVenta = (Long)modelo.getValueAt(indiceFilaSeleccionada, 0);
+        idUsuario = (Long)modelo.getValueAt(indiceFilaSeleccionada, 1);
+        fecha = (String)modelo.getValueAt(indiceFilaSeleccionada, 2);
+        total = (Double)modelo.getValueAt(indiceFilaSeleccionada, 3);
+        System.out.println(idVenta + " " + idUsuario + " " + fecha + " " + total);
+    }//GEN-LAST:event_btnVerDetallesActionPerformed
+
+    
+    public void consultarPeriodo(Date fechaInicial, Date fechaFinal) {
         try {
             this.listaVentas = ventasNegocio.consultarPorPeriodo(fechaInicial, fechaFinal);
-            System.out.println(listaVentas);
             model.setRowCount(0);
             for (Venta ventas : listaVentas) {
                 Long id_venta = ventas.getId();
@@ -232,6 +317,23 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
                 Object[] fila = {id_venta, id_usuario, fecha, total};
                 model.addRow(fila);
             }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void consultarPorId(Long id) {
+        try {
+            Venta venta = ventasNegocio.consultarPorId(id);
+            model.setRowCount(0);
+            Long id_venta = venta.getId();
+            Long id_usuario = venta.getUsuario().getId();
+            String fecha = String.valueOf(venta.getFechaDeVenta());
+            Double total = venta.getTotal();
+            //llenando la tabla.
+            Object[] fila = {id_venta, id_usuario, fecha, total};
+            model.addRow(fila);
+
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -279,15 +381,16 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     private javax.swing.JTextField FondoTitulo;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnMenu;
+    private javax.swing.JButton btnMostrarTodas;
+    private javax.swing.JButton btnPorPeriodo;
     private javax.swing.JButton btnSalir;
-    private com.toedter.calendar.JDateChooser dateFin;
-    private com.toedter.calendar.JDateChooser dateInicio;
+    private javax.swing.JButton btnVerDetalles;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblApartado;
-    private javax.swing.JLabel lblFecha;
     private javax.swing.JLabel lblLogoCabecera;
     private javax.swing.JLabel lblSeleccionarFecha;
     private javax.swing.JTable tblVentas;
+    private javax.swing.JTextField txtBuscarPorID;
     // End of variables declaration//GEN-END:variables
 }

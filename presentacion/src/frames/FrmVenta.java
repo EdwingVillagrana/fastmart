@@ -294,6 +294,11 @@ public class FrmVenta extends javax.swing.JFrame {
 
         txtCodigo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtCodigo.setBorder(null);
+        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtCodigo);
         txtCodigo.setBounds(30, 62, 150, 20);
 
@@ -530,12 +535,12 @@ public class FrmVenta extends javax.swing.JFrame {
             this.txtPrecio.setText(precio);
         }
     }//GEN-LAST:event_btnModificarActionPerformed
-
+    
     private void btnAgregarACarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarACarritoActionPerformed
         String camposValidos = validarCamposParaAgregarProducto();
         if (seEstaModificando) {
             if (camposValidos != null) {
-                JOptionPane.showMessageDialog(null, camposValidos);
+                JOptionPane.showMessageDialog(null, camposValidos, "No se puede agregar", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 Long cantidad = Long.parseLong(this.txtCantidad.getText());
                 listaProductos.get(indiceEnModificacion).setCantidad(cantidad);
@@ -547,7 +552,7 @@ public class FrmVenta extends javax.swing.JFrame {
             }
         } else {
             if (camposValidos != null) {
-                JOptionPane.showMessageDialog(null, camposValidos);
+                JOptionPane.showMessageDialog(null, camposValidos,"No se puede agregar", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 boolean seEncuentraEnCarrito = false;
                 for (DetalleVenta d : listaProductos) {
@@ -633,6 +638,10 @@ public class FrmVenta extends javax.swing.JFrame {
             evt.consume(); // Elimina el carácter que no es del 0 al 9
         }
     }//GEN-LAST:event_txtCantidadKeyTyped
+
+    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
+            // Falta agregar la validación para que no acepte caracteres
+    }//GEN-LAST:event_txtCodigoActionPerformed
 
     public String validarCamposParaAgregarProducto() {
 

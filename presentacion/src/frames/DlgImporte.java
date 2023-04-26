@@ -155,7 +155,6 @@ public class DlgImporte extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAceptarImporteActionPerformed
 
     public Double obtenerImporte() {
-
         return importe;
     }
 

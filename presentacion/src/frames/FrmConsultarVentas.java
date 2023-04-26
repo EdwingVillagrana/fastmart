@@ -16,6 +16,9 @@ import java.sql.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 /**
  *
  * @author Kevin Rios
@@ -28,14 +31,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     private List<Venta> listaVentas = new ArrayList<>();
     private Date fechaInicio;
     private Date fechaFinal;
-    
-    
-    private Long idVenta;
-    private Long idUsuario;
-    private String fecha;
-    private Double total;
-    
-    
+
     /**
      * Creates new form ConsultarVenta
      */
@@ -45,6 +41,9 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         this.usuarioLogueado = usuarioLogeado;
         this.ventasNegocio = new VentasNegocio();
         model = (DefaultTableModel) this.tblVentas.getModel();
+        TableColumnModel columnModel = tblVentas.getColumnModel();
+        TableColumn columnaNombreUsuario = columnModel.getColumn(1);
+        columnaNombreUsuario.setPreferredWidth(180);
     }
 
     /**
@@ -241,8 +240,8 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         if (txtBuscarPorID.getText().isEmpty() || txtBuscarPorID.getText().isBlank()) {
-            JOptionPane.showMessageDialog(null, "Debe ingresar un ID","Error", JOptionPane.INFORMATION_MESSAGE);
-        }else{
+            JOptionPane.showMessageDialog(null, "Debe ingresar un ID", "Error", JOptionPane.INFORMATION_MESSAGE);
+        } else {
             consultarPorId(Long.parseLong(txtBuscarPorID.getText()));
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -259,7 +258,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBuscarPorIDKeyTyped
 
     private void btnPorPeriodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorPeriodoActionPerformed
-            DlgFechaSelector dlgFechaS = new DlgFechaSelector(this, true);
+        DlgFechaSelector dlgFechaS = new DlgFechaSelector(this, true);
         dlgFechaS.setVisible(true);
         while (dlgFechaS.isVisible()) {
             try {
@@ -268,128 +267,83 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
                 io.printStackTrace();
             }
         }
-        
         fechaInicio = dlgFechaS.obtenerFechaInicio();
         fechaFinal = dlgFechaS.obtenerFechaFinal();
-        System.out.println(fechaInicio + " " + fechaFinal);
         consultarPeriodo(fechaInicio, fechaFinal);
     }//GEN-LAST:event_btnPorPeriodoActionPerformed
 
     private void btnVerDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerDetallesActionPerformed
-        
-        DefaultTableModel modelo = (DefaultTableModel) tblVentas.getModel();
+
         int indiceFilaSeleccionada = tblVentas.getSelectedRow();
-        if (indiceFilaSeleccionada==-1) {
+        if (indiceFilaSeleccionada == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione una venta", "ERROR", JOptionPane.INFORMATION_MESSAGE);
-        }else{
-            DlgMostarVenta dlgVenta = new DlgMostarVenta(this, true);
-            idVenta = (Long)modelo.getValueAt(indiceFilaSeleccionada, 0);
-            idUsuario = (Long)modelo.getValueAt(indiceFilaSeleccionada, 1);
-            fecha = (String)modelo.getValueAt(indiceFilaSeleccionada, 2);
-            total = (Double)modelo.getValueAt(indiceFilaSeleccionada, 3);
-            System.out.println(idVenta + " " + idUsuario + " " + fecha + " " + total);
-            dlgVenta.setIdVenta(idVenta);
-            dlgVenta.setIdUsuario(idUsuario);
-            dlgVenta.setFecha(fecha);
-            dlgVenta.setTotal(total);
-            dlgVenta.setVisible(true);
+        } else {
+            System.out.println(indiceFilaSeleccionada);
+            Venta ventaAMostrar = listaVentas.get(indiceFilaSeleccionada);
+            DlgDetallesVenta dlgDetallesVenta = new DlgDetallesVenta(this, true, ventaAMostrar);
+            dlgDetallesVenta.setVisible(true);
+
+            while (dlgDetallesVenta.isVisible()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException io) {
+                    io.printStackTrace();
+                }
+            }
         }
-        
-        
     }//GEN-LAST:event_btnVerDetallesActionPerformed
 
-    
     public void consultarPeriodo(Date fechaInicial, Date fechaFinal) {
         try {
             this.listaVentas = ventasNegocio.consultarPorPeriodo(fechaInicial, fechaFinal);
             model.setRowCount(0);
-            for (Venta ventas : listaVentas) {
-                Long id_venta = ventas.getId();
-                Long id_usuario = ventas.getUsuario().getId();
-                String fecha = String.valueOf(ventas.getFechaDeVenta());
-                Double total = ventas.getTotal();
-                //llenando la tabla.
-                Object[] fila = {id_venta, id_usuario, fecha, total};
-                model.addRow(fila);
+            for (Venta venta : listaVentas) {
+                mostrarVenta(venta);
             }
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
-    public void consultarTodas(){
+
+    public void consultarTodas() {
         try {
             this.listaVentas = ventasNegocio.consultarTodos();
             model.setRowCount(0);
 
-            for (Venta ventas : listaVentas) {
-                Long id_venta = ventas.getId();
-                Long id_usuario = ventas.getUsuario().getId();
-                String fecha = String.valueOf(ventas.getFechaDeVenta());
-                Double total = ventas.getTotal();
-                //llenando la tabla.
-                Object[] fila = {id_venta, id_usuario, fecha, total};
-                model.addRow(fila);
+            for (Venta venta : listaVentas) {
+                mostrarVenta(venta);
             }
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
+
     public void consultarPorId(Long id) {
         try {
             Venta venta = ventasNegocio.consultarPorId(id);
-            model.setRowCount(0);
-            Long id_venta = venta.getId();
-            Long id_usuario = venta.getUsuario().getId();
-            String fecha = String.valueOf(venta.getFechaDeVenta());
-            Double total = venta.getTotal();
-            //llenando la tabla.
-            Object[] fila = {id_venta, id_usuario, fecha, total};
-            model.addRow(fila);
-
+            this.listaVentas.add(venta);
+            if (venta == null) {
+                JOptionPane.showMessageDialog(null, "La venta no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            } else{
+                model.setRowCount(0);
+                mostrarVenta(venta);
+            }
+            
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(FrmConsultarVentas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(FrmConsultarVentas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(FrmConsultarVentas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(FrmConsultarVentas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//        //</editor-fold>
-//        //</editor-fold>
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new FrmConsultarVentas().setVisible(true);
-//            }
-//        });
-//    }
+
+    public void mostrarVenta(Venta venta) {
+        Long id_venta = venta.getId();
+        String nombreUsuario = venta.getUsuario().getNombre();
+        String fecha = String.valueOf(venta.getFechaDeVenta());
+        Double total = venta.getTotal();
+        //llenando la tabla.
+        Object[] fila = {id_venta, nombreUsuario, total, fecha};
+        model.addRow(fila);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;

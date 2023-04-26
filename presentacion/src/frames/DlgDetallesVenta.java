@@ -4,19 +4,32 @@
  */
 package frames;
 
+import entidades.DetalleVenta;
+import entidades.Venta;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Kevin Rios
  */
-public class DlgMostarVenta extends javax.swing.JDialog {
+public class DlgDetallesVenta extends javax.swing.JDialog {
+
+    private Venta venta;
+    private DefaultTableModel model;
+    private List<DetalleVenta> detallesVenta;
 
     /**
      * Creates new form DlgMostarVenta
      */
-    public DlgMostarVenta(java.awt.Frame parent, boolean modal) {
+    public DlgDetallesVenta(java.awt.Frame parent, boolean modal, Venta venta) {
         super(parent, modal);
         this.setLocationRelativeTo(null);
         initComponents();
+        this.venta = venta;
+        model = (DefaultTableModel) tblDetalleVenta.getModel();
+        detallesVenta = venta.getProductos();
+        llenarCampos();
     }
 
     /**
@@ -50,12 +63,6 @@ public class DlgMostarVenta extends javax.swing.JDialog {
         MostrarVenta.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         MostrarVenta.add(txtIdUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 90, 30));
         MostrarVenta.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 60, 130, 30));
-
-        txtTotal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTotalActionPerformed(evt);
-            }
-        });
         MostrarVenta.add(txtTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 90, 30));
         MostrarVenta.add(txtIdVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 90, 30));
 
@@ -63,11 +70,6 @@ public class DlgMostarVenta extends javax.swing.JDialog {
         btnMenu.setForeground(new java.awt.Color(255, 255, 255));
         btnMenu.setText("🏠");
         btnMenu.setActionCommand("\\u2715");
-        btnMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuActionPerformed(evt);
-            }
-        });
         MostrarVenta.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 30));
 
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -83,38 +85,46 @@ public class DlgMostarVenta extends javax.swing.JDialog {
         MostrarVenta.add(FondoTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, 30));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Total");
-        MostrarVenta.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 40, 40, -1));
+        MostrarVenta.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 40, 40, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Fecha");
-        MostrarVenta.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 40, 60, -1));
+        MostrarVenta.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, 60, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setText("ID Usuario");
-        MostrarVenta.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(167, 40, 60, -1));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Usuario");
+        MostrarVenta.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, 50, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("ID Venta");
-        MostrarVenta.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, 60, -1));
+        MostrarVenta.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 60, -1));
 
         jLabel5.setEnabled(false);
         MostrarVenta.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 540, 10));
 
         tblDetalleVenta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "ID Venta", "ID Producto", "Cantidad", "Precio"
+                "Producto", "Cantidad", "Precio", "Subtotal"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Long.class, java.lang.Double.class, java.lang.Double.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -136,72 +146,64 @@ public class DlgMostarVenta extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTotalActionPerformed
-
-    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuActionPerformed
-
-    public void setIdVenta(Long idVenta) {
-       this.txtIdVenta.setText(String.valueOf(idVenta));
-    }
-    public void setIdUsuario(Long idUsuario) {
-       this.txtIdUsuario.setText(String.valueOf(idUsuario));
-    }
-    public void setFecha(String fecha) {
-       this.txtFecha.setText(fecha);
-    }
-    public void setTotal(Double total) {
-       this.txtTotal.setText(String.valueOf(total));
-    }
-    
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DlgMostarVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DlgMostarVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DlgMostarVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DlgMostarVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    public void llenarCampos() {
+        this.txtIdVenta.setText(venta.getId().toString());
+        this.txtIdUsuario.setText(venta.getUsuario().getNombre());
+        this.txtFecha.setText(venta.getFechaDeVenta().toString());
+        this.txtTotal.setText(venta.getTotal().toString());
+        
+        for (DetalleVenta detalleVenta : detallesVenta) {
+            String producto = detalleVenta.getProducto().getNombre();
+            Long cantidad = detalleVenta.getCantidad();
+            Double precio = detalleVenta.getPrecio();
+            Double subtotal = cantidad * precio;
+            //llenando la tabla.
+            Object[] fila = {producto, cantidad, precio, subtotal};
+            model.addRow(fila);
         }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DlgMostarVenta dialog = new DlgMostarVenta(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
     }
 
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(DlgDetallesVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(DlgDetallesVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(DlgDetallesVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(DlgDetallesVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                DlgDetallesVenta dialog = new DlgDetallesVenta(new javax.swing.JFrame(), true);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;

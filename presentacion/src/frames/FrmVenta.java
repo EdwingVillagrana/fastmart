@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -294,9 +296,9 @@ public class FrmVenta extends javax.swing.JFrame {
 
         txtCodigo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtCodigo.setBorder(null);
-        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoActionPerformed(evt);
+        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoKeyTyped(evt);
             }
         });
         jPanel1.add(txtCodigo);
@@ -520,7 +522,7 @@ public class FrmVenta extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int indiceSeleccionado = tableArticulosCarrito.getSelectedRow();
         if (indiceSeleccionado == -1) {
-            JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun producto de la lista para modificar","No se puede hacer la modificación!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun producto de la lista para modificar", "No se puede hacer la modificación!", JOptionPane.INFORMATION_MESSAGE);
         } else {
             String nombre = listaProductos.get(indiceSeleccionado).getProducto().getNombre();
             String cantidad = listaProductos.get(indiceSeleccionado).getCantidad().toString();
@@ -535,7 +537,7 @@ public class FrmVenta extends javax.swing.JFrame {
             this.txtPrecio.setText(precio);
         }
     }//GEN-LAST:event_btnModificarActionPerformed
-    
+
     private void btnAgregarACarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarACarritoActionPerformed
         String camposValidos = validarCamposParaAgregarProducto();
         if (seEstaModificando) {
@@ -552,7 +554,7 @@ public class FrmVenta extends javax.swing.JFrame {
             }
         } else {
             if (camposValidos != null) {
-                JOptionPane.showMessageDialog(null, camposValidos,"No se puede agregar", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, camposValidos, "No se puede agregar", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 boolean seEncuentraEnCarrito = false;
                 for (DetalleVenta d : listaProductos) {
@@ -561,7 +563,7 @@ public class FrmVenta extends javax.swing.JFrame {
                     }
                 }
                 if (seEncuentraEnCarrito) {
-                    JOptionPane.showMessageDialog(null, "El producto ya se encuentra en la lista, si desea modificarlo, seleccionelo y presione el botón modificar.","El producto ya se encuentra en la lista!",JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "El producto ya se encuentra en la lista, si desea modificarlo, seleccionelo y presione el botón modificar.", "El producto ya se encuentra en la lista!", JOptionPane.INFORMATION_MESSAGE);
                     limpiarCamposDeProducto();
                     productoActual = null;
                 } else {
@@ -581,13 +583,13 @@ public class FrmVenta extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int indiceSeleccionado = tableArticulosCarrito.getSelectedRow();
         if (indiceSeleccionado == -1) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un artículo para poder eliminar","No hay un articulo seleccionado!!",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un artículo para poder eliminar", "No hay un articulo seleccionado!!", JOptionPane.INFORMATION_MESSAGE);
         } else {
             int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el producto del carrito?", "Eliminar producto", JOptionPane.YES_NO_OPTION);
             if (confirmaEliminacion == 0) {
                 listaProductos.remove(indiceSeleccionado);
                 llenarTablaArticulosCarrito();
-                
+
                 calculaTotal();
                 calculaCambio();
             }
@@ -620,7 +622,7 @@ public class FrmVenta extends javax.swing.JFrame {
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
         if (txtCodigo.getText().isEmpty() || txtCodigo.getText().isBlank()) {
-            JOptionPane.showMessageDialog(null, "El campo de código está vacío","Falta código!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El campo de código está vacío", "Falta código!", JOptionPane.INFORMATION_MESSAGE);
         } else {
             Long codigo = Long.parseLong(txtCodigo.getText());
             consultarCodigo(codigo);
@@ -641,9 +643,19 @@ public class FrmVenta extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCantidadKeyTyped
 
-    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
-            // Falta agregar la validación para que no acepte caracteres
-    }//GEN-LAST:event_txtCodigoActionPerformed
+    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        String codigo = txtCodigo.getText() + c;
+        Pattern patron = Pattern.compile("^\\d{0,6}(\\.\\d{0,2})?$");
+
+        Matcher matcher = patron.matcher(codigo);
+
+        if (!matcher.matches() || txtCodigo.getText().length() == 5) {
+
+            evt.consume(); //Si no coincide va a hacer esto: 
+        }
+    }//GEN-LAST:event_txtCodigoKeyTyped
 
     public String validarCamposParaAgregarProducto() {
 

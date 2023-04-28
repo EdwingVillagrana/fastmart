@@ -24,7 +24,6 @@ public class DlgDetallesVenta extends javax.swing.JDialog {
      */
     public DlgDetallesVenta(java.awt.Frame parent, boolean modal, Venta venta) {
         super(parent, modal);
-        this.setLocationRelativeTo(null);
         initComponents();
         this.venta = venta;
         model = (DefaultTableModel) tblDetalleVenta.getModel();
@@ -130,6 +129,7 @@ public class DlgDetallesVenta extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        tblDetalleVenta.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblDetalleVenta);
 
         MostrarVenta.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 460, 180));

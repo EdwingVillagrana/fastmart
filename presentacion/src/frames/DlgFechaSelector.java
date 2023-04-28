@@ -90,6 +90,8 @@ public class DlgFechaSelector extends javax.swing.JDialog {
         jPanel1.add(lblHasta);
         lblHasta.setBounds(190, 75, 37, 16);
 
+        btnAceptar.setBackground(new java.awt.Color(255, 145, 77));
+        btnAceptar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,6 +101,8 @@ public class DlgFechaSelector extends javax.swing.JDialog {
         jPanel1.add(btnAceptar);
         btnAceptar.setBounds(180, 110, 90, 22);
 
+        btnCancelar.setBackground(new java.awt.Color(255, 145, 77));
+        btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,6 +124,7 @@ public class DlgFechaSelector extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed

@@ -108,7 +108,14 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblVentas.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblVentas);
+        if (tblVentas.getColumnModel().getColumnCount() > 0) {
+            tblVentas.getColumnModel().getColumn(0).setResizable(false);
+            tblVentas.getColumnModel().getColumn(1).setResizable(false);
+            tblVentas.getColumnModel().getColumn(2).setResizable(false);
+            tblVentas.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(10, 130, 620, 250);
@@ -247,7 +254,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnMostrarTodasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarTodasActionPerformed
-        consultarTodas();
+        listarVentas();
     }//GEN-LAST:event_btnMostrarTodasActionPerformed
 
     private void txtBuscarPorIDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarPorIDKeyTyped
@@ -278,7 +285,6 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         if (indiceFilaSeleccionada == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione una venta", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            System.out.println(indiceFilaSeleccionada);
             Venta ventaAMostrar = listaVentas.get(indiceFilaSeleccionada);
             DlgDetallesVenta dlgDetallesVenta = new DlgDetallesVenta(this, true, ventaAMostrar);
             dlgDetallesVenta.setVisible(true);
@@ -305,7 +311,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         }
     }
 
-    public void consultarTodas() {
+    public void listarVentas() {
         try {
             this.listaVentas = ventasNegocio.consultarTodos();
             model.setRowCount(0);

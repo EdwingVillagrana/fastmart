@@ -4,19 +4,34 @@ package frames;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+import entidades.Producto;
+import entidades.Usuario;
+import excepciones.NegocioException;
+import implementaciones.ProductosNegocio;
+import interfaces.IProductosNegocio;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Kevin Rios
  */
 public class ConsultarProductos extends javax.swing.JFrame {
-
+    private Usuario usuarioLogueado;
+    private IProductosNegocio productosNegocio;
+    private DefaultTableModel model;
+    private List<Producto> listaProductos = new ArrayList<>();
+    
     /**
      * Creates new form ConsultarVenta
      */
     public ConsultarProductos() {
         initComponents();
+        this.productosNegocio = new ProductosNegocio();
+        model = (DefaultTableModel) this.tblProductos.getModel();
+        radioNombre.setSelected(true);
         this.setLocationRelativeTo(null);
         
     }
@@ -46,7 +61,8 @@ public class ConsultarProductos extends javax.swing.JFrame {
         radioCod = new javax.swing.JRadioButton();
         radioID = new javax.swing.JRadioButton();
         radioNombre = new javax.swing.JRadioButton();
-        btnBuscar1 = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        btnListar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -59,6 +75,7 @@ public class ConsultarProductos extends javax.swing.JFrame {
         btnSalir.setText("Salir");
         btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnSalir.setInheritsPopupMenu(true);
+        btnSalir.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSalir.setName(""); // NOI18N
         btnSalir.setVerifyInputWhenFocusTarget(false);
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -67,30 +84,48 @@ public class ConsultarProductos extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnSalir);
-        btnSalir.setBounds(480, 50, 100, 40);
+        btnSalir.setBounds(470, 50, 140, 40);
 
-        tblProductos.setBackground(new java.awt.Color(163, 148, 132));
         tblProductos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tblProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID ", "Nombre", "Precio", "Stock", "Categoria"
+                "ID ", "Nombre", "Proveedor", "P Compra", "P Venta", "Categoria", "Código", "Stock"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+            Class[] types = new Class [] {
+                java.lang.Long.class, java.lang.String.class, java.lang.Long.class, java.lang.Double.class, java.lang.Object.class, java.lang.Long.class, java.lang.Long.class, java.lang.Long.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        tblProductos.setShowGrid(true);
+        tblProductos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblProductos);
+        if (tblProductos.getColumnModel().getColumnCount() > 0) {
+            tblProductos.getColumnModel().getColumn(0).setPreferredWidth(15);
+            tblProductos.getColumnModel().getColumn(1).setPreferredWidth(70);
+            tblProductos.getColumnModel().getColumn(2).setPreferredWidth(35);
+            tblProductos.getColumnModel().getColumn(3).setPreferredWidth(40);
+            tblProductos.getColumnModel().getColumn(4).setPreferredWidth(35);
+            tblProductos.getColumnModel().getColumn(5).setPreferredWidth(35);
+            tblProductos.getColumnModel().getColumn(6).setPreferredWidth(35);
+            tblProductos.getColumnModel().getColumn(7).setPreferredWidth(35);
+        }
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 150, 570, 250);
+        jScrollPane1.setBounds(10, 150, 600, 250);
 
         btnMenu.setBackground(new java.awt.Color(110, 88, 68));
         btnMenu.setForeground(new java.awt.Color(255, 255, 255));
@@ -115,20 +150,16 @@ public class ConsultarProductos extends javax.swing.JFrame {
         lblLogoCabecera.setBounds(200, 0, 190, 30);
 
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
-        FondoTitulo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FondoTituloActionPerformed(evt);
-            }
-        });
         jPanel1.add(FondoTitulo);
-        FondoTitulo.setBounds(40, 0, 570, 30);
+        FondoTitulo.setBounds(40, 0, 590, 30);
 
         btnSeleccionar.setBackground(new java.awt.Color(255, 145, 77));
         btnSeleccionar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnSeleccionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_seleccionar.png"))); // NOI18N
-        btnSeleccionar.setText("Seleccionar Producto");
+        btnSeleccionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_modificarVenta.png"))); // NOI18N
+        btnSeleccionar.setText("Modificar Producto");
         btnSeleccionar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnSeleccionar.setInheritsPopupMenu(true);
+        btnSeleccionar.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSeleccionar.setName(""); // NOI18N
         btnSeleccionar.setVerifyInputWhenFocusTarget(false);
         btnSeleccionar.addActionListener(new java.awt.event.ActionListener() {
@@ -137,12 +168,18 @@ public class ConsultarProductos extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnSeleccionar);
-        btnSeleccionar.setBounds(370, 100, 210, 30);
+        btnSeleccionar.setBounds(440, 95, 171, 35);
 
         jPanel2.setBackground(new java.awt.Color(0, 145, 155));
         jPanel2.setLayout(null);
+
+        txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBusquedaKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtBusqueda);
-        txtBusqueda.setBounds(20, 50, 310, 22);
+        txtBusqueda.setBounds(20, 50, 230, 22);
 
         lblCriterioBusqueda.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblCriterioBusqueda.setForeground(new java.awt.Color(255, 255, 255));
@@ -153,44 +190,78 @@ public class ConsultarProductos extends javax.swing.JFrame {
         radioGrupo.add(radioCod);
         radioCod.setForeground(new java.awt.Color(255, 255, 255));
         radioCod.setText("Cód. Producto");
+        radioCod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioCodActionPerformed(evt);
+            }
+        });
         jPanel2.add(radioCod);
-        radioCod.setBounds(230, 30, 100, 20);
+        radioCod.setBounds(150, 30, 100, 20);
 
         radioGrupo.add(radioID);
         radioID.setForeground(new java.awt.Color(255, 255, 255));
         radioID.setText("ID");
+        radioID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioIDActionPerformed(evt);
+            }
+        });
         jPanel2.add(radioID);
-        radioID.setBounds(140, 30, 34, 20);
+        radioID.setBounds(100, 30, 34, 20);
 
+        radioGrupo.add(radioNombre);
         radioNombre.setForeground(new java.awt.Color(255, 255, 255));
         radioNombre.setText("Nombre");
+        radioNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioNombreActionPerformed(evt);
+            }
+        });
         jPanel2.add(radioNombre);
         radioNombre.setBounds(20, 30, 67, 20);
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 50, 350, 80);
+        jPanel2.setBounds(10, 50, 290, 80);
 
-        btnBuscar1.setBackground(new java.awt.Color(255, 145, 77));
-        btnBuscar1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnBuscar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_lupa.png"))); // NOI18N
-        btnBuscar1.setText("Buscar");
-        btnBuscar1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnBuscar1.setInheritsPopupMenu(true);
-        btnBuscar1.setName(""); // NOI18N
-        btnBuscar1.setVerifyInputWhenFocusTarget(false);
-        btnBuscar1.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscar.setBackground(new java.awt.Color(255, 145, 77));
+        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_lupa.png"))); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnBuscar.setInheritsPopupMenu(true);
+        btnBuscar.setMargin(new java.awt.Insets(2, 1, 2, 2));
+        btnBuscar.setName(""); // NOI18N
+        btnBuscar.setVerifyInputWhenFocusTarget(false);
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscar1ActionPerformed(evt);
+                btnBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscar1);
-        btnBuscar1.setBounds(370, 50, 100, 40);
+        jPanel1.add(btnBuscar);
+        btnBuscar.setBounds(320, 50, 140, 40);
+
+        btnListar.setBackground(new java.awt.Color(255, 145, 77));
+        btnListar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnListar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_listarVentas.png"))); // NOI18N
+        btnListar.setText("Listar");
+        btnListar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnListar.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnListar.setMaximumSize(new java.awt.Dimension(70, 30));
+        btnListar.setMinimumSize(new java.awt.Dimension(70, 30));
+        btnListar.setPreferredSize(new java.awt.Dimension(70, 30));
+        btnListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnListar);
+        btnListar.setBounds(320, 95, 111, 35);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,21 +277,171 @@ public class ConsultarProductos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuActionPerformed
 
-    private void FondoTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FondoTituloActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_FondoTituloActionPerformed
-
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
-        // TODO add your handling code here:
+        int indiceFilaSeleccionada = tblProductos.getSelectedRow();
+        if (indiceFilaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un producto", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+        }else {
+            Producto productoAModificar = listaProductos.get(indiceFilaSeleccionada);
+            DlgModificarProducto dlgModificarProducto = new DlgModificarProducto(this, true, productoAModificar);
+            dlgModificarProducto.setVisible(true);
+            
+            while (dlgModificarProducto.isVisible()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException io) {
+                    io.printStackTrace();
+                }
+            }
+        }
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
-    private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBuscar1ActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        if (radioCod.isSelected()) {
+            if (txtBusqueda.getText().isEmpty() || txtBusqueda.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Ingrese el código del producto", "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                Long codigo = Long.parseLong(txtBusqueda.getText());
+                consultarPorCodigo(codigo);
+            }
+        }
+        if (radioID.isSelected()) {
+            if (txtBusqueda.getText().isBlank() || txtBusqueda.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Ingrese el ID del producto", "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                Long id = Long.parseLong(txtBusqueda.getText());
+                consultarPorId(id);
+            }
+                
+        }
+        if (radioNombre.isSelected()) {
+            if (txtBusqueda.getText().isBlank() || txtBusqueda.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Ingrese el nombre del producto", "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                String nombre = txtBusqueda.getText();
+                consultarPorNombre(nombre);
+            }
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    public void consultarPorCodigo(Long codigo){
+        try {
+            Producto producto = productosNegocio.consultarPorCodigo(codigo);
+            this.listaProductos.add(producto);
+            if (producto == null) {
+                JOptionPane.showMessageDialog(null, "El producto no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                model.setRowCount(0);
+                mostrarProducto(producto);
+            }            
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void consultarPorId(Long id){
+        try {
+            Producto producto = productosNegocio.consultarPorId(id);
+            this.listaProductos.add(producto);
+            if (producto == null) {
+                JOptionPane.showMessageDialog(null, "El producto no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                model.setRowCount(0);
+                mostrarProducto(producto);
+            }            
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void consultarPorNombre(String nombre){
+        try {
+            Producto producto = productosNegocio.consultarPorNombre(nombre);
+            this.listaProductos.add(producto);
+            if (producto == null) {
+                JOptionPane.showMessageDialog(null, "El producto no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                model.setRowCount(0);
+                mostrarProducto(producto);
+            }            
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void listarProductos(){
+        try {
+            this.listaProductos = productosNegocio.consultarTodos();
+            model.setRowCount(0);
+
+            for (Producto producto: listaProductos) {
+                mostrarProducto(producto);
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void mostrarProducto(Producto producto){
+        Long id_producto = producto.getId();
+        String nombre = producto.getNombre();
+        Long id_proveedor = producto.getProveedor().getId();
+        Double precio_compra = producto.getPrecio_compra();
+        Double precio_venta = producto.getPrecio_venta();
+        Long id_categoria = producto.getCategoria().getId();
+        Long codigo = producto.getCodigo();
+        Long stock = producto.getStock();
+        Object[] fila = {id_producto, nombre, id_proveedor, precio_compra, precio_venta, id_categoria, codigo, stock};
+        model.addRow(fila);
+    }
+    
+    private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
+        if (radioID.isSelected()) {
+            char c = evt.getKeyChar();
+            if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE))) {
+                evt.consume(); // Elimina el carácter que no es del 0 al 9
+            }
+        }
+        if (radioCod.isSelected()) {
+            char c = evt.getKeyChar();
+            if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE))) {
+                evt.consume(); // Elimina el carácter que no es del 0 al 9
+            }
+        }
+        if (radioNombre.isSelected()) {
+            char c = evt.getKeyChar();
+            // Verificar si el carácter ingresado es una letra
+            if (!Character.isLetter(c) && c != ' ') {
+                evt.consume(); // Eliminar el carácter ingresado si no es una letra o espacio
+            }
+        }
+    }//GEN-LAST:event_txtBusquedaKeyTyped
+
+    private void radioIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIDActionPerformed
+        if (radioID.isSelected() ) {
+            txtBusqueda.setText("");
+        }
+    }//GEN-LAST:event_radioIDActionPerformed
+
+    private void radioNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNombreActionPerformed
+        if (radioNombre.isSelected()) {
+            txtBusqueda.setText("");
+        }
+    }//GEN-LAST:event_radioNombreActionPerformed
+
+    private void radioCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioCodActionPerformed
+      if (radioCod.isSelected()) {
+            txtBusqueda.setText("");
+        }
+    }//GEN-LAST:event_radioCodActionPerformed
+
+    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
+        listarProductos();
+    }//GEN-LAST:event_btnListarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -262,7 +483,8 @@ public class ConsultarProductos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;
-    private javax.swing.JButton btnBuscar1;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnListar;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnSeleccionar;

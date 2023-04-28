@@ -67,7 +67,7 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
         lblApartado.setText("Registrar Categoria");
         jPanel1.add(lblApartado);
-        lblApartado.setBounds(60, 0, 165, 30);
+        lblApartado.setBounds(60, 0, 170, 30);
 
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
@@ -135,7 +135,7 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblTitulo.setText("Datos de la Categoría");
         jPanel1.add(lblTitulo);
-        lblTitulo.setBounds(235, 50, 182, 25);
+        lblTitulo.setBounds(235, 50, 190, 25);
 
         panelBotones.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 2));
         panelBotones.setLayout(null);

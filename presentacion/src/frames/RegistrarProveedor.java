@@ -4,6 +4,9 @@
  */
 package frames;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  *
  * @author Kevin Rios
@@ -277,8 +280,14 @@ public class RegistrarProveedor extends javax.swing.JFrame {
 
     private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
         // TODO add your handling code here:
-        if(txtTelefono.getText().length() >= 20){
-            evt.consume();
+        char c = evt.getKeyChar();
+        String codigo = txtTelefono.getText() + c;
+        Pattern patron = Pattern.compile("^\\d{0,12}(\\.\\d{0,2})?$");
+
+        Matcher matcher = patron.matcher(codigo);
+        //Creo que no hace falta agregar lo de || txtTelefono.getText().length() == 20 porque en lo del Pattern.complile, ya le pone el limite
+        if (!matcher.matches()) {
+            evt.consume(); //Si no coincide va a hacer esto: 
         }
     }//GEN-LAST:event_txtTelefonoKeyTyped
 

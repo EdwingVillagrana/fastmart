@@ -1,18 +1,19 @@
 package frames;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Kevin Rios
  */
 public class RegistrarProducto extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form RegistrarUsuario
      */
@@ -262,7 +263,7 @@ public class RegistrarProducto extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         limpiarCampos();
-    
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtCompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCompraKeyTyped
@@ -271,43 +272,52 @@ public class RegistrarProducto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCompraKeyTyped
 
-    private void limpiarCampos(){
+    private void limpiarCampos() {
         this.txtNombre.setText("");
         this.txtCompra.setText("");
         this.txtVenta.setText("");
         this.comboCategoria.setSelectedIndex(0);
         this.comboProveedor.setSelectedIndex(0);
     }
-    
-    private boolean validarCampos(){
+
+    private boolean validarCampos() {
         if (this.txtNombre.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Compleme el campo nombre", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
-        }else if (this.txtCompra.getText().equals("")) {
+        } else if (this.txtCompra.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Compleme el campo precio compra", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
-        }else if(this.txtVenta.getText().equals("")){
+        } else if (this.txtVenta.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Compleme el campo precio venta", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
-        }else if(this.comboCategoria.getSelectedIndex() == 0){
+        } else if (this.comboCategoria.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(null, "Seleccione la categoria", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
-        }else if(this.comboProveedor.getSelectedIndex() == 0){
+        } else if (this.comboProveedor.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(null, "Seleccione el proveedor", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
     }
-    
+
     private void txtVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtVentaKeyTyped
-        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.' && txtVenta.getText().length() >= 6) {
-            evt.consume();
+//        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.' && txtVenta.getText().length() >= 6) {
+//            evt.consume();
+//        }
+        char c = evt.getKeyChar();
+        String codigo = txtVenta.getText() + c;
+        Pattern patron = Pattern.compile("^\\d{0,6}(\\.\\d{0,2})?$");
+
+        Matcher matcher = patron.matcher(codigo);
+
+        if (!matcher.matches() || txtVenta.getText().length() == 7) {
+            evt.consume(); //Si no coincide va a hacer esto: 
         }
     }//GEN-LAST:event_txtVentaKeyTyped
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         // TODO add your handling code here:
-        if(txtNombre.getText().length() >= 20){
+        if (txtNombre.getText().length() >= 20) {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped

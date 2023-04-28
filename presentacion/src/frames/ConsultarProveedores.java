@@ -146,13 +146,13 @@ public class ConsultarProveedores extends javax.swing.JFrame {
         lblCriterioBusqueda.setForeground(new java.awt.Color(255, 255, 255));
         lblCriterioBusqueda.setText("Criterios de Búsqueda");
         jPanel2.add(lblCriterioBusqueda);
-        lblCriterioBusqueda.setBounds(10, 10, 126, 14);
+        lblCriterioBusqueda.setBounds(10, 10, 128, 14);
 
         radioGrupoP.add(radioID);
         radioID.setForeground(new java.awt.Color(255, 255, 255));
         radioID.setText("ID");
         jPanel2.add(radioID);
-        radioID.setBounds(140, 30, 34, 20);
+        radioID.setBounds(140, 30, 40, 20);
 
         radioGrupoP.add(radioNombre);
         radioNombre.setForeground(new java.awt.Color(255, 255, 255));

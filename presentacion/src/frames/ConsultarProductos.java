@@ -32,8 +32,6 @@ public class ConsultarProductos extends javax.swing.JFrame {
         this.productosNegocio = new ProductosNegocio();
         model = (DefaultTableModel) this.tblProductos.getModel();
         radioNombre.setSelected(true);
-        this.setLocationRelativeTo(null);
-        
     }
 
     /**
@@ -271,6 +269,7 @@ public class ConsultarProductos extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed

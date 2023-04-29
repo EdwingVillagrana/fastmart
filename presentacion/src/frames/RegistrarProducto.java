@@ -1,7 +1,21 @@
 package frames;
 
+import entidades.Categoria;
+import entidades.Producto;
+import entidades.Proveedor;
+import excepciones.NegocioException;
+import implementaciones.CategoriasNegocio;
+import implementaciones.ProductosNegocio;
+import implementaciones.ProveedoresNegocio;
+import interfaces.ICategoriasNegocio;
+import interfaces.IProductosNegocio;
+import interfaces.IProveedoresNegocio;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /*
@@ -14,12 +28,26 @@ import javax.swing.JOptionPane;
  */
 public class RegistrarProducto extends javax.swing.JFrame {
 
+    private IProveedoresNegocio proveedoresNegocio;
+    private ICategoriasNegocio categoriasNegocio;
+    private IProductosNegocio productosNegocio;
+    private List<Proveedor> listaProveedores;
+    private List<Categoria> listaCategorias;
+    private DefaultComboBoxModel modeloProveedores;
+    private DefaultComboBoxModel modeloCategorias;
+    
     /**
      * Creates new form RegistrarUsuario
      */
     public RegistrarProducto() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        this.productosNegocio = new ProductosNegocio();
+        this.proveedoresNegocio = new ProveedoresNegocio();
+        this.categoriasNegocio = new CategoriasNegocio();
+        modeloProveedores = (DefaultComboBoxModel) this.comboProveedor.getModel();
+        modeloCategorias = (DefaultComboBoxModel) this.comboCategoria.getModel();
+        listarProveedores();
+        listarCategorias();
     }
 
     /**
@@ -49,11 +77,13 @@ public class RegistrarProducto extends javax.swing.JFrame {
         lblPrecioVenta = new javax.swing.JLabel();
         comboCategoria = new javax.swing.JComboBox<>();
         comboProveedor = new javax.swing.JComboBox<>();
+        txtCodigo = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
-        panelBotones = new javax.swing.JPanel();
-        btnCancelar = new javax.swing.JButton();
-        btnSalir = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        panelBotones = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -73,9 +103,9 @@ public class RegistrarProducto extends javax.swing.JFrame {
 
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
-        lblApartado.setText("Registrar Usuario");
+        lblApartado.setText("Registrar Producto");
         jPanel1.add(lblApartado);
-        lblApartado.setBounds(60, 0, 150, 30);
+        lblApartado.setBounds(60, 0, 170, 30);
 
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
@@ -163,49 +193,21 @@ public class RegistrarProducto extends javax.swing.JFrame {
         comboProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
         jPanel2.add(comboProveedor);
         comboProveedor.setBounds(170, 90, 240, 22);
+        jPanel2.add(txtCodigo);
+        txtCodigo.setBounds(170, 225, 71, 22);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setText("Código:");
+        jPanel2.add(jLabel1);
+        jLabel1.setBounds(100, 225, 60, 20);
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(40, 80, 570, 240);
+        jPanel2.setBounds(40, 80, 570, 260);
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblTitulo.setText("Datos del Producto");
         jPanel1.add(lblTitulo);
         lblTitulo.setBounds(240, 50, 170, 25);
-
-        panelBotones.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 2));
-        panelBotones.setLayout(null);
-
-        btnCancelar.setBackground(new java.awt.Color(255, 145, 77));
-        btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_cancelar.png"))); // NOI18N
-        btnCancelar.setText("Cancelar");
-        btnCancelar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnCancelar.setInheritsPopupMenu(true);
-        btnCancelar.setName(""); // NOI18N
-        btnCancelar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
-        panelBotones.add(btnCancelar);
-        btnCancelar.setBounds(130, 5, 110, 90);
-
-        btnSalir.setBackground(new java.awt.Color(255, 145, 77));
-        btnSalir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_salir.png"))); // NOI18N
-        btnSalir.setText("Salir");
-        btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSalir.setInheritsPopupMenu(true);
-        btnSalir.setName(""); // NOI18N
-        btnSalir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
-            }
-        });
-        panelBotones.add(btnSalir);
-        btnSalir.setBounds(250, 5, 110, 90);
 
         btnRegistrar.setBackground(new java.awt.Color(255, 145, 77));
         btnRegistrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -220,11 +222,45 @@ public class RegistrarProducto extends javax.swing.JFrame {
                 btnRegistrarActionPerformed(evt);
             }
         });
-        panelBotones.add(btnRegistrar);
-        btnRegistrar.setBounds(10, 5, 110, 90);
+        jPanel1.add(btnRegistrar);
+        btnRegistrar.setBounds(250, 370, 110, 90);
 
+        btnSalir.setBackground(new java.awt.Color(255, 145, 77));
+        btnSalir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_salir.png"))); // NOI18N
+        btnSalir.setText("Salir");
+        btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSalir.setInheritsPopupMenu(true);
+        btnSalir.setName(""); // NOI18N
+        btnSalir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSalir);
+        btnSalir.setBounds(490, 370, 110, 90);
+
+        btnCancelar.setBackground(new java.awt.Color(255, 145, 77));
+        btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_cancelar.png"))); // NOI18N
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCancelar.setInheritsPopupMenu(true);
+        btnCancelar.setName(""); // NOI18N
+        btnCancelar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCancelar);
+        btnCancelar.setBounds(370, 370, 110, 90);
+
+        panelBotones.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 2));
+        panelBotones.setLayout(null);
         jPanel1.add(panelBotones);
-        panelBotones.setBounds(240, 330, 370, 100);
+        panelBotones.setBounds(240, 365, 370, 100);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -235,11 +271,12 @@ public class RegistrarProducto extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
@@ -251,12 +288,26 @@ public class RegistrarProducto extends javax.swing.JFrame {
     }//GEN-LAST:event_FondoTituloActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        if (validarCampos()) {
-            JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
-            limpiarCampos();
-        }
+//        if (validarCampos()) {
+//            String nombre = txtNombre.getText();
+//            Object proveedorAux = modeloProveedores.getSelectedItem();
+//            Object categoriaAux = modeloCategorias.getSelectedItem();
+//            proveedorAux = new Proveedor();
+//            categoriaAux = new Categoria();
+//            Double precio_compra = Double.parseDouble(txtCompra.getText());
+//            Double precio_venta = Double.parseDouble(txtVenta.getText());
+//            Long codigo = Long.parseLong(txtCodigo.getText());
+//            Producto producto = new Producto(nombre, (Proveedor) proveedorAux, precio_compra, precio_venta, (Categoria) categoriaAux, codigo);
+//            try {
+//                productosNegocio.agregar(producto);
+//                JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+//            } catch (NegocioException ex) {
+//                Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
+//            }            
+//        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
@@ -272,6 +323,57 @@ public class RegistrarProducto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCompraKeyTyped
 
+    private Proveedor consultarProveedor(String nombre){
+        try {
+            Proveedor proveedor = proveedoresNegocio.consultarPorNombre(nombre);
+            if (proveedor == null) {
+                JOptionPane.showMessageDialog(null, "El proveedor no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                return proveedor;
+            }            
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        return null;
+    }
+    
+    private Categoria consultarCategoria(String nombre){
+        try {
+            Categoria categoria = categoriasNegocio.consultarPorNombre(nombre);
+            if (categoria == null) {
+                JOptionPane.showMessageDialog(null, "La categoria no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                return categoria;
+            }            
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        return null;
+    }
+    private void listarProveedores(){
+        try {
+            this.listaProveedores = proveedoresNegocio.consultarTodos();
+
+            for (Proveedor proveedor: listaProveedores) {
+                modeloProveedores.addElement(proveedor.getNombre());
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    private void listarCategorias(){
+        try {
+            this.listaCategorias = categoriasNegocio.consultarTodos();
+
+            for (Categoria categoria: listaCategorias) {
+                modeloCategorias.addElement(categoria.getNombre());
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
     private void limpiarCampos() {
         this.txtNombre.setText("");
         this.txtCompra.setText("");
@@ -365,6 +467,7 @@ public class RegistrarProducto extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> comboCategoria;
     private javax.swing.JComboBox<String> comboProveedor;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblApartado;
@@ -377,6 +480,7 @@ public class RegistrarProducto extends javax.swing.JFrame {
     private javax.swing.JLabel lblProveedor;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JPanel panelBotones;
+    private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtCompra;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;

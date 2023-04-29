@@ -4,21 +4,31 @@ package frames;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+import entidades.Proveedor;
+import excepciones.NegocioException;
+import implementaciones.ProveedoresNegocio;
+import interfaces.IProveedoresNegocio;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Kevin Rios
  */
 public class ConsultarProveedores extends javax.swing.JFrame {
-
+    private IProveedoresNegocio proveedoresNegocio;
+    private List<Proveedor> listaProveedores = new ArrayList<>();
+    private DefaultTableModel model;
     /**
      * Creates new form ConsultarVenta
      */
     public ConsultarProveedores() {
         initComponents();
-        this.setLocationRelativeTo(null);
-        
+        this.proveedoresNegocio = new ProveedoresNegocio();
+        model = (DefaultTableModel) this.tblProveedores.getModel();
+        radioNombre.setSelected(true);
     }
 
     /**
@@ -45,6 +55,8 @@ public class ConsultarProveedores extends javax.swing.JFrame {
         lblCriterioBusqueda = new javax.swing.JLabel();
         radioID = new javax.swing.JRadioButton();
         radioNombre = new javax.swing.JRadioButton();
+        btnListarProveedores = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -67,25 +79,40 @@ public class ConsultarProveedores extends javax.swing.JFrame {
         jPanel1.add(btnSalir);
         btnSalir.setBounds(480, 50, 100, 50);
 
-        tblProveedores.setBackground(new java.awt.Color(163, 148, 132));
         tblProveedores.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tblProveedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID ", "Nombre", "Precio", "Stock", "Categoria"
+                "ID ", "Nombre", "Dirección", "Telefono", "Email"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+            Class[] types = new Class [] {
+                java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        tblProveedores.setShowGrid(true);
+        tblProveedores.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblProveedores);
+        if (tblProveedores.getColumnModel().getColumnCount() > 0) {
+            tblProveedores.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tblProveedores.getColumnModel().getColumn(1).setPreferredWidth(80);
+            tblProveedores.getColumnModel().getColumn(2).setPreferredWidth(100);
+            tblProveedores.getColumnModel().getColumn(3).setPreferredWidth(100);
+            tblProveedores.getColumnModel().getColumn(4).setPreferredWidth(100);
+        }
 
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(10, 150, 570, 250);
@@ -135,39 +162,79 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBuscar);
-        btnBuscar.setBounds(370, 50, 100, 50);
+        btnBuscar.setBounds(254, 50, 100, 50);
 
         jPanel2.setBackground(new java.awt.Color(0, 145, 155));
         jPanel2.setLayout(null);
+
+        txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBusquedaKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtBusqueda);
-        txtBusqueda.setBounds(20, 50, 310, 22);
+        txtBusqueda.setBounds(20, 50, 190, 22);
 
         lblCriterioBusqueda.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblCriterioBusqueda.setForeground(new java.awt.Color(255, 255, 255));
         lblCriterioBusqueda.setText("Criterios de Búsqueda");
         jPanel2.add(lblCriterioBusqueda);
-        lblCriterioBusqueda.setBounds(10, 10, 128, 14);
+        lblCriterioBusqueda.setBounds(10, 10, 126, 14);
 
         radioGrupoP.add(radioID);
         radioID.setForeground(new java.awt.Color(255, 255, 255));
         radioID.setText("ID");
+        radioID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioIDActionPerformed(evt);
+            }
+        });
         jPanel2.add(radioID);
         radioID.setBounds(140, 30, 40, 20);
 
         radioGrupoP.add(radioNombre);
         radioNombre.setForeground(new java.awt.Color(255, 255, 255));
         radioNombre.setText("Nombre");
+        radioNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioNombreActionPerformed(evt);
+            }
+        });
         jPanel2.add(radioNombre);
         radioNombre.setBounds(20, 30, 67, 20);
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 50, 350, 80);
+        jPanel2.setBounds(10, 50, 230, 80);
+
+        btnListarProveedores.setBackground(new java.awt.Color(255, 145, 77));
+        btnListarProveedores.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnListarProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_listarVentas.png"))); // NOI18N
+        btnListarProveedores.setText("Listar");
+        btnListarProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarProveedoresActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnListarProveedores);
+        btnListarProveedores.setBounds(367, 50, 100, 50);
+
+        btnModificar.setBackground(new java.awt.Color(255, 145, 77));
+        btnModificar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_modificarVenta.png"))); // NOI18N
+        btnModificar.setText("Modificar Proveedor");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnModificar);
+        btnModificar.setBounds(401, 410, 180, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,6 +244,7 @@ public class ConsultarProveedores extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
@@ -192,8 +260,126 @@ public class ConsultarProveedores extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        if (radioID.isSelected()) {
+            if (txtBusqueda.getText().isBlank() || txtBusqueda.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Ingrese el código del proveedor", "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                Long codigo = Long.parseLong(txtBusqueda.getText());
+                consultarPorCodigo(codigo);         
+            }
+        }
+        if (radioNombre.isSelected()) {
+            if (txtBusqueda.getText().isBlank() || txtBusqueda.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Ingrese el nombre del proveedor", "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                String nombre = txtBusqueda.getText();
+                consultarPorNombre(nombre);
+            }
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    public void consultarPorCodigo(Long codigo){
+        try {
+            Proveedor proveedor = proveedoresNegocio.consultarPorId(codigo);
+            this.listaProveedores.add(proveedor);
+            if (proveedor == null) {
+                JOptionPane.showMessageDialog(null, "El proveedor no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                model.setRowCount(0);
+                mostrarProveedor(proveedor);
+            }            
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void consultarPorNombre(String nombre){
+        try {
+            Proveedor proveedor = proveedoresNegocio.consultarPorNombre(nombre);
+            this.listaProveedores.add(proveedor);
+            if (proveedor == null) {
+                JOptionPane.showMessageDialog(null, "El proveedor no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                model.setRowCount(0);
+                mostrarProveedor(proveedor);
+            }            
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void listarProveedores(){
+        try {
+            this.listaProveedores = proveedoresNegocio.consultarTodos();
+            model.setRowCount(0);
+            for (Proveedor proveedor: listaProveedores) {
+                mostrarProveedor(proveedor);
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void mostrarProveedor(Proveedor proveedor){
+        String direccion = proveedor.getDireccion();
+        String email = proveedor.getEmail();
+        Long id_proveedor = proveedor.getId();
+        String nombre = proveedor.getNombre();
+        String telefono = proveedor.getTelefono();
+        Object[] fila = {id_proveedor,nombre, direccion, telefono, email};
+        model.addRow(fila);
+    }
+    
+    private void radioNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNombreActionPerformed
+        if (radioNombre.isSelected()) {
+            txtBusqueda.setText("");
+        }
+    }//GEN-LAST:event_radioNombreActionPerformed
+
+    private void radioIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIDActionPerformed
+        if (radioID.isSelected()) {
+            txtBusqueda.setText("");
+        }
+    }//GEN-LAST:event_radioIDActionPerformed
+
+    private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
+        if (radioID.isSelected()) {
+            char c = evt.getKeyChar();
+            if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE))) {
+                evt.consume(); // Elimina el carácter que no es del 0 al 9
+            }
+        }
+        if (radioNombre.isSelected()) {
+            char c = evt.getKeyChar();
+            // Verificar si el carácter ingresado es una letra
+            if (!Character.isLetter(c) && c != ' ') {
+                evt.consume(); // Eliminar el carácter ingresado si no es una letra o espacio
+            }
+        }
+    }//GEN-LAST:event_txtBusquedaKeyTyped
+
+    private void btnListarProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarProveedoresActionPerformed
+        listarProveedores();
+    }//GEN-LAST:event_btnListarProveedoresActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        int indiceFilaSeleccionada = tblProveedores.getSelectedRow();
+        if (indiceFilaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un proveedor", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+        }else {
+            Proveedor proveedorAModificar = listaProveedores.get(indiceFilaSeleccionada);
+            DlgModificarProveedor dlgModificarProveedor = new DlgModificarProveedor(this, true, proveedorAModificar);
+            dlgModificarProveedor.setVisible(true);
+            
+            while (dlgModificarProveedor.isVisible()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException io) {
+                    io.printStackTrace();
+                }
+            }
+        }
+    }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -240,7 +426,9 @@ public class ConsultarProveedores extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnListarProveedores;
     private javax.swing.JButton btnMenu;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

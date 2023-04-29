@@ -132,7 +132,7 @@ public class DlgModificarProducto extends javax.swing.JDialog {
 
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         jPanel1.add(FondoTitulo);
-        FondoTitulo.setBounds(0, 0, 490, 30);
+        FondoTitulo.setBounds(0, 0, 280, 30);
 
         jLabel1.setText("Stock :");
         jPanel1.add(jLabel1);
@@ -195,7 +195,7 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

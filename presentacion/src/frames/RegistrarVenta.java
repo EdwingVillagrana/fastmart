@@ -35,11 +35,11 @@ public class RegistrarVenta extends javax.swing.JFrame {
         Fondo = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        btnPagar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         Filtro = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        btnLimpiar = new javax.swing.JButton();
+        txtFieldTotalPagar = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -52,7 +52,7 @@ public class RegistrarVenta extends javax.swing.JFrame {
         btnMenu = new javax.swing.JButton();
         FondoTitulo = new javax.swing.JTextField();
         Cantidad = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        btnCantidad = new javax.swing.JButton();
 
         popupMenu1.setLabel("popupMenu1");
 
@@ -76,8 +76,8 @@ public class RegistrarVenta extends javax.swing.JFrame {
 
         Fondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 430, 100));
 
-        jButton2.setText("Pagar");
-        Fondo.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 360, 190, 60));
+        btnPagar.setText("Pagar");
+        Fondo.add(btnPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 360, 190, 60));
 
         jLabel1.setText("Filtro:");
         Fondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 60, 50, 20));
@@ -89,17 +89,17 @@ public class RegistrarVenta extends javax.swing.JFrame {
         });
         Fondo.add(Filtro, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 60, 240, -1));
 
-        jButton1.setText("Limpiar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnLimpiarActionPerformed(evt);
             }
         });
-        Fondo.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 390, -1, 20));
+        Fondo.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 390, -1, 20));
 
-        jTextField1.setEditable(false);
-        jTextField1.setText("Total a pagar");
-        Fondo.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 320, 80, 30));
+        txtFieldTotalPagar.setEditable(false);
+        txtFieldTotalPagar.setText("Total a pagar");
+        Fondo.add(txtFieldTotalPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 320, 90, 30));
 
         jTextField2.setEditable(false);
         Fondo.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 330, 70, -1));
@@ -159,8 +159,8 @@ public class RegistrarVenta extends javax.swing.JFrame {
         });
         Fondo.add(Cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 360, 60, -1));
 
-        jButton3.setText("Cantidad");
-        Fondo.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 360, -1, -1));
+        btnCantidad.setText("Cantidad");
+        Fondo.add(btnCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 360, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -177,11 +177,11 @@ public class RegistrarVenta extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
 
         Filtro.setText("");
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         // TODO add your handling code here:
@@ -250,10 +250,10 @@ public class RegistrarVenta extends javax.swing.JFrame {
     private javax.swing.JTextField Filtro;
     private javax.swing.JPanel Fondo;
     private javax.swing.JTextField FondoTitulo;
+    private javax.swing.JButton btnCantidad;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnMenu;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnPagar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -265,10 +265,10 @@ public class RegistrarVenta extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private java.awt.PopupMenu popupMenu1;
     private java.awt.PopupMenu popupMenu2;
+    private javax.swing.JTextField txtFieldTotalPagar;
     // End of variables declaration//GEN-END:variables
 }

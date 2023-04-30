@@ -35,7 +35,7 @@ public class RegistrarProducto extends javax.swing.JFrame {
     private List<Categoria> listaCategorias;
     private DefaultComboBoxModel modeloProveedores;
     private DefaultComboBoxModel modeloCategorias;
-    
+
     /**
      * Creates new form RegistrarUsuario
      */
@@ -79,6 +79,8 @@ public class RegistrarProducto extends javax.swing.JFrame {
         comboProveedor = new javax.swing.JComboBox<>();
         txtCodigo = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        txtStock = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
         btnRegistrar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
@@ -201,8 +203,21 @@ public class RegistrarProducto extends javax.swing.JFrame {
         jPanel2.add(jLabel1);
         jLabel1.setBounds(100, 225, 60, 20);
 
+        txtStock.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtStockKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtStock);
+        txtStock.setBounds(170, 250, 71, 22);
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setText("Stock");
+        jPanel2.add(jLabel2);
+        jLabel2.setBounds(100, 250, 60, 20);
+
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(40, 80, 570, 260);
+        jPanel2.setBounds(40, 80, 570, 280);
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblTitulo.setText("Datos del Producto");
@@ -288,26 +303,31 @@ public class RegistrarProducto extends javax.swing.JFrame {
     }//GEN-LAST:event_FondoTituloActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-//        if (validarCampos()) {
-//            String nombre = txtNombre.getText();
-//            Object proveedorAux = modeloProveedores.getSelectedItem();
-//            Object categoriaAux = modeloCategorias.getSelectedItem();
-//            proveedorAux = new Proveedor();
-//            categoriaAux = new Categoria();
-//            Double precio_compra = Double.parseDouble(txtCompra.getText());
-//            Double precio_venta = Double.parseDouble(txtVenta.getText());
-//            Long codigo = Long.parseLong(txtCodigo.getText());
-//            Producto producto = new Producto(nombre, (Proveedor) proveedorAux, precio_compra, precio_venta, (Categoria) categoriaAux, codigo);
-//            try {
-//                productosNegocio.agregar(producto);
-//                JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
-//            } catch (NegocioException ex) {
-//                Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
-//            }            
-//        }
+        if (validarCampos()) {
+            String nombre = txtNombre.getText();
+            int indiceProveedor = comboProveedor.getSelectedIndex();
+            Proveedor proveedor = listaProveedores.get(indiceProveedor - 1);
+            Double precioCompra = Double.parseDouble(txtCompra.getText());
+            Double precioVenta = Double.parseDouble(txtVenta.getText());
+            int indiceCategoria = comboCategoria.getSelectedIndex();
+            Categoria categoria = listaCategorias.get(indiceCategoria - 1);
+            Long codigo = Long.parseLong(txtCodigo.getText());
+            Long stock = Long.parseLong(txtStock.getText());
+
+            Producto productoAgregar = new Producto(nombre, proveedor, precioCompra, precioVenta, categoria, codigo, stock);
+            try {
+                productosNegocio.agregar(productoAgregar);
+                JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+            } catch (NegocioException ex) {
+                Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex, "Producto no registrada", JOptionPane.ERROR_MESSAGE);
+
+            }
+
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
-    
+
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
@@ -323,63 +343,66 @@ public class RegistrarProducto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCompraKeyTyped
 
-    private Proveedor consultarProveedor(String nombre){
+    private Proveedor consultarProveedor(String nombre) {
         try {
             Proveedor proveedor = proveedoresNegocio.consultarPorNombre(nombre);
             if (proveedor == null) {
                 JOptionPane.showMessageDialog(null, "El proveedor no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
-            }else{
+            } else {
                 return proveedor;
-            }            
+            }
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
         return null;
     }
-    
-    private Categoria consultarCategoria(String nombre){
+
+    private Categoria consultarCategoria(String nombre) {
         try {
             Categoria categoria = categoriasNegocio.consultarPorNombre(nombre);
             if (categoria == null) {
                 JOptionPane.showMessageDialog(null, "La categoria no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
-            }else{
+            } else {
                 return categoria;
-            }            
+            }
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
         return null;
     }
-    private void listarProveedores(){
+
+    private void listarProveedores() {
         try {
             this.listaProveedores = proveedoresNegocio.consultarTodos();
 
-            for (Proveedor proveedor: listaProveedores) {
+            for (Proveedor proveedor : listaProveedores) {
                 modeloProveedores.addElement(proveedor.getNombre());
             }
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
-    private void listarCategorias(){
+
+    private void listarCategorias() {
         try {
             this.listaCategorias = categoriasNegocio.consultarTodos();
 
-            for (Categoria categoria: listaCategorias) {
+            for (Categoria categoria : listaCategorias) {
                 modeloCategorias.addElement(categoria.getNombre());
             }
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
+
     private void limpiarCampos() {
         this.txtNombre.setText("");
         this.txtCompra.setText("");
         this.txtVenta.setText("");
         this.comboCategoria.setSelectedIndex(0);
         this.comboProveedor.setSelectedIndex(0);
+        this.txtCodigo.setText("");
+        this.txtStock.setText("");
     }
 
     private boolean validarCampos() {
@@ -424,40 +447,47 @@ public class RegistrarProducto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtNombreKeyTyped
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistrarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistrarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistrarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistrarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void txtStockKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockKeyTyped
+        // TODO add your handling code here:
+        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.') {
+            evt.consume();
         }
-        //</editor-fold>
+    }//GEN-LAST:event_txtStockKeyTyped
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistrarProducto().setVisible(true);
-            }
-        });
-    }
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(RegistrarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(RegistrarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(RegistrarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(RegistrarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new RegistrarProducto().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;
@@ -468,6 +498,7 @@ public class RegistrarProducto extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboCategoria;
     private javax.swing.JComboBox<String> comboProveedor;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblApartado;
@@ -484,6 +515,7 @@ public class RegistrarProducto extends javax.swing.JFrame {
     private javax.swing.JTextField txtCompra;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtStock;
     private javax.swing.JTextField txtVenta;
     // End of variables declaration//GEN-END:variables
 }

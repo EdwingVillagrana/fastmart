@@ -4,6 +4,12 @@
  */
 package frames;
 
+import entidades.Categoria;
+import excepciones.NegocioException;
+import implementaciones.CategoriasNegocio;
+import interfaces.ICategoriasNegocio;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,10 +18,13 @@ import javax.swing.JOptionPane;
  */
 public class RegistrarCategoria extends javax.swing.JFrame {
 
+    private ICategoriasNegocio categoriasNegocio;
+
     /**
      * Creates new form RegistrarProveedor
      */
     public RegistrarCategoria() {
+        this.categoriasNegocio = new CategoriasNegocio();
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -35,12 +44,10 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         lblLogoCabecera = new javax.swing.JLabel();
         FondoTitulo = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        lblDescripcion = new javax.swing.JLabel();
         txtID = new javax.swing.JTextField();
         lblID = new javax.swing.JLabel();
         lblNombre = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
-        txtDescripcion = new javax.swing.JTextField();
         lblTitulo = new javax.swing.JLabel();
         panelBotones = new javax.swing.JPanel();
         btnCancelar = new javax.swing.JButton();
@@ -87,11 +94,6 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 2));
         jPanel2.setLayout(null);
 
-        lblDescripcion.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblDescripcion.setText("Descripción:");
-        jPanel2.add(lblDescripcion);
-        lblDescripcion.setBounds(50, 110, 90, 20);
-
         txtID.setEditable(false);
         jPanel2.add(txtID);
         txtID.setBounds(140, 40, 60, 22);
@@ -115,22 +117,8 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         jPanel2.add(txtNombre);
         txtNombre.setBounds(140, 72, 330, 22);
 
-        txtDescripcion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        txtDescripcion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDescripcionActionPerformed(evt);
-            }
-        });
-        txtDescripcion.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDescripcionKeyTyped(evt);
-            }
-        });
-        jPanel2.add(txtDescripcion);
-        txtDescripcion.setBounds(140, 110, 330, 50);
-
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(40, 80, 570, 240);
+        jPanel2.setBounds(40, 80, 570, 110);
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblTitulo.setText("Datos de la Categoría");
@@ -224,79 +212,79 @@ public class RegistrarCategoria extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        validarCampos();
-    }//GEN-LAST:event_btnRegistrarActionPerformed
+        if (validarCampos()) {
+            String nombre = txtNombre.getText();
+            Categoria categoriaAgregar = new Categoria(nombre);
+            System.out.println("Categoria: " + categoriaAgregar);
+            try {
+                categoriasNegocio.agregar(categoriaAgregar);
+                JOptionPane.showMessageDialog(null, "Se ha registrado la categoría exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+            } catch (NegocioException ex) {
+                Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex, "Producto no registrada", JOptionPane.ERROR_MESSAGE);
 
-    private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcionActionPerformed
+            }
+        }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         // TODO add your handling code here:
-        if(txtNombre.getText().length() >= 20){
+        if (txtNombre.getText().length() >= 20) {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped
 
-    private void txtDescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyTyped
-        // TODO add your handling code here:
-        if(txtDescripcion.getText().length() >= 20){
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtDescripcionKeyTyped
+    private void limpiarCampos() {
+        this.txtNombre.setText("");
+//            this.txtDescripcion.setText("");
+    }
 
-    
-    private void limpiarCampos(){
-            this.txtNombre.setText("");
-            this.txtDescripcion.setText("");
-            }
-    
-    private boolean validarCampos(){
+    private boolean validarCampos() {
         if (this.txtNombre.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Compleme el campo nombre", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
-        }else if (this.txtDescripcion.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Compleme el campo descripción", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return false;
+//        }else if (this.txtDescripcion.getText().equals("")) {
+//            JOptionPane.showMessageDialog(null, "Compleme el campo descripción", "Advertencia", JOptionPane.WARNING_MESSAGE);
+//            return false;
         }
         return true;
     }
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistrarCategoria().setVisible(true);
-            }
-        });
-    }
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new RegistrarCategoria().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;
@@ -307,13 +295,11 @@ public class RegistrarCategoria extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblApartado;
-    private javax.swing.JLabel lblDescripcion;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblLogoCabecera;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JPanel panelBotones;
-    private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables

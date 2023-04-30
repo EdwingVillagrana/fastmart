@@ -4,20 +4,34 @@
  */
 package frames;
 
+import entidades.Categoria;
+import entidades.Producto;
+import entidades.Proveedor;
+import excepciones.NegocioException;
+import implementaciones.ProductosNegocio;
+import implementaciones.ProveedoresNegocio;
+import interfaces.IProveedoresNegocio;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author Kevin Rios
+ * @author Gabriel Ramos
  */
 public class RegistrarProveedor extends javax.swing.JFrame {
+
+    private IProveedoresNegocio proveedoresNegocio;
 
     /**
      * Creates new form RegistrarProveedor
      */
     public RegistrarProveedor() {
         initComponents();
+        this.proveedoresNegocio = new ProveedoresNegocio();
+
         this.setLocationRelativeTo(null);
     }
 
@@ -255,25 +269,59 @@ public class RegistrarProveedor extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegistrarActionPerformed
+        if (validarCampos()) {
+            String nombre = txtNombre.getText();
+            String direccion = txtDireccion.getText();
+            String email = txtEmail.getText();
+            String telefono = txtTelefono.getText();
 
+            Proveedor proveedorAgregar = new Proveedor(nombre, direccion, telefono, email);
+            
+            try {
+                proveedoresNegocio.agregar(proveedorAgregar);
+                JOptionPane.showMessageDialog(null, "Se ha registrado el proveedor exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+            } catch (NegocioException ex) {
+                Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex, "Producto no registrada", JOptionPane.ERROR_MESSAGE);
+
+            }
+
+        }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+    private boolean validarCampos() {
+        if (this.txtNombre.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Compleme el campo nombre", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (this.txtDireccion.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Compleme el campo dirección", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (this.txtEmail.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Compleme el campo E-mail", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (this.txtTelefono.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Complete el campo Teléfono!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         // TODO add your handling code here:
-        if(txtNombre.getText().length() >= 20){
+        if (txtNombre.getText().length() >= 20) {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
         // TODO add your handling code here:
-        if(txtDireccion.getText().length() >= 20){
+        if (txtDireccion.getText().length() >= 30) {
             evt.consume();
         }
     }//GEN-LAST:event_txtDireccionKeyTyped
 
     private void txtEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyTyped
         // TODO add your handling code here:
-        if(txtEmail.getText().length() >= 20){
+        if (txtEmail.getText().length() >= 30) {
             evt.consume();
         }
     }//GEN-LAST:event_txtEmailKeyTyped

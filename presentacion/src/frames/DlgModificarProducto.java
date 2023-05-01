@@ -6,6 +6,8 @@ package frames;
 
 import entidades.Producto;
 import interfaces.IProductosNegocio;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -80,26 +82,57 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         txtID.setEditable(false);
         jPanel1.add(txtID);
         txtID.setBounds(50, 75, 50, 22);
+
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombre);
         txtNombre.setBounds(80, 105, 170, 30);
 
         txtProveedor.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        txtProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtProveedorKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtProveedor);
         txtProveedor.setBounds(90, 145, 160, 21);
 
         txtPCompra.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        txtPCompra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPCompraKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtPCompra);
         txtPCompra.setBounds(110, 175, 140, 21);
 
         txtPVenta.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        txtPVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPVentaKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtPVenta);
         txtPVenta.setBounds(100, 205, 150, 21);
 
         txtCategoria.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        txtCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCategoriaKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtCategoria);
         txtCategoria.setBounds(90, 235, 160, 21);
 
         txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtCodigo);
         txtCodigo.setBounds(80, 265, 170, 21);
 
@@ -228,6 +261,53 @@ public class DlgModificarProducto extends javax.swing.JDialog {
 //        productosNegocio.actualizar(producto);
         
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (txtNombre.getText().length() >= 100 || !Character.isLetter(c)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProveedorKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtProveedorKeyTyped
+
+    private void txtPCompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPCompraKeyTyped
+        char c = evt.getKeyChar();
+        String codigo = txtPCompra.getText() + c;
+        Pattern patron = Pattern.compile("^\\d{0,6}(\\.\\d{0,2})?$");
+
+        Matcher matcher = patron.matcher(codigo);
+
+        if (!matcher.matches() || txtPCompra.getText().length() == 7) {
+            evt.consume(); //Si no coincide va a hacer esto: 
+        }
+    }//GEN-LAST:event_txtPCompraKeyTyped
+
+    private void txtPVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPVentaKeyTyped
+        char c = evt.getKeyChar();
+        String codigo = txtPVenta.getText() + c;
+        Pattern patron = Pattern.compile("^\\d{0,6}(\\.\\d{0,2})?$");
+
+        Matcher matcher = patron.matcher(codigo);
+
+        if (!matcher.matches() || txtPVenta.getText().length() == 7) {
+            evt.consume(); //Si no coincide va a hacer esto: 
+        }
+    }//GEN-LAST:event_txtPVentaKeyTyped
+
+    private void txtCategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCategoriaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCategoriaKeyTyped
+
+    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
+        // TODO add your handling code here:
+        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCodigoKeyTyped
 
     /**
      * @param args the command line arguments

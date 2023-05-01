@@ -166,6 +166,11 @@ public class RegistrarProducto extends javax.swing.JFrame {
         txtVenta.setBounds(170, 155, 140, 22);
 
         txtNombre.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
+            }
+        });
         txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNombreKeyTyped(evt);
@@ -195,6 +200,12 @@ public class RegistrarProducto extends javax.swing.JFrame {
         comboProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
         jPanel2.add(comboProveedor);
         comboProveedor.setBounds(170, 90, 240, 22);
+
+        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtCodigo);
         txtCodigo.setBounds(170, 225, 71, 22);
 
@@ -316,8 +327,9 @@ public class RegistrarProducto extends javax.swing.JFrame {
 
             Producto productoAgregar = new Producto(nombre, proveedor, precioCompra, precioVenta, categoria, codigo, stock);
             try {
-                productosNegocio.agregar(productoAgregar);
+                productosNegocio.agregar(productoAgregar);                
                 JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+                limpiarCampos();
             } catch (NegocioException ex) {
                 Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, ex, "Producto no registrada", JOptionPane.ERROR_MESSAGE);
@@ -442,7 +454,8 @@ public class RegistrarProducto extends javax.swing.JFrame {
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         // TODO add your handling code here:
-        if (txtNombre.getText().length() >= 20) {
+        char c = evt.getKeyChar();
+        if (txtNombre.getText().length() >= 100 || !Character.isLetter(c)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped
@@ -453,6 +466,17 @@ public class RegistrarProducto extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_txtStockKeyTyped
+
+    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
+        // TODO add your handling code here:
+        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCodigoKeyTyped
+
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreActionPerformed
 
 //    /**
 //     * @param args the command line arguments

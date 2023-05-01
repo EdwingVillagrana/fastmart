@@ -256,10 +256,7 @@ public class RegistrarProveedor extends javax.swing.JFrame {
     }//GEN-LAST:event_FondoTituloActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        this.txtNombre.setText("");
-        this.txtEmail.setText("");
-        this.txtDireccion.setText("");
-        this.txtTelefono.setText("");
+        limpiarCampos();
 
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -280,9 +277,10 @@ public class RegistrarProveedor extends javax.swing.JFrame {
             try {
                 proveedoresNegocio.agregar(proveedorAgregar);
                 JOptionPane.showMessageDialog(null, "Se ha registrado el proveedor exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+                limpiarCampos();
             } catch (NegocioException ex) {
                 Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex, "Producto no registrada", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, ex, "Proveedor no registrado", JOptionPane.ERROR_MESSAGE);
 
             }
 
@@ -305,23 +303,33 @@ public class RegistrarProveedor extends javax.swing.JFrame {
         return true;
     }
     
+    private void limpiarCampos(){
+        this.txtNombre.setText("");
+        this.txtEmail.setText("");
+        this.txtDireccion.setText("");
+        this.txtTelefono.setText("");
+    }
+    
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         // TODO add your handling code here:
-        if (txtNombre.getText().length() >= 20) {
+        char c = evt.getKeyChar();
+        if (txtNombre.getText().length() >= 100 || !Character.isLetter(c)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
         // TODO add your handling code here:
-        if (txtDireccion.getText().length() >= 30) {
+        char c = evt.getKeyChar();
+        if (txtDireccion.getText().length() >= 250 || !Character.isLetter(c)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtDireccionKeyTyped
 
     private void txtEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyTyped
         // TODO add your handling code here:
-        if (txtEmail.getText().length() >= 30) {
+        char c = evt.getKeyChar();
+        if (txtEmail.getText().length() >= 100 || !Character.isLetter(c)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtEmailKeyTyped
@@ -334,7 +342,7 @@ public class RegistrarProveedor extends javax.swing.JFrame {
 
         Matcher matcher = patron.matcher(codigo);
         //Creo que no hace falta agregar lo de || txtTelefono.getText().length() == 20 porque en lo del Pattern.complile, ya le pone el limite
-        if (!matcher.matches()) {
+        if (!matcher.matches() || txtTelefono.getText().length() >= 10) {
             evt.consume(); //Si no coincide va a hacer esto: 
         }
     }//GEN-LAST:event_txtTelefonoKeyTyped

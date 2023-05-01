@@ -4,39 +4,33 @@
  */
 package frames;
 
-import entidades.Proveedor;
-import excepciones.NegocioException;
-import interfaces.IProveedoresNegocio;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import entidades.Categoria;
+import interfaces.ICategoriasNegocio;
 
 /**
  *
  * @author Kevin Rios
  */
-public class DlgModificarProveedor extends javax.swing.JDialog {
-
-    private Proveedor proveedor;
-    private IProveedoresNegocio proveedoresNegocio;
+public class DlgModificarCategoria extends javax.swing.JDialog {
+private Categoria categoria;
+    private ICategoriasNegocio categoriasNegocio;
     /**
-     * Creates new form DlgModificarProveedor
+     * Creates new form DlgModificarCategoria
      */
-    public DlgModificarProveedor(java.awt.Frame parent, boolean modal, Proveedor proveedor) {
+    public DlgModificarCategoria(java.awt.Frame parent, boolean modal, Categoria categoria) {
         super(parent, modal);
         initComponents();
-        this.proveedor = proveedor;
+        this.categoria = categoria;
         llenarCampos();
-    }
-    
-    public void llenarCampos(){
-        this.txtID.setText(proveedor.getId().toString());
-        this.txtNombre.setText(proveedor.getNombre());
-        this.txtDireccion.setText(proveedor.getDireccion());
-        this.txtTelefono.setText(proveedor.getTelefono());
-        this.txtEmail.setText(proveedor.getEmail());
+        
     }
 
+    
+    public void llenarCampos(){
+        this.txtID.setText(categoria.getId().toString());
+        this.txtNombre.setText(categoria.getNombre());
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -47,40 +41,28 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        lblLogoCabecera = new javax.swing.JLabel();
-        lblApartado = new javax.swing.JLabel();
+        txtID = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         btnMenu = new javax.swing.JButton();
+        lblApartado = new javax.swing.JLabel();
+        lblLogoCabecera = new javax.swing.JLabel();
         FondoTitulo = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        txtID = new javax.swing.JTextField();
-        txtNombre = new javax.swing.JTextField();
-        txtDireccion = new javax.swing.JTextField();
-        txtTelefono = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
 
-        lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
-        jPanel1.add(lblLogoCabecera);
-        lblLogoCabecera.setBounds(80, 0, 190, 30);
-
-        lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblApartado.setForeground(new java.awt.Color(255, 255, 255));
-        lblApartado.setText("Modificar");
-        jPanel1.add(lblApartado);
-        lblApartado.setBounds(50, 0, 100, 30);
+        txtID.setEditable(false);
+        jPanel1.add(txtID);
+        txtID.setBounds(50, 75, 50, 22);
+        jPanel1.add(txtNombre);
+        txtNombre.setBounds(80, 105, 170, 30);
 
         btnMenu.setBackground(new java.awt.Color(110, 88, 68));
         btnMenu.setForeground(new java.awt.Color(255, 255, 255));
@@ -93,34 +75,33 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
         jPanel1.add(btnMenu);
         btnMenu.setBounds(0, 0, 40, 30);
 
+        lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblApartado.setForeground(new java.awt.Color(255, 255, 255));
+        lblApartado.setText("Modificar");
+        jPanel1.add(lblApartado);
+        lblApartado.setBounds(50, 0, 100, 30);
+
+        lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
+        jPanel1.add(lblLogoCabecera);
+        lblLogoCabecera.setBounds(80, 0, 190, 30);
+
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         jPanel1.add(FondoTitulo);
         FondoTitulo.setBounds(0, 0, 280, 30);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Ingrese los datos a actualizar");
-        jPanel1.add(jLabel1);
-        jLabel1.setBounds(40, 50, 200, 20);
-
-        jLabel2.setText("Email :");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setText("Ingrese los datos a actualizar");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(20, 210, 50, 16);
+        jLabel2.setBounds(40, 40, 200, 20);
 
         jLabel3.setText("ID :");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(20, 90, 30, 16);
+        jLabel3.setBounds(20, 80, 30, 16);
 
         jLabel4.setText("Nombre :");
         jPanel1.add(jLabel4);
-        jLabel4.setBounds(20, 120, 50, 16);
-
-        jLabel5.setText("Dirección :");
-        jPanel1.add(jLabel5);
-        jLabel5.setBounds(20, 150, 60, 16);
-
-        jLabel6.setText("Télefono :");
-        jPanel1.add(jLabel6);
-        jLabel6.setBounds(20, 180, 60, 16);
+        jLabel4.setBounds(20, 110, 60, 16);
 
         btnAceptar.setBackground(new java.awt.Color(255, 145, 77));
         btnAceptar.setText("Aceptar");
@@ -130,7 +111,7 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
             }
         });
         jPanel1.add(btnAceptar);
-        btnAceptar.setBounds(20, 250, 90, 30);
+        btnAceptar.setBounds(20, 150, 72, 30);
 
         btnCancelar.setBackground(new java.awt.Color(255, 145, 77));
         btnCancelar.setText("Cancelar");
@@ -140,31 +121,17 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
             }
         });
         jPanel1.add(btnCancelar);
-        btnCancelar.setBounds(150, 250, 90, 30);
-
-        txtID.setEditable(false);
-        jPanel1.add(txtID);
-        txtID.setBounds(50, 85, 50, 22);
-        jPanel1.add(txtNombre);
-        txtNombre.setBounds(80, 115, 160, 22);
-        jPanel1.add(txtDireccion);
-        txtDireccion.setBounds(90, 145, 150, 22);
-        jPanel1.add(txtTelefono);
-        txtTelefono.setBounds(80, 175, 160, 22);
-        jPanel1.add(txtEmail);
-        txtEmail.setBounds(60, 205, 180, 22);
+        btnCancelar.setBounds(170, 150, 80, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -175,25 +142,24 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuActionPerformed
 
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        //        Long id_producto = Long.parseLong(txtID.getText());
+        //        String nombre = txtNombre.getText();
+        //        Long id_proveedor = Long.parseLong(txtProveedor.getText());
+        //        Double precio_compra = Double.parseDouble(txtPCompra.getText());
+        //        Double precio_venta = Double.parseDouble(txtPVenta.getText());
+        //        Long categoria = Long.parseLong(txtCategoria.getText());
+        //        Long codigo = Long.parseLong(txtCodigo.getText());
+        //        Long stock = Long.parseLong(txtStock.getText());
+        //
+        //        producto = new Producto(nombre, id_proveedor, precio_compra, precio_venta, categoria,codigo);
+        //        productosNegocio.actualizar(producto);
+
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-//
-//            proveedor.setNombre(txtNombre.getText());
-//            proveedor.setDireccion(txtDireccion.getText());
-//            proveedor.setEmail(txtEmail.getText());
-//            proveedor.setTelefono(txtTelefono.getText());
-//            try {
-//                proveedoresNegocio.actualizar(proveedor);
-//                JOptionPane.showMessageDialog(null, "Se ha actualizado el proveedor exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
-//            } catch (NegocioException ex) {
-//                Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
-//                JOptionPane.showMessageDialog(null, ex, "Proveedor no actualizado", JOptionPane.ERROR_MESSAGE);
-//
-//            }
-    }//GEN-LAST:event_btnAceptarActionPerformed
 
 //    /**
 //     * @param args the command line arguments
@@ -212,20 +178,20 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(DlgModificarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgModificarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(DlgModificarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgModificarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(DlgModificarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgModificarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(DlgModificarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgModificarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //
 //        /* Create and display the dialog */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                DlgModificarProveedor dialog = new DlgModificarProveedor(new javax.swing.JFrame(), true);
+//                DlgModificarCategoria dialog = new DlgModificarCategoria(new javax.swing.JFrame(), true);
 //                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 //                    @Override
 //                    public void windowClosing(java.awt.event.WindowEvent e) {
@@ -242,19 +208,13 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnMenu;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblApartado;
     private javax.swing.JLabel lblLogoCabecera;
-    private javax.swing.JTextField txtDireccion;
-    private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

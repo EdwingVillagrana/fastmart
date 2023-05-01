@@ -118,7 +118,7 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         txtNombre.setBounds(140, 72, 330, 22);
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(40, 80, 570, 110);
+        jPanel2.setBounds(40, 80, 570, 120);
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblTitulo.setText("Datos de la Categoría");
@@ -177,7 +177,7 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         btnRegistrar.setBounds(10, 5, 110, 90);
 
         jPanel1.add(panelBotones);
-        panelBotones.setBounds(240, 330, 370, 100);
+        panelBotones.setBounds(240, 220, 370, 100);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -187,7 +187,7 @@ public class RegistrarCategoria extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -219,6 +219,7 @@ public class RegistrarCategoria extends javax.swing.JFrame {
             try {
                 categoriasNegocio.agregar(categoriaAgregar);
                 JOptionPane.showMessageDialog(null, "Se ha registrado la categoría exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+                limpiarCampos();
             } catch (NegocioException ex) {
                 Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, ex, "Producto no registrada", JOptionPane.ERROR_MESSAGE);
@@ -229,7 +230,8 @@ public class RegistrarCategoria extends javax.swing.JFrame {
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         // TODO add your handling code here:
-        if (txtNombre.getText().length() >= 20) {
+        char c = evt.getKeyChar();
+        if (txtNombre.getText().length() >= 100 || !Character.isLetter(c)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped

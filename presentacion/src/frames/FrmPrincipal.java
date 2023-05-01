@@ -53,6 +53,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         menuConsultasVentas = new javax.swing.JMenuItem();
         menuConsultasProductos = new javax.swing.JMenuItem();
         menuConsultasProveedores = new javax.swing.JMenuItem();
+        menuConsultasCategorias = new javax.swing.JMenuItem();
         menuMantenimiento = new javax.swing.JMenu();
         menuManenimientoEmpleado = new javax.swing.JMenuItem();
         menuManenimientoProducto = new javax.swing.JMenuItem();
@@ -149,6 +150,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         menuConsultas.add(menuConsultasProveedores);
+
+        menuConsultasCategorias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_categorias.png"))); // NOI18N
+        menuConsultasCategorias.setText("Consultar Categorias");
+        menuConsultasCategorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuConsultasCategoriasActionPerformed(evt);
+            }
+        });
+        menuConsultas.add(menuConsultasCategorias);
 
         menu.add(menuConsultas);
 
@@ -328,6 +338,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
         setVisible(false); // Oculta el FrmPrincipal
     }//GEN-LAST:event_menuConsultasProveedoresActionPerformed
 
+    private void menuConsultasCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasCategoriasActionPerformed
+        frmConsultarCategorias consultarProveedores = new frmConsultarCategorias();
+        consultarProveedores.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // Aquí es donde se ejecutará el código cuando se cierre el consultarProveedores
+                setVisible(true); // Hace visible el FrmPrincipal
+            }
+        });
+        consultarProveedores.setVisible(true);
+        setVisible(false); // Oculta el FrmPrincipal
+    }//GEN-LAST:event_menuConsultasCategoriasActionPerformed
+
 //    /**
 //     * @param args the command line arguments
 //     */
@@ -370,6 +393,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuCompras;
     private javax.swing.JMenuItem menuComprasCompra;
     private javax.swing.JMenu menuConsultas;
+    private javax.swing.JMenuItem menuConsultasCategorias;
     private javax.swing.JMenuItem menuConsultasProductos;
     private javax.swing.JMenuItem menuConsultasProveedores;
     private javax.swing.JMenuItem menuConsultasVentas;

@@ -79,8 +79,6 @@ public class RegistrarProducto extends javax.swing.JFrame {
         comboProveedor = new javax.swing.JComboBox<>();
         txtCodigo = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        txtStock = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
         btnRegistrar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
@@ -214,19 +212,6 @@ public class RegistrarProducto extends javax.swing.JFrame {
         jPanel2.add(jLabel1);
         jLabel1.setBounds(100, 225, 60, 20);
 
-        txtStock.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtStockKeyTyped(evt);
-            }
-        });
-        jPanel2.add(txtStock);
-        txtStock.setBounds(170, 250, 71, 22);
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("Stock");
-        jPanel2.add(jLabel2);
-        jLabel2.setBounds(100, 250, 60, 20);
-
         jPanel1.add(jPanel2);
         jPanel2.setBounds(40, 80, 570, 280);
 
@@ -323,9 +308,8 @@ public class RegistrarProducto extends javax.swing.JFrame {
             int indiceCategoria = comboCategoria.getSelectedIndex();
             Categoria categoria = listaCategorias.get(indiceCategoria - 1);
             Long codigo = Long.parseLong(txtCodigo.getText());
-            Long stock = Long.parseLong(txtStock.getText());
 
-            Producto productoAgregar = new Producto(nombre, proveedor, precioCompra, precioVenta, categoria, codigo, stock);
+            Producto productoAgregar = new Producto(nombre, proveedor, precioCompra, precioVenta, categoria, codigo);
             try {
                 productosNegocio.agregar(productoAgregar);                
                 JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
@@ -414,7 +398,7 @@ public class RegistrarProducto extends javax.swing.JFrame {
         this.comboCategoria.setSelectedIndex(0);
         this.comboProveedor.setSelectedIndex(0);
         this.txtCodigo.setText("");
-        this.txtStock.setText("");
+        
     }
 
     private boolean validarCampos() {
@@ -459,13 +443,6 @@ public class RegistrarProducto extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped
-
-    private void txtStockKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockKeyTyped
-        // TODO add your handling code here:
-        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.') {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtStockKeyTyped
 
     private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
         // TODO add your handling code here:
@@ -522,7 +499,6 @@ public class RegistrarProducto extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboCategoria;
     private javax.swing.JComboBox<String> comboProveedor;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblApartado;
@@ -539,7 +515,6 @@ public class RegistrarProducto extends javax.swing.JFrame {
     private javax.swing.JTextField txtCompra;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtStock;
     private javax.swing.JTextField txtVenta;
     // End of variables declaration//GEN-END:variables
 }

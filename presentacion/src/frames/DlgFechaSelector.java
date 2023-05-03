@@ -149,12 +149,12 @@ public class DlgFechaSelector extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    public Date obtenerFechaInicio() {
-        return fechaInicio;
+    public String obtenerFechaInicio() {
+        return fechaInicio.toString();
     }
     
-    public Date obtenerFechaFinal() {
-        return fechaFinal;
+    public String obtenerFechaFinal() {
+        return fechaFinal.toString();
     }
     
     /**

@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -29,8 +30,8 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     private IVentasNegocio ventasNegocio;
     private DefaultTableModel model;
     private List<Venta> listaVentas = new ArrayList<>();
-    private Date fechaInicio;
-    private Date fechaFinal;
+    private String fechaInicio;
+    private String fechaFinal;
 
     /**
      * Creates new form ConsultarVenta
@@ -276,6 +277,8 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         }
         fechaInicio = dlgFechaS.obtenerFechaInicio();
         fechaFinal = dlgFechaS.obtenerFechaFinal();
+        System.out.println(fechaInicio);
+        System.out.println(fechaFinal);
         consultarPeriodo(fechaInicio, fechaFinal);
     }//GEN-LAST:event_btnPorPeriodoActionPerformed
 
@@ -299,7 +302,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnVerDetallesActionPerformed
 
-    public void consultarPeriodo(Date fechaInicial, Date fechaFinal) {
+    public void consultarPeriodo(String fechaInicial, String fechaFinal) {
         try {
             this.listaVentas = ventasNegocio.consultarPorPeriodo(fechaInicial, fechaFinal);
             model.setRowCount(0);
@@ -342,11 +345,14 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
 
     public void mostrarVenta(Venta venta) {
         Long id_venta = venta.getId();
+        LocalDate fechaLocal = venta.getFechaDeVenta().toLocalDate();
+        fechaLocal = fechaLocal.plusDays(1);
+        System.out.println(fechaLocal);
         String nombreUsuario = venta.getUsuario().getNombre();
-        String fecha = String.valueOf(venta.getFechaDeVenta());
+        String fecha = fechaLocal.toString();
         Double total = venta.getTotal();
         //llenando la tabla.
-        Object[] fila = {id_venta, nombreUsuario, total, fecha};
+        Object[] fila = {id_venta, nombreUsuario, total, fechaLocal};
         model.addRow(fila);
     }
 

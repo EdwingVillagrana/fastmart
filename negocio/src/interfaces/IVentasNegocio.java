@@ -18,5 +18,5 @@ public interface IVentasNegocio extends IGenericaNegocio<Venta> {
 
     public Venta consultarPorId(Long id) throws NegocioException;
 
-    public List<Venta> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws NegocioException;
+    public List<Venta> consultarPorPeriodo(String fechaInicio, String fechaFin) throws NegocioException;
 }

@@ -176,14 +176,15 @@ public class VentasDAO implements IVentasDAO {
      * durante la consulta.
      */
     @Override
-    public List<Venta> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws PersistenciaException {
+    public List<Venta> consultarPorPeriodo(String fechaInicio, String fechaFin) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
             try {
-                String jpql = "SELECT v FROM Venta v WHERE v.fechaDeVenta BETWEEN :fechaInicio AND :fechaFin";
+                String jpql = "SELECT v FROM Venta v WHERE v.fechaDeVenta BETWEEN '" + fechaInicio + "' AND '" + fechaFin + "'";
                 TypedQuery<Venta> query = em.createQuery(jpql, Venta.class);
-                query.setParameter("fechaInicio", fechaInicio, TemporalType.DATE);
-                query.setParameter("fechaFin", fechaFin, TemporalType.DATE);
+//                query.setParameter("fechaInicio", fechaInicio, TemporalType.DATE);
+//                query.setParameter("fechaFin", fechaFin, TemporalType.DATE);
+                System.out.println(jpql);
                 return query.getResultList();
             } finally {
                 em.close();

@@ -78,10 +78,10 @@ public class VentasNegocio implements IVentasNegocio {
      * @throws NegocioException si ocurre un error en la capa de negocio.
      */
     @Override
-    public List<Venta> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws NegocioException {
+    public List<Venta> consultarPorPeriodo(String fechaInicio, String fechaFin) throws NegocioException {
         List<Venta> ventas = null;
         try {
-            ventas = ventasDAO.consultarPorPeriodo(fechaFin, fechaFin);
+            ventas = ventasDAO.consultarPorPeriodo(fechaInicio, fechaFin);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al realizar la consulta: ", e);
         } finally{

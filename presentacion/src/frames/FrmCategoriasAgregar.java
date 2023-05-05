@@ -16,14 +16,14 @@ import javax.swing.JOptionPane;
  *
  * @author Kevin Rios
  */
-public class RegistrarCategoria extends javax.swing.JFrame {
+public class FrmCategoriasAgregar extends javax.swing.JFrame {
 
     private ICategoriasNegocio categoriasNegocio;
 
     /**
      * Creates new form RegistrarProveedor
      */
-    public RegistrarCategoria() {
+    public FrmCategoriasAgregar() {
         this.categoriasNegocio = new CategoriasNegocio();
         initComponents();
         this.setLocationRelativeTo(null);
@@ -269,13 +269,13 @@ public class RegistrarCategoria extends javax.swing.JFrame {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(FrmCategoriasAgregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(FrmCategoriasAgregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(FrmCategoriasAgregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(RegistrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(FrmCategoriasAgregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //        //</editor-fold>
@@ -283,7 +283,7 @@ public class RegistrarCategoria extends javax.swing.JFrame {
 //        /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                new RegistrarCategoria().setVisible(true);
+//                new FrmCategoriasAgregar().setVisible(true);
 //            }
 //        });
 //    }

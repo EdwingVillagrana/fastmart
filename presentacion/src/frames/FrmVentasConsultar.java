@@ -24,7 +24,7 @@ import javax.swing.table.TableColumnModel;
  *
  * @author Kevin Rios
  */
-public class FrmConsultarVentas extends javax.swing.JFrame {
+public class FrmVentasConsultar extends javax.swing.JFrame {
 
     private Usuario usuarioLogueado;
     private IVentasNegocio ventasNegocio;
@@ -36,7 +36,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     /**
      * Creates new form ConsultarVenta
      */
-    public FrmConsultarVentas(Usuario usuarioLogeado) {
+    public FrmVentasConsultar(Usuario usuarioLogeado) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.usuarioLogueado = usuarioLogeado;
@@ -57,16 +57,16 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        btnSalir = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scrollPaneTblVentas = new javax.swing.JScrollPane();
         tblVentas = new javax.swing.JTable();
-        lblSeleccionarFecha = new javax.swing.JLabel();
-        btnMenu = new javax.swing.JButton();
+        lblId = new javax.swing.JLabel();
         lblApartado = new javax.swing.JLabel();
         lblLogoCabecera = new javax.swing.JLabel();
         FondoTitulo = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         txtBuscarPorID = new javax.swing.JTextField();
+        btnMenu = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
         btnMostrarTodas = new javax.swing.JButton();
         btnPorPeriodo = new javax.swing.JButton();
         btnVerDetalles = new javax.swing.JButton();
@@ -75,22 +75,6 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         setUndecorated(true);
 
         jPanel1.setLayout(null);
-
-        btnSalir.setBackground(new java.awt.Color(255, 145, 77));
-        btnSalir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_Slim_Salir.png"))); // NOI18N
-        btnSalir.setText("Salir");
-        btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnSalir.setInheritsPopupMenu(true);
-        btnSalir.setName(""); // NOI18N
-        btnSalir.setVerifyInputWhenFocusTarget(false);
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnSalir);
-        btnSalir.setBounds(520, 70, 110, 40);
 
         tblVentas.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         tblVentas.setModel(new javax.swing.table.DefaultTableModel(
@@ -110,7 +94,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
             }
         });
         tblVentas.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tblVentas);
+        scrollPaneTblVentas.setViewportView(tblVentas);
         if (tblVentas.getColumnModel().getColumnCount() > 0) {
             tblVentas.getColumnModel().getColumn(0).setResizable(false);
             tblVentas.getColumnModel().getColumn(1).setResizable(false);
@@ -118,24 +102,13 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
             tblVentas.getColumnModel().getColumn(3).setResizable(false);
         }
 
-        jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 130, 620, 250);
+        jPanel1.add(scrollPaneTblVentas);
+        scrollPaneTblVentas.setBounds(10, 130, 620, 250);
 
-        lblSeleccionarFecha.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        lblSeleccionarFecha.setText("Introduzca ID:");
-        jPanel1.add(lblSeleccionarFecha);
-        lblSeleccionarFecha.setBounds(10, 70, 120, 14);
-
-        btnMenu.setBackground(new java.awt.Color(110, 88, 68));
-        btnMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenu.setText("🏠");
-        btnMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnMenu);
-        btnMenu.setBounds(0, 0, 50, 30);
+        lblId.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblId.setText("Introduzca ID:");
+        jPanel1.add(lblId);
+        lblId.setBounds(10, 70, 120, 14);
 
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
@@ -149,11 +122,6 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         lblLogoCabecera.setBounds(230, 0, 190, 30);
 
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
-        FondoTitulo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FondoTituloActionPerformed(evt);
-            }
-        });
         jPanel1.add(FondoTitulo);
         FondoTitulo.setBounds(40, 0, 610, 30);
 
@@ -180,6 +148,33 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         });
         jPanel1.add(txtBuscarPorID);
         txtBuscarPorID.setBounds(10, 88, 140, 22);
+
+        btnMenu.setBackground(new java.awt.Color(110, 88, 68));
+        btnMenu.setForeground(new java.awt.Color(255, 255, 255));
+        btnMenu.setText("🏠");
+        btnMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnMenu);
+        btnMenu.setBounds(0, 0, 50, 30);
+
+        btnSalir.setBackground(new java.awt.Color(255, 145, 77));
+        btnSalir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_Slim_Salir.png"))); // NOI18N
+        btnSalir.setText("Salir");
+        btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnSalir.setInheritsPopupMenu(true);
+        btnSalir.setName(""); // NOI18N
+        btnSalir.setVerifyInputWhenFocusTarget(false);
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSalir);
+        btnSalir.setBounds(520, 70, 110, 40);
 
         btnMostrarTodas.setBackground(new java.awt.Color(255, 145, 77));
         btnMostrarTodas.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -238,10 +233,6 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuActionPerformed
 
-    private void FondoTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FondoTituloActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_FondoTituloActionPerformed
-
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
@@ -289,7 +280,7 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Seleccione una venta", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         } else {
             Venta ventaAMostrar = listaVentas.get(indiceFilaSeleccionada);
-            DlgDetallesVenta dlgDetallesVenta = new DlgDetallesVenta(this, true, ventaAMostrar);
+            DlgVentasDetalles dlgDetallesVenta = new DlgVentasDetalles(this, true, ventaAMostrar);
             dlgDetallesVenta.setVisible(true);
 
             while (dlgDetallesVenta.isVisible()) {
@@ -366,10 +357,10 @@ public class FrmConsultarVentas extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnVerDetalles;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblApartado;
+    private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblLogoCabecera;
-    private javax.swing.JLabel lblSeleccionarFecha;
+    private javax.swing.JScrollPane scrollPaneTblVentas;
     private javax.swing.JTable tblVentas;
     private javax.swing.JTextField txtBuscarPorID;
     // End of variables declaration//GEN-END:variables

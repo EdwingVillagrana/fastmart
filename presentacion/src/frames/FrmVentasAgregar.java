@@ -25,7 +25,7 @@ import javax.swing.table.JTableHeader;
  *
  * @author Kevin Rios
  */
-public class FrmVenta extends javax.swing.JFrame {
+public class FrmVentasAgregar extends javax.swing.JFrame {
 
     private Usuario usuarioLogueado = null;
     private DefaultTableModel model;
@@ -51,7 +51,7 @@ public class FrmVenta extends javax.swing.JFrame {
      *
      * @param usuarioLogueado
      */
-    public FrmVenta(Usuario usuarioLogueado) {
+    public FrmVentasAgregar(Usuario usuarioLogueado) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.ventasNegocio = new VentasNegocio();
@@ -613,7 +613,7 @@ public class FrmVenta extends javax.swing.JFrame {
                 llenarTablaArticulosCarrito();
                 JOptionPane.showMessageDialog(null, "Venta Registrada", "Acción Exitosa", JOptionPane.INFORMATION_MESSAGE);
             } catch (NegocioException ex) {
-                Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FrmVentasAgregar.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, ex, "Venta no registrada!", JOptionPane.ERROR_MESSAGE);
             }
         }

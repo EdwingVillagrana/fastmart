@@ -18,7 +18,7 @@ public interface IComprasNegocio extends IGenericaNegocio<Compra> {
 
     public Compra consultarPorId(Long id) throws NegocioException;
 
-    public List<Compra> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws NegocioException;
+    public List<Compra> consultarPorPeriodo(String fechaInicio, String fechaFin) throws NegocioException;
 
     public List<Compra> consultarPorUsuario(Usuario usuario) throws NegocioException;
 }

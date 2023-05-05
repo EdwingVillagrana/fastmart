@@ -222,11 +222,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuVentasVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVentasVentaActionPerformed
-        FrmVenta frmVenta = new FrmVenta(usuarioLogueado);
+        FrmVentasAgregar frmVenta = new FrmVentasAgregar(usuarioLogueado);
         frmVenta.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                // Aquí es donde se ejecutará el código cuando se cierre el FrmVenta
+                // Aquí es donde se ejecutará el código cuando se cierre el FrmVentasAgregar
                 setVisible(true); // Hace visible el FrmPrincipal
             }
         });
@@ -244,11 +244,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
      * @param evt
      */
     private void menuConsultasVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasVentasActionPerformed
-        FrmConsultarVentas frmConsultarVentas = new FrmConsultarVentas(usuarioLogueado);
+        FrmVentasConsultar frmConsultarVentas = new FrmVentasConsultar(usuarioLogueado);
         frmConsultarVentas.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                // Aquí es donde se ejecutará el código cuando se cierre el FrmConsultarVentas
+                // Aquí es donde se ejecutará el código cuando se cierre el FrmVentasConsultar
                 setVisible(true); // Hace visible el FrmPrincipal
             }
         });
@@ -299,7 +299,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuManenimientoProveedorActionPerformed
 
     private void menuManenimientoCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoCategoriaActionPerformed
-        RegistrarCategoria registrarCategoria = new RegistrarCategoria();
+        FrmCategoriasAgregar registrarCategoria = new FrmCategoriasAgregar();
         registrarCategoria.addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
                 // Aquí es donde se ejecutará el código cuando se cierre el registrarCategoria

@@ -18,7 +18,7 @@ public interface IComprasDAO extends IGenericaDAO<Compra, Long> {
 
     public Compra consultarPorId(Long id) throws PersistenciaException;
 
-    public List<Compra> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws PersistenciaException;
+    public List<Compra> consultarPorPeriodo(String fechaInicio, String fechaFin) throws PersistenciaException;
 
     public List<Compra> consultarPorUsuario(Usuario usuario) throws PersistenciaException;
 }

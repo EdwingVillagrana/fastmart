@@ -168,14 +168,12 @@ public class ComprasDAO implements IComprasDAO {
      * durante la consulta.
      */
     @Override
-    public List<Compra> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws PersistenciaException {
+    public List<Compra> consultarPorPeriodo(String fechaInicio, String fechaFin) throws PersistenciaException {
         try {
             EntityManager em = this.conexion.crearConexion();
             try {
-                String jpql = "SELECT c FROM Compra c WHERE c.fechaDeCompra BETWEEN :fechaInicio AND :fechaFin";
+                String jpql = "SELECT c FROM Compra c WHERE c.fechaDeCompra BETWEEN '" + fechaInicio + "' AND '" + fechaFin + "'";
                 TypedQuery<Compra> query = em.createQuery(jpql, Compra.class);
-                query.setParameter("fechaInicio", fechaInicio, TemporalType.DATE);
-                query.setParameter("fechaFin", fechaFin, TemporalType.DATE);
                 return query.getResultList();
             } finally {
                 em.close();

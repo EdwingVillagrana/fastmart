@@ -182,8 +182,6 @@ public class VentasDAO implements IVentasDAO {
             try {
                 String jpql = "SELECT v FROM Venta v WHERE v.fechaDeVenta BETWEEN '" + fechaInicio + "' AND '" + fechaFin + "'";
                 TypedQuery<Venta> query = em.createQuery(jpql, Venta.class);
-//                query.setParameter("fechaInicio", fechaInicio, TemporalType.DATE);
-//                query.setParameter("fechaFin", fechaFin, TemporalType.DATE);
                 System.out.println(jpql);
                 return query.getResultList();
             } finally {

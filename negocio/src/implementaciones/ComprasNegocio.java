@@ -65,7 +65,7 @@ public class ComprasNegocio implements IComprasNegocio {
     }
 
     @Override
-    public List<Compra> consultarPorPeriodo(Date fechaInicio, Date fechaFin) throws NegocioException {
+    public List<Compra> consultarPorPeriodo(String fechaInicio, String fechaFin) throws NegocioException {
         List<Compra> compras = null;
         try {
             compras = comprasDAO.consultarPorPeriodo(fechaInicio, fechaFin);

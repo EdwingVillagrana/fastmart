@@ -8,7 +8,6 @@ import entidades.Proveedor;
 import excepciones.NegocioException;
 import implementaciones.ProveedoresNegocio;
 import interfaces.IProveedoresNegocio;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -17,18 +16,19 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Kevin Rios
  */
-public class ConsultarProveedores extends javax.swing.JFrame {
+public class FrmProveedores extends javax.swing.JFrame {
     private IProveedoresNegocio proveedoresNegocio;
     private List<Proveedor> listaProveedores = new ArrayList<>();
     private DefaultTableModel model;
     /**
      * Creates new form ConsultarVenta
      */
-    public ConsultarProveedores() {
+    public FrmProveedores() {
         initComponents();
         this.proveedoresNegocio = new ProveedoresNegocio();
         model = (DefaultTableModel) this.tblProveedores.getModel();
         radioNombre.setSelected(true);
+        listarProveedores();
     }
 
     /**
@@ -57,27 +57,31 @@ public class ConsultarProveedores extends javax.swing.JFrame {
         radioNombre = new javax.swing.JRadioButton();
         btnListarProveedores = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
 
         btnSalir.setBackground(new java.awt.Color(255, 145, 77));
         btnSalir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_Slim_Salir.png"))); // NOI18N
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_salir.png"))); // NOI18N
         btnSalir.setText("Salir");
-        btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSalir.setInheritsPopupMenu(true);
         btnSalir.setName(""); // NOI18N
         btnSalir.setVerifyInputWhenFocusTarget(false);
+        btnSalir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
         jPanel1.add(btnSalir);
-        btnSalir.setBounds(480, 50, 100, 40);
+        btnSalir.setBounds(590, 320, 90, 80);
 
         tblProveedores.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tblProveedores.setModel(new javax.swing.table.DefaultTableModel(
@@ -85,14 +89,14 @@ public class ConsultarProveedores extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID ", "Nombre", "Dirección", "Telefono", "Email"
+                "Nombre", "Dirección", "Telefono", "Email"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -107,15 +111,14 @@ public class ConsultarProveedores extends javax.swing.JFrame {
         tblProveedores.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblProveedores);
         if (tblProveedores.getColumnModel().getColumnCount() > 0) {
-            tblProveedores.getColumnModel().getColumn(0).setPreferredWidth(0);
-            tblProveedores.getColumnModel().getColumn(1).setPreferredWidth(80);
+            tblProveedores.getColumnModel().getColumn(0).setPreferredWidth(80);
+            tblProveedores.getColumnModel().getColumn(1).setPreferredWidth(100);
             tblProveedores.getColumnModel().getColumn(2).setPreferredWidth(100);
             tblProveedores.getColumnModel().getColumn(3).setPreferredWidth(100);
-            tblProveedores.getColumnModel().getColumn(4).setPreferredWidth(100);
         }
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 150, 570, 250);
+        jScrollPane1.setBounds(10, 140, 570, 260);
 
         btnMenu.setBackground(new java.awt.Color(110, 88, 68));
         btnMenu.setForeground(new java.awt.Color(255, 255, 255));
@@ -130,14 +133,14 @@ public class ConsultarProveedores extends javax.swing.JFrame {
 
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
-        lblApartado.setText("Consultar Proveedores");
+        lblApartado.setText("Proveedores");
         jPanel1.add(lblApartado);
-        lblApartado.setBounds(60, 0, 200, 30);
+        lblApartado.setBounds(60, 0, 130, 30);
 
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
         jPanel1.add(lblLogoCabecera);
-        lblLogoCabecera.setBounds(200, 0, 190, 30);
+        lblLogoCabecera.setBounds(280, 0, 190, 30);
 
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         FondoTitulo.addActionListener(new java.awt.event.ActionListener() {
@@ -146,7 +149,7 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel1.add(FondoTitulo);
-        FondoTitulo.setBounds(40, 0, 570, 30);
+        FondoTitulo.setBounds(40, 0, 660, 30);
 
         btnBuscar.setBackground(new java.awt.Color(255, 145, 77));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -162,7 +165,7 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBuscar);
-        btnBuscar.setBounds(254, 50, 100, 40);
+        btnBuscar.setBounds(440, 50, 140, 40);
 
         jPanel2.setBackground(new java.awt.Color(0, 145, 155));
         jPanel2.setLayout(null);
@@ -173,13 +176,13 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel2.add(txtBusqueda);
-        txtBusqueda.setBounds(20, 50, 190, 22);
+        txtBusqueda.setBounds(20, 40, 280, 30);
 
         lblCriterioBusqueda.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblCriterioBusqueda.setForeground(new java.awt.Color(255, 255, 255));
         lblCriterioBusqueda.setText("Criterios de Búsqueda");
         jPanel2.add(lblCriterioBusqueda);
-        lblCriterioBusqueda.setBounds(10, 10, 126, 14);
+        lblCriterioBusqueda.setBounds(10, 5, 126, 14);
 
         radioGrupoP.add(radioID);
         radioID.setForeground(new java.awt.Color(255, 255, 255));
@@ -190,7 +193,7 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel2.add(radioID);
-        radioID.setBounds(140, 30, 40, 20);
+        radioID.setBounds(140, 20, 40, 20);
 
         radioGrupoP.add(radioNombre);
         radioNombre.setForeground(new java.awt.Color(255, 255, 255));
@@ -201,10 +204,10 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel2.add(radioNombre);
-        radioNombre.setBounds(20, 30, 67, 20);
+        radioNombre.setBounds(20, 20, 67, 20);
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 50, 230, 80);
+        jPanel2.setBounds(10, 50, 420, 80);
 
         btnListarProveedores.setBackground(new java.awt.Color(255, 145, 77));
         btnListarProveedores.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -216,29 +219,59 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnListarProveedores);
-        btnListarProveedores.setBounds(367, 50, 100, 40);
+        btnListarProveedores.setBounds(440, 95, 140, 35);
 
         btnModificar.setBackground(new java.awt.Color(255, 145, 77));
         btnModificar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_modificarVenta.png"))); // NOI18N
-        btnModificar.setText("Modificar Proveedor");
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_ModificarAll.png"))); // NOI18N
+        btnModificar.setText("Modificar");
+        btnModificar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnModificar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarActionPerformed(evt);
             }
         });
         jPanel1.add(btnModificar);
-        btnModificar.setBounds(255, 100, 325, 30);
+        btnModificar.setBounds(590, 140, 90, 80);
+
+        btnEliminar.setBackground(new java.awt.Color(255, 145, 77));
+        btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_EliminarAll.png"))); // NOI18N
+        btnEliminar.setText("Eliminar");
+        btnEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEliminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminar);
+        btnEliminar.setBounds(590, 230, 90, 80);
+
+        btnAgregar.setBackground(new java.awt.Color(255, 145, 77));
+        btnAgregar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_AgregarAll.png"))); // NOI18N
+        btnAgregar.setText("Agregar");
+        btnAgregar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAgregar);
+        btnAgregar.setBounds(590, 50, 90, 80);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -306,7 +339,7 @@ public class ConsultarProveedores extends javax.swing.JFrame {
         }
     }
     
-    public void listarProveedores(){
+    private void listarProveedores(){
         try {
             this.listaProveedores = proveedoresNegocio.consultarTodos();
             model.setRowCount(0);
@@ -321,10 +354,9 @@ public class ConsultarProveedores extends javax.swing.JFrame {
     public void mostrarProveedor(Proveedor proveedor){
         String direccion = proveedor.getDireccion();
         String email = proveedor.getEmail();
-        Long id_proveedor = proveedor.getId();
         String nombre = proveedor.getNombre();
         String telefono = proveedor.getTelefono();
-        Object[] fila = {id_proveedor,nombre, direccion, telefono, email};
+        Object[] fila = {nombre, direccion, telefono, email};
         model.addRow(fila);
     }
     
@@ -366,10 +398,10 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Seleccione un proveedor", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         }else {
             Proveedor proveedorAModificar = listaProveedores.get(indiceFilaSeleccionada);
-            DlgModificarProveedor dlgModificarProveedor = new DlgModificarProveedor(this, true, proveedorAModificar);
-            dlgModificarProveedor.setVisible(true);
+            DlgProveedor dlgProveedor = new DlgProveedor(this, true, proveedorAModificar);
+            dlgProveedor.setVisible(true);
             
-            while (dlgModificarProveedor.isVisible()) {
+            while (dlgProveedor.isVisible()) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException io) {
@@ -379,51 +411,94 @@ public class ConsultarProveedores extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConsultarProveedores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConsultarProveedores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConsultarProveedores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConsultarProveedores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ConsultarProveedores().setVisible(true);
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        DlgProveedor dlgProveedor = new DlgProveedor(this, true);
+        dlgProveedor.setVisible(true);
+        while (dlgProveedor.isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException io) {
+                io.printStackTrace();
             }
-        });
-    }
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(FrmProveedores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(FrmProveedores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(FrmProveedores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(FrmProveedores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new FrmProveedores().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnListarProveedores;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnModificar;

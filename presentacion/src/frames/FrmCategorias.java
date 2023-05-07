@@ -19,14 +19,14 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Kevin Rios
  */
-public class ConsultarCategorias extends javax.swing.JFrame {
+public class FrmCategorias extends javax.swing.JFrame {
 private ICategoriasNegocio categoriasNegocio;
     private DefaultTableModel model;
     private List<Categoria> listaCategorias = new ArrayList<>();
     /**
      * Creates new form frmConsultarCategorias
      */
-    public ConsultarCategorias() {
+    public FrmCategorias() {
         initComponents();
         this.categoriasNegocio = new CategoriasNegocio();
         model = (DefaultTableModel) this.tblCategorias.getModel();
@@ -279,7 +279,7 @@ private ICategoriasNegocio categoriasNegocio;
 //            try {
 //                categoriasNegocio.eliminar(categoriaEliminar);
 //            } catch (NegocioException ex) {
-//                Logger.getLogger(ConsultarCategorias.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(FrmCategorias.class.getName()).log(Level.SEVERE, null, ex);
 //            }
 //            JOptionPane.showMessageDialog(null, "Se ha eliminado la categoría exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
 //        }
@@ -312,8 +312,7 @@ private ICategoriasNegocio categoriasNegocio;
                     listarCategorias();
                 }
 
-            } catch (NegocioException ex) {
-                Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NegocioException ex) {               
                 JOptionPane.showMessageDialog(null, ex, "Categoría no registrada", JOptionPane.ERROR_MESSAGE);
 
             }
@@ -400,21 +399,23 @@ private ICategoriasNegocio categoriasNegocio;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConsultarCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConsultarCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConsultarCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConsultarCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmCategorias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConsultarCategorias().setVisible(true);
+                new FrmCategorias().setVisible(true);
             }
         });
     }

@@ -42,6 +42,7 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
         this.usuarioLogueado = usuarioLogeado;
         this.ventasNegocio = new VentasNegocio();
         model = (DefaultTableModel) this.tblVentas.getModel();
+        listarVentas();
         TableColumnModel columnModel = tblVentas.getColumnModel();
         TableColumn columnaNombreUsuario = columnModel.getColumn(1);
         columnaNombreUsuario.setPreferredWidth(180);
@@ -74,6 +75,7 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
 
         tblVentas.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -93,6 +95,7 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblVentas.setShowGrid(true);
         tblVentas.getTableHeader().setReorderingAllowed(false);
         scrollPaneTblVentas.setViewportView(tblVentas);
         if (tblVentas.getColumnModel().getColumnCount() > 0) {
@@ -268,8 +271,6 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
         }
         fechaInicio = dlgFechaS.obtenerFechaInicio();
         fechaFinal = dlgFechaS.obtenerFechaFinal();
-        System.out.println(fechaInicio);
-        System.out.println(fechaFinal);
         consultarPeriodo(fechaInicio, fechaFinal);
     }//GEN-LAST:event_btnPorPeriodoActionPerformed
 
@@ -338,7 +339,6 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
         Long id_venta = venta.getId();
         LocalDate fechaLocal = venta.getFechaDeVenta().toLocalDate();
         fechaLocal = fechaLocal.plusDays(1);
-        System.out.println(fechaLocal);
         String nombreUsuario = venta.getUsuario().getNombre();
         String fecha = fechaLocal.toString();
         Double total = venta.getTotal();

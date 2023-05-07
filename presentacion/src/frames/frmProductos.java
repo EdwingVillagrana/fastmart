@@ -9,29 +9,27 @@ import entidades.Usuario;
 import excepciones.NegocioException;
 import implementaciones.ProductosNegocio;
 import interfaces.IProductosNegocio;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Kevin Rios
  */
-public class frmProductos extends javax.swing.JFrame {
-    private Usuario usuarioLogueado;
+public class FrmProductos extends javax.swing.JFrame {
     private IProductosNegocio productosNegocio;
     private DefaultTableModel model;
     private List<Producto> listaProductos = new ArrayList<>();
-    private boolean seAgrega = false;
-    private boolean seModifica = false;
     
     /**
      * Creates new form ConsultarVenta
      */
-    public frmProductos() {
+    public FrmProductos() {
         initComponents();
-        this.productosNegocio = new ProductosNegocio();
+        productosNegocio = new ProductosNegocio();
         model = (DefaultTableModel) this.tblProductos.getModel();
         radioNombre.setSelected(true);
         listarProductos();
@@ -267,6 +265,11 @@ public class frmProductos extends javax.swing.JFrame {
         btnEliminar.setText("Eliminar");
         btnEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnEliminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnEliminar);
         btnEliminar.setBounds(550, 230, 90, 80);
 
@@ -323,20 +326,6 @@ public class frmProductos extends javax.swing.JFrame {
         }
     }
     
-    public void consultarPorId(Long id){
-        try {
-            Producto producto = productosNegocio.consultarPorId(id);
-            this.listaProductos.add(producto);
-            if (producto == null) {
-                JOptionPane.showMessageDialog(null, "El producto no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
-            }else{
-                model.setRowCount(0);
-                mostrarProducto(producto);
-            }            
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
     
     public void consultarPorNombre(String nombre){
         try {
@@ -353,7 +342,7 @@ public class frmProductos extends javax.swing.JFrame {
         }
     }
     
-    public void listarProductos(){
+    private void listarProductos(){
         try {
             this.listaProductos = productosNegocio.consultarTodos();
             model.setRowCount(0);
@@ -419,9 +408,8 @@ public class frmProductos extends javax.swing.JFrame {
         if (indiceFilaSeleccionada == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione un producto", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         }else {
-            seModifica = true;
             Producto productoAModificar = listaProductos.get(indiceFilaSeleccionada);
-            DlgModificarProducto dlgModificarProducto = new DlgModificarProducto(this, true, productoAModificar);
+            DlgProducto dlgModificarProducto = new DlgProducto(this, true, productoAModificar);
             dlgModificarProducto.setVisible(true);
            
         }  
@@ -432,54 +420,78 @@ public class frmProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        seAgrega = true;
-        Producto producto = new Producto();
-        DlgModificarProducto dlgModificarProducto = new DlgModificarProducto(this, true, producto);
+        DlgProducto dlgModificarProducto = new DlgProducto(this, true);
         dlgModificarProducto.setVisible(true);
-
+        while (dlgModificarProducto.isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException io) {
+                io.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int indiceSeleccionado = tblProductos.getSelectedRow();
+        if (indiceSeleccionado == -1) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un producto para poder eliminar", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el producto?", "Eliminar producto", JOptionPane.YES_NO_OPTION);
+            if (confirmaEliminacion == 0) {
+                try {
+                    Producto producto = listaProductos.get(indiceSeleccionado);
+                    productosNegocio.eliminar(producto);
+                    listarProductos();
+                    JOptionPane.showMessageDialog(null, "Se elimino correctamente", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+                } catch (NegocioException ex) {
+                    Logger.getLogger(FrmProductos.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmProductos().setVisible(true);
             }
-        });
-    }
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(FrmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(FrmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(FrmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(FrmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new FrmProductos().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;

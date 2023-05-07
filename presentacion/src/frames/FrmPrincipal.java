@@ -43,22 +43,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         menu = new javax.swing.JMenuBar();
         menuInicio = new javax.swing.JMenu();
-        menuInicioCerrarS = new javax.swing.JMenuItem();
         menuInicioSalirAplicacion = new javax.swing.JMenuItem();
         menuVentas = new javax.swing.JMenu();
         menuVentasVenta = new javax.swing.JMenuItem();
-        menuCompras = new javax.swing.JMenu();
-        menuComprasCompra = new javax.swing.JMenuItem();
         menuConsultas = new javax.swing.JMenu();
         menuConsultasVentas = new javax.swing.JMenuItem();
         menuConsultasProductos = new javax.swing.JMenuItem();
         menuConsultasProveedores = new javax.swing.JMenuItem();
         menuConsultasCategorias = new javax.swing.JMenuItem();
-        menuMantenimiento = new javax.swing.JMenu();
-        menuManenimientoEmpleado = new javax.swing.JMenuItem();
-        menuManenimientoProducto = new javax.swing.JMenuItem();
-        menuManenimientoProveedor = new javax.swing.JMenuItem();
-        menuManenimientoCategoria = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Principal");
@@ -72,15 +64,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         menuInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_home.png"))); // NOI18N
         menuInicio.setText("Inicio");
-
-        menuInicioCerrarS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_cerrarSesion.png"))); // NOI18N
-        menuInicioCerrarS.setText("Cerrar Sesión");
-        menuInicioCerrarS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuInicioCerrarSActionPerformed(evt);
-            }
-        });
-        menuInicio.add(menuInicioCerrarS);
 
         menuInicioSalirAplicacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_salirAplicacion.png"))); // NOI18N
         menuInicioSalirAplicacion.setText("Salir de la aplicación");
@@ -107,25 +90,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         menu.add(menuVentas);
 
-        menuCompras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_agregarCompras.png"))); // NOI18N
-        menuCompras.setText("Compras");
-
-        menuComprasCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_comprasCompra.png"))); // NOI18N
-        menuComprasCompra.setText("Compra");
-        menuComprasCompra.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuComprasCompraActionPerformed(evt);
-            }
-        });
-        menuCompras.add(menuComprasCompra);
-
-        menu.add(menuCompras);
-
-        menuConsultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_consultas.png"))); // NOI18N
-        menuConsultas.setText("Consultas");
+        menuConsultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_configurar.png"))); // NOI18N
+        menuConsultas.setText("Administración");
 
         menuConsultasVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_consultasVentas.png"))); // NOI18N
-        menuConsultasVentas.setText("Consultar Ventas");
+        menuConsultasVentas.setText("Ventas");
         menuConsultasVentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuConsultasVentasActionPerformed(evt);
@@ -134,7 +103,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         menuConsultas.add(menuConsultasVentas);
 
         menuConsultasProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_producto.png"))); // NOI18N
-        menuConsultasProductos.setText("Consultar Productos");
+        menuConsultasProductos.setText("Productos");
         menuConsultasProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuConsultasProductosActionPerformed(evt);
@@ -143,7 +112,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         menuConsultas.add(menuConsultasProductos);
 
         menuConsultasProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_añadirProveedor.png"))); // NOI18N
-        menuConsultasProveedores.setText("Consultar Proveedores");
+        menuConsultasProveedores.setText("Proveedores");
         menuConsultasProveedores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuConsultasProveedoresActionPerformed(evt);
@@ -152,7 +121,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         menuConsultas.add(menuConsultasProveedores);
 
         menuConsultasCategorias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_categorias.png"))); // NOI18N
-        menuConsultasCategorias.setText("Consultar Categorias");
+        menuConsultasCategorias.setText("Categorías");
         menuConsultasCategorias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuConsultasCategoriasActionPerformed(evt);
@@ -161,47 +130,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         menuConsultas.add(menuConsultasCategorias);
 
         menu.add(menuConsultas);
-
-        menuMantenimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_configurar.png"))); // NOI18N
-        menuMantenimiento.setText("Mantenimiento");
-
-        menuManenimientoEmpleado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_añadirEmpleado.png"))); // NOI18N
-        menuManenimientoEmpleado.setText("Añadir Usuario");
-        menuManenimientoEmpleado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuManenimientoEmpleadoActionPerformed(evt);
-            }
-        });
-        menuMantenimiento.add(menuManenimientoEmpleado);
-
-        menuManenimientoProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_añadirProducto.png"))); // NOI18N
-        menuManenimientoProducto.setText("Añadir Producto");
-        menuManenimientoProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuManenimientoProductoActionPerformed(evt);
-            }
-        });
-        menuMantenimiento.add(menuManenimientoProducto);
-
-        menuManenimientoProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_añadirProveedor.png"))); // NOI18N
-        menuManenimientoProveedor.setText("Añadir Proveedor");
-        menuManenimientoProveedor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuManenimientoProveedorActionPerformed(evt);
-            }
-        });
-        menuMantenimiento.add(menuManenimientoProveedor);
-
-        menuManenimientoCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_añadirCategoria.png"))); // NOI18N
-        menuManenimientoCategoria.setText("Añadir Categoria");
-        menuManenimientoCategoria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuManenimientoCategoriaActionPerformed(evt);
-            }
-        });
-        menuMantenimiento.add(menuManenimientoCategoria);
-
-        menu.add(menuMantenimiento);
 
         setJMenuBar(menu);
 
@@ -234,10 +162,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         setVisible(false); // Oculta el FrmPrincipal
     }//GEN-LAST:event_menuVentasVentaActionPerformed
 
-    private void menuComprasCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuComprasCompraActionPerformed
-
-    }//GEN-LAST:event_menuComprasCompraActionPerformed
-
     /**
      * Se agregó la navegabilidad al formulario de consulta
      *
@@ -257,22 +181,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_menuConsultasVentasActionPerformed
 
-    private void menuManenimientoEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoEmpleadoActionPerformed
-
-    }//GEN-LAST:event_menuManenimientoEmpleadoActionPerformed
-
-    private void menuManenimientoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoProductoActionPerformed
-        RegistrarProducto registrarProducto = new RegistrarProducto();
-        registrarProducto.addWindowListener(new WindowAdapter() {
-            public void windowClosed(WindowEvent e) {
-                // Aquí es donde se ejecutará el código cuando se cierre el registrarCategoria
-                setVisible(true); // Hace visible el registrarCategoria
-            }
-        });
-        registrarProducto.setVisible(true);
-        setVisible(false); //Ocultando el FrmPrincipal
-    }//GEN-LAST:event_menuManenimientoProductoActionPerformed
-
     private void menuInicioSalirAplicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuInicioSalirAplicacionActionPerformed
         int a = JOptionPane.YES_NO_OPTION;
         int resultado = JOptionPane.showConfirmDialog(this, "¿DESEA CERRAR LA APLICACIÓN?", "SALIR", a);
@@ -281,29 +189,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuInicioSalirAplicacionActionPerformed
 
-    private void menuInicioCerrarSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuInicioCerrarSActionPerformed
-
-
-    }//GEN-LAST:event_menuInicioCerrarSActionPerformed
-
-    private void menuManenimientoProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoProveedorActionPerformed
-        RegistrarProveedor registrarProveedor = new RegistrarProveedor();
-        registrarProveedor.addWindowListener(new WindowAdapter() {
-            public void windowClosed(WindowEvent e) {
-                // Aquí es donde se ejecutará el código cuando se cierre el registrarCategoria
-                setVisible(true); // Hace visible el registrarProveedor
-            }
-        });
-        registrarProveedor.setVisible(true);
-        setVisible(false); //Ocultando el FrmPrincipal
-    }//GEN-LAST:event_menuManenimientoProveedorActionPerformed
-
-    private void menuManenimientoCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoCategoriaActionPerformed
-     
-    }//GEN-LAST:event_menuManenimientoCategoriaActionPerformed
-
     private void menuConsultasProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasProductosActionPerformed
-        frmProductos frmConsultarProductos = new frmProductos();
+        FrmProductos frmConsultarProductos = new FrmProductos();
         frmConsultarProductos.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -318,7 +205,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuConsultasProductosActionPerformed
 
     private void menuConsultasProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasProveedoresActionPerformed
-        ConsultarProveedores consultarProveedores = new ConsultarProveedores();
+        FrmProveedores consultarProveedores = new FrmProveedores();
         consultarProveedores.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -331,7 +218,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuConsultasProveedoresActionPerformed
 
     private void menuConsultasCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasCategoriasActionPerformed
-        ConsultarCategorias consultarProveedores = new ConsultarCategorias();
+        FrmCategorias consultarProveedores = new FrmCategorias();
         consultarProveedores.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -382,21 +269,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuBar menu;
-    private javax.swing.JMenu menuCompras;
-    private javax.swing.JMenuItem menuComprasCompra;
     private javax.swing.JMenu menuConsultas;
     private javax.swing.JMenuItem menuConsultasCategorias;
     private javax.swing.JMenuItem menuConsultasProductos;
     private javax.swing.JMenuItem menuConsultasProveedores;
     private javax.swing.JMenuItem menuConsultasVentas;
     private javax.swing.JMenu menuInicio;
-    private javax.swing.JMenuItem menuInicioCerrarS;
     private javax.swing.JMenuItem menuInicioSalirAplicacion;
-    private javax.swing.JMenuItem menuManenimientoCategoria;
-    private javax.swing.JMenuItem menuManenimientoEmpleado;
-    private javax.swing.JMenuItem menuManenimientoProducto;
-    private javax.swing.JMenuItem menuManenimientoProveedor;
-    private javax.swing.JMenu menuMantenimiento;
     private javax.swing.JMenu menuVentas;
     private javax.swing.JMenuItem menuVentasVenta;
     // End of variables declaration//GEN-END:variables

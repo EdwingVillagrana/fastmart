@@ -9,27 +9,34 @@ import excepciones.NegocioException;
 import interfaces.IProveedoresNegocio;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Kevin Rios
  */
-public class DlgModificarProveedor extends javax.swing.JDialog {
+public class DlgProveedor extends javax.swing.JDialog {
 
     private Proveedor proveedor;
     private IProveedoresNegocio proveedoresNegocio;
     /**
      * Creates new form DlgModificarProveedor
      */
-    public DlgModificarProveedor(java.awt.Frame parent, boolean modal, Proveedor proveedor) {
+    public DlgProveedor(java.awt.Frame parent, boolean modal, Proveedor proveedor) {
         super(parent, modal);
         initComponents();
         this.proveedor = proveedor;
-        llenarCampos();
+        llenarCamposActualizar();
     }
     
-    public void llenarCampos(){
+    public DlgProveedor(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+    }
+    
+    private void llenarCamposActualizar(){
         this.txtID.setText(proveedor.getId().toString());
         this.txtNombre.setText(proveedor.getNombre());
         this.txtDireccion.setText(proveedor.getDireccion());
@@ -64,6 +71,7 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
         txtDireccion = new javax.swing.JTextField();
         txtTelefono = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -98,9 +106,9 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
         FondoTitulo.setBounds(0, 0, 280, 30);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Ingrese los datos a actualizar");
+        jLabel1.setText("Ingrese los datos");
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(40, 50, 200, 20);
+        jLabel1.setBounds(80, 50, 120, 20);
 
         jLabel2.setText("Email :");
         jPanel1.add(jLabel2);
@@ -145,14 +153,43 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
         txtID.setEditable(false);
         jPanel1.add(txtID);
         txtID.setBounds(50, 85, 50, 22);
+
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombre);
         txtNombre.setBounds(80, 115, 160, 22);
+
+        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDireccionKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtDireccion);
         txtDireccion.setBounds(90, 145, 150, 22);
+
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtTelefono);
         txtTelefono.setBounds(80, 175, 160, 22);
+
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEmailKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtEmail);
         txtEmail.setBounds(60, 205, 180, 22);
+
+        jPanel2.setBackground(new java.awt.Color(0, 145, 155));
+        jPanel2.setLayout(null);
+        jPanel1.add(jPanel2);
+        jPanel2.setBounds(10, 80, 250, 160);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,9 +199,7 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
 
         pack();
@@ -180,21 +215,74 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-//
-//            proveedor.setNombre(txtNombre.getText());
-//            proveedor.setDireccion(txtDireccion.getText());
-//            proveedor.setEmail(txtEmail.getText());
-//            proveedor.setTelefono(txtTelefono.getText());
-//            try {
-//                proveedoresNegocio.actualizar(proveedor);
-//                JOptionPane.showMessageDialog(null, "Se ha actualizado el proveedor exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
-//            } catch (NegocioException ex) {
-//                Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
-//                JOptionPane.showMessageDialog(null, ex, "Proveedor no actualizado", JOptionPane.ERROR_MESSAGE);
-//
-//            }
+        if (validarCampos()) {
+            String nombre = txtNombre.getText();
+            String direccion = txtDireccion.getText();
+            String email = txtEmail.getText();
+            String telefono = txtTelefono.getText();
+
+            Proveedor proveedorAgregar = new Proveedor(nombre, direccion, telefono, email);
+
+            try {
+                proveedoresNegocio.agregar(proveedorAgregar);
+                JOptionPane.showMessageDialog(null, "Se ha registrado el proveedor exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(null, ex, "Proveedor no registrado", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        char c = evt.getKeyChar();
+        if (txtNombre.getText().length() >= 100 || !Character.isLetter(c)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
+       char c = evt.getKeyChar();
+        if (txtDireccion.getText().length() >= 250 || !Character.isLetter(c)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDireccionKeyTyped
+
+    private void txtEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyTyped
+        char c = evt.getKeyChar();
+        if (txtEmail.getText().length() >= 100 || !Character.isLetter(c)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtEmailKeyTyped
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        String codigo = txtTelefono.getText() + c;
+        Pattern patron = Pattern.compile("^\\d{0,12}(\\.\\d{0,2})?$");
+
+        Matcher matcher = patron.matcher(codigo);
+        //Creo que no hace falta agregar lo de || txtTelefono.getText().length() == 20 porque en lo del Pattern.complile, ya le pone el limite
+        if (!matcher.matches() || txtTelefono.getText().length() >= 10) {
+            evt.consume(); //Si no coincide va a hacer esto: 
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
+
+    private boolean validarCampos() {
+        if (this.txtNombre.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Compleme el campo nombre", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (this.txtDireccion.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Compleme el campo dirección", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (this.txtEmail.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Compleme el campo E-mail", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (this.txtTelefono.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Complete el campo Teléfono!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
 //    /**
 //     * @param args the command line arguments
 //     */
@@ -212,20 +300,20 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(DlgModificarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(DlgModificarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(DlgModificarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(DlgModificarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //
 //        /* Create and display the dialog */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                DlgModificarProveedor dialog = new DlgModificarProveedor(new javax.swing.JFrame(), true);
+//                DlgProveedor dialog = new DlgProveedor(new javax.swing.JFrame(), true);
 //                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 //                    @Override
 //                    public void windowClosing(java.awt.event.WindowEvent e) {
@@ -249,6 +337,7 @@ public class DlgModificarProveedor extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblApartado;
     private javax.swing.JLabel lblLogoCabecera;
     private javax.swing.JTextField txtDireccion;

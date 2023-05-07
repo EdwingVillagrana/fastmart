@@ -48,6 +48,7 @@ public class RegistrarProducto extends javax.swing.JFrame {
         modeloCategorias = (DefaultComboBoxModel) this.comboCategoria.getModel();
         listarProveedores();
         listarCategorias();
+        // ConsultarCategorias, 
     }
 
     /**
@@ -196,6 +197,11 @@ public class RegistrarProducto extends javax.swing.JFrame {
         comboCategoria.setBounds(170, 190, 240, 22);
 
         comboProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
+        comboProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboProveedorActionPerformed(evt);
+            }
+        });
         jPanel2.add(comboProveedor);
         comboProveedor.setBounds(170, 90, 240, 22);
 
@@ -454,6 +460,10 @@ public class RegistrarProducto extends javax.swing.JFrame {
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void comboProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProveedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboProveedorActionPerformed
 
 //    /**
 //     * @param args the command line arguments

@@ -299,19 +299,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuManenimientoProveedorActionPerformed
 
     private void menuManenimientoCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManenimientoCategoriaActionPerformed
-        FrmCategoriasAgregar registrarCategoria = new FrmCategoriasAgregar();
-        registrarCategoria.addWindowListener(new WindowAdapter() {
-            public void windowClosed(WindowEvent e) {
-                // Aquí es donde se ejecutará el código cuando se cierre el registrarCategoria
-                setVisible(true); // Hace visible el registrarCategoria
-            }
-        });
-        registrarCategoria.setVisible(true);
-        setVisible(false); //Ocultando el FrmPrincipal
+     
     }//GEN-LAST:event_menuManenimientoCategoriaActionPerformed
 
     private void menuConsultasProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasProductosActionPerformed
-        ConsultarProductos frmConsultarProductos = new ConsultarProductos();
+        frmProductos frmConsultarProductos = new frmProductos();
         frmConsultarProductos.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -339,7 +331,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuConsultasProveedoresActionPerformed
 
     private void menuConsultasCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsultasCategoriasActionPerformed
-        frmConsultarCategorias consultarProveedores = new frmConsultarCategorias();
+        ConsultarCategorias consultarProveedores = new ConsultarCategorias();
         consultarProveedores.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {

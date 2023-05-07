@@ -4,10 +4,20 @@
  */
 package frames;
 
+import entidades.Categoria;
 import entidades.Producto;
+import entidades.Proveedor;
+import excepciones.NegocioException;
+import implementaciones.CategoriasNegocio;
+import implementaciones.ProveedoresNegocio;
+import interfaces.ICategoriasNegocio;
 import interfaces.IProductosNegocio;
+import interfaces.IProveedoresNegocio;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,7 +26,13 @@ import java.util.regex.Pattern;
 public class DlgModificarProducto extends javax.swing.JDialog {
 
     private Producto producto;
+    private ICategoriasNegocio categoriasNegocio;
+    private IProveedoresNegocio proveedoresNegocio;
     private IProductosNegocio productosNegocio;
+    private List<Proveedor> listaProveedores;
+    private List<Categoria> listaCategorias;
+    private DefaultComboBoxModel modeloProveedores;
+    private DefaultComboBoxModel modeloCategorias;
     
     /**
      * Creates new form DlgModificarProducto
@@ -25,7 +41,13 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.producto = producto;
+        this.proveedoresNegocio = new ProveedoresNegocio();
+        this.categoriasNegocio = new CategoriasNegocio();
+        modeloProveedores = (DefaultComboBoxModel) this.comboProveedor.getModel();
+        modeloCategorias = (DefaultComboBoxModel) this.comboCategoria.getModel();
         llenarCampos();
+        listarProveedores();
+        listarCategorias();
     }
     
     public void llenarCampos(){
@@ -72,6 +94,8 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        comboCategoria = new javax.swing.JComboBox<>();
+        comboProveedor = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -224,11 +248,19 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         jPanel1.add(btnCancelar);
         btnCancelar.setBounds(170, 330, 80, 30);
 
+        comboCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
+        jPanel1.add(comboCategoria);
+        comboCategoria.setBounds(370, 160, 130, 22);
+
+        comboProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleecione" }));
+        jPanel1.add(comboProveedor);
+        comboProveedor.setBounds(370, 120, 130, 22);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,6 +294,8 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         
     }//GEN-LAST:event_btnAceptarActionPerformed
 
+    
+    
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
@@ -309,6 +343,30 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtCodigoKeyTyped
 
+    private void listarProveedores() {
+        try {
+            this.listaProveedores = proveedoresNegocio.consultarTodos();
+
+            for (Proveedor proveedor : listaProveedores) {
+                modeloProveedores.addElement(proveedor.getNombre());
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private void listarCategorias() {
+        try {
+            this.listaCategorias = categoriasNegocio.consultarTodos();
+
+            for (Categoria categoria : listaCategorias) {
+                modeloCategorias.addElement(categoria.getNombre());
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -356,6 +414,8 @@ public class DlgModificarProducto extends javax.swing.JDialog {
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnMenu;
+    private javax.swing.JComboBox<String> comboCategoria;
+    private javax.swing.JComboBox<String> comboProveedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

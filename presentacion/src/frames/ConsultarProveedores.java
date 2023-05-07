@@ -77,7 +77,7 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnSalir);
-        btnSalir.setBounds(480, 50, 100, 50);
+        btnSalir.setBounds(480, 50, 100, 40);
 
         tblProveedores.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tblProveedores.setModel(new javax.swing.table.DefaultTableModel(
@@ -162,7 +162,7 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBuscar);
-        btnBuscar.setBounds(254, 50, 100, 50);
+        btnBuscar.setBounds(254, 50, 100, 40);
 
         jPanel2.setBackground(new java.awt.Color(0, 145, 155));
         jPanel2.setLayout(null);
@@ -216,7 +216,7 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnListarProveedores);
-        btnListarProveedores.setBounds(367, 50, 100, 50);
+        btnListarProveedores.setBounds(367, 50, 100, 40);
 
         btnModificar.setBackground(new java.awt.Color(255, 145, 77));
         btnModificar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -228,7 +228,7 @@ public class ConsultarProveedores extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnModificar);
-        btnModificar.setBounds(401, 410, 180, 30);
+        btnModificar.setBounds(255, 100, 325, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -238,9 +238,7 @@ public class ConsultarProveedores extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();

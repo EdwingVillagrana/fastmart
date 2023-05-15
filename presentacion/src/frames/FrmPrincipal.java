@@ -198,6 +198,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 setVisible(true); // Hace visible el FrmPrincipal
             }
         });
+        this.dispose();
         frmConsultarProductos.setVisible(true);
         setVisible(false); // Oculta el FrmPrincipal
 

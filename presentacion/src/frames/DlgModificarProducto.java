@@ -4,81 +4,39 @@
  */
 package frames;
 
-import entidades.Categoria;
 import entidades.Producto;
-import entidades.Proveedor;
-import excepciones.NegocioException;
-import implementaciones.CategoriasNegocio;
-import implementaciones.ProductosNegocio;
-import implementaciones.ProveedoresNegocio;
-import interfaces.ICategoriasNegocio;
 import interfaces.IProductosNegocio;
-import interfaces.IProveedoresNegocio;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Kevin Rios
  */
-public class DlgProducto extends javax.swing.JDialog {
+public class DlgModificarProducto extends javax.swing.JDialog {
 
     private Producto producto;
-    private ICategoriasNegocio categoriasNegocio;
-    private IProveedoresNegocio proveedoresNegocio;
     private IProductosNegocio productosNegocio;
-    private List<Proveedor> listaProveedores;
-    private List<Categoria> listaCategorias;
-    private DefaultComboBoxModel modeloProveedores;
-    private DefaultComboBoxModel modeloCategorias;
     
     /**
      * Creates new form DlgModificarProducto
      */
-    public DlgProducto(java.awt.Frame parent, boolean modal, Producto producto) {
+    public DlgModificarProducto(java.awt.Frame parent, boolean modal, Producto producto) {
         super(parent, modal);
         initComponents();
-        productosNegocio = new ProductosNegocio();
         this.producto = producto;
-        this.proveedoresNegocio = new ProveedoresNegocio();
-        this.categoriasNegocio = new CategoriasNegocio();
-        modeloProveedores = (DefaultComboBoxModel) this.comboProveedor.getModel();
-        modeloCategorias = (DefaultComboBoxModel) this.comboCategoria.getModel();
-        
         llenarCampos();
-        listarProveedores();
-        listarCategorias();
     }
     
-    public DlgProducto(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-        productosNegocio = new ProductosNegocio();
-        this.proveedoresNegocio = new ProveedoresNegocio();
-        this.categoriasNegocio = new CategoriasNegocio();
-        modeloProveedores = (DefaultComboBoxModel) this.comboProveedor.getModel();
-        modeloCategorias = (DefaultComboBoxModel) this.comboCategoria.getModel();
-        txtStock.setEditable(true);
-        listarProveedores();
-        listarCategorias();
-    }
-    
-    
-    
-    private void llenarCampos(){
+    public void llenarCampos(){
         this.txtID.setText(producto.getId().toString());
         this.txtNombre.setText(producto.getNombre());
+        this.txtProveedor.setText(producto.getProveedor().getId().toString());
         this.txtPCompra.setText(producto.getPrecio_compra().toString());
         this.txtPVenta.setText(producto.getPrecio_venta().toString());
+        this.txtCategoria.setText(producto.getCategoria().getId().toString());
         this.txtCodigo.setText(producto.getCodigo().toString());
         this.txtStock.setText(producto.getStock().toString());
-        modeloProveedores.setSelectedItem(producto.getProveedor().getNombre());
-        modeloCategorias.setSelectedItem(producto.getCategoria().getNombre());
     }
 
     /**
@@ -93,8 +51,10 @@ public class DlgProducto extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         txtID = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
+        txtProveedor = new javax.swing.JTextField();
         txtPCompra = new javax.swing.JTextField();
         txtPVenta = new javax.swing.JTextField();
+        txtCategoria = new javax.swing.JTextField();
         txtCodigo = new javax.swing.JTextField();
         txtStock = new javax.swing.JTextField();
         btnMenu = new javax.swing.JButton();
@@ -112,9 +72,6 @@ public class DlgProducto extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        comboProveedor = new javax.swing.JComboBox<>();
-        comboCategoria = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -134,6 +91,15 @@ public class DlgProducto extends javax.swing.JDialog {
         jPanel1.add(txtNombre);
         txtNombre.setBounds(80, 105, 170, 30);
 
+        txtProveedor.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        txtProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtProveedorKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtProveedor);
+        txtProveedor.setBounds(90, 145, 160, 21);
+
         txtPCompra.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         txtPCompra.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -152,6 +118,15 @@ public class DlgProducto extends javax.swing.JDialog {
         jPanel1.add(txtPVenta);
         txtPVenta.setBounds(100, 205, 150, 21);
 
+        txtCategoria.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        txtCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCategoriaKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtCategoria);
+        txtCategoria.setBounds(90, 235, 160, 21);
+
         txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -163,11 +138,6 @@ public class DlgProducto extends javax.swing.JDialog {
 
         txtStock.setEditable(false);
         txtStock.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        txtStock.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtStockKeyTyped(evt);
-            }
-        });
         jPanel1.add(txtStock);
         txtStock.setBounds(70, 295, 180, 21);
 
@@ -184,7 +154,7 @@ public class DlgProducto extends javax.swing.JDialog {
 
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
-        lblApartado.setText("Producto");
+        lblApartado.setText("Modificar");
         jPanel1.add(lblApartado);
         lblApartado.setBounds(50, 0, 100, 30);
 
@@ -195,16 +165,16 @@ public class DlgProducto extends javax.swing.JDialog {
 
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         jPanel1.add(FondoTitulo);
-        FondoTitulo.setBounds(0, 0, 290, 30);
+        FondoTitulo.setBounds(0, 0, 280, 30);
 
         jLabel1.setText("Stock :");
         jPanel1.add(jLabel1);
         jLabel1.setBounds(20, 300, 50, 16);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("Ingrese los datos");
+        jLabel2.setText("Ingrese los datos a actualizar");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(80, 40, 120, 20);
+        jLabel2.setBounds(40, 40, 200, 20);
 
         jLabel3.setText("ID :");
         jPanel1.add(jLabel3);
@@ -242,7 +212,7 @@ public class DlgProducto extends javax.swing.JDialog {
             }
         });
         jPanel1.add(btnAceptar);
-        btnAceptar.setBounds(10, 340, 72, 30);
+        btnAceptar.setBounds(20, 330, 72, 30);
 
         btnCancelar.setBackground(new java.awt.Color(255, 145, 77));
         btnCancelar.setText("Cancelar");
@@ -252,33 +222,17 @@ public class DlgProducto extends javax.swing.JDialog {
             }
         });
         jPanel1.add(btnCancelar);
-        btnCancelar.setBounds(190, 340, 80, 30);
-
-        jPanel2.setBackground(new java.awt.Color(0, 145, 155));
-        jPanel2.setLayout(null);
-
-        comboProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleecione" }));
-        jPanel2.add(comboProveedor);
-        comboProveedor.setBounds(80, 75, 130, 22);
-
-        comboCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
-        jPanel2.add(comboCategoria);
-        comboCategoria.setBounds(80, 165, 130, 22);
-
-        jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 70, 260, 260);
+        btnCancelar.setBounds(170, 330, 80, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
         );
 
         pack();
@@ -294,39 +248,31 @@ public class DlgProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        if (validarCampos()) {
-            String nombre = txtNombre.getText();
-            int indiceProveedor = comboProveedor.getSelectedIndex();
-            Proveedor proveedor = listaProveedores.get(indiceProveedor - 1);
-            Double precioCompra = Double.parseDouble(txtPCompra.getText());
-            Double precioVenta = Double.parseDouble(txtPVenta.getText());
-            int indiceCategoria = comboCategoria.getSelectedIndex();
-            Categoria categoria = listaCategorias.get(indiceCategoria - 1);
-            Long codigo = Long.parseLong(txtCodigo.getText());
-            Long stock = Long.parseLong(txtStock.getText());
-
-            Producto productoAgregar = new Producto(nombre, proveedor, precioCompra, precioVenta, categoria, codigo, stock);
-            try {
-                productosNegocio.agregar(productoAgregar);
-                JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose();
-            } catch (NegocioException ex) {
-                JOptionPane.showMessageDialog(null, "El producto ya existe en la base de datos", "Producto no registrado", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+//        Long id_producto = Long.parseLong(txtID.getText());
+//        String nombre = txtNombre.getText();
+//        Long id_proveedor = Long.parseLong(txtProveedor.getText());
+//        Double precio_compra = Double.parseDouble(txtPCompra.getText());
+//        Double precio_venta = Double.parseDouble(txtPVenta.getText());
+//        Long categoria = Long.parseLong(txtCategoria.getText());
+//        Long codigo = Long.parseLong(txtCodigo.getText());
+//        Long stock = Long.parseLong(txtStock.getText());
+//        
+//        producto = new Producto(nombre, id_proveedor, precio_compra, precio_venta, categoria,codigo);
+//        productosNegocio.actualizar(producto);
+        
     }//GEN-LAST:event_btnAceptarActionPerformed
 
-    
-    
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
-
-        
+        // TODO add your handling code here:
         char c = evt.getKeyChar();
-            // Verificar si el carácter ingresado es una letra
-            if (!Character.isLetter(c) && c != ' ' || txtNombre.getText().length() >= 100) {
-                evt.consume(); // Eliminar el carácter ingresado si no es una letra o espacio
-            }
+        if (txtNombre.getText().length() >= 100 || !Character.isLetter(c)) {
+            evt.consume();
+        }
     }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProveedorKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtProveedorKeyTyped
 
     private void txtPCompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPCompraKeyTyped
         char c = evt.getKeyChar();
@@ -352,63 +298,17 @@ public class DlgProducto extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtPVentaKeyTyped
 
+    private void txtCategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCategoriaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCategoriaKeyTyped
+
     private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
         // TODO add your handling code here:
-        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.' || txtCodigo.getText().length() >= 5) {
+        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.') {
             evt.consume();
         }
     }//GEN-LAST:event_txtCodigoKeyTyped
 
-    private void txtStockKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockKeyTyped
-        char c = evt.getKeyChar();
-        if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE)) || txtStock.getText().length() >= 3) {
-            evt.consume(); // Elimina el carácter que no es del 0 al 9
-        }
-    }//GEN-LAST:event_txtStockKeyTyped
-
-    private void listarProveedores() {
-        try {
-            this.listaProveedores = proveedoresNegocio.consultarTodos();
-
-            for (Proveedor proveedor : listaProveedores) {
-                modeloProveedores.addElement(proveedor.getNombre());
-            }
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
-
-    private void listarCategorias() {
-        try {
-            this.listaCategorias = categoriasNegocio.consultarTodos();
-
-            for (Categoria categoria : listaCategorias) {
-                modeloCategorias.addElement(categoria.getNombre());
-            }
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
-    private boolean validarCampos() {
-        if (this.txtNombre.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Compleme el campo nombre", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return false;
-        } else if (this.txtPCompra.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Compleme el campo precio compra", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return false;
-        } else if (this.txtPVenta.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Compleme el campo precio venta", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return false;
-        } else if (this.comboCategoria.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "Seleccione la categoria", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return false;
-        } else if (this.comboProveedor.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "Seleccione el proveedor", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        return true;
-    }
-    
     /**
      * @param args the command line arguments
      */
@@ -426,20 +326,20 @@ public class DlgProducto extends javax.swing.JDialog {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(DlgProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgModificarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(DlgProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgModificarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(DlgProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgModificarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(DlgProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(DlgModificarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //
 //        /* Create and display the dialog */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                DlgProducto dialog = new DlgProducto(new javax.swing.JFrame(), true);
+//                DlgModificarProducto dialog = new DlgModificarProducto(new javax.swing.JFrame(), true);
 //                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 //                    @Override
 //                    public void windowClosing(java.awt.event.WindowEvent e) {
@@ -456,8 +356,6 @@ public class DlgProducto extends javax.swing.JDialog {
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnMenu;
-    private javax.swing.JComboBox<String> comboCategoria;
-    private javax.swing.JComboBox<String> comboProveedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -468,14 +366,15 @@ public class DlgProducto extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblApartado;
     private javax.swing.JLabel lblLogoCabecera;
+    private javax.swing.JTextField txtCategoria;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPCompra;
     private javax.swing.JTextField txtPVenta;
+    private javax.swing.JTextField txtProveedor;
     private javax.swing.JTextField txtStock;
     // End of variables declaration//GEN-END:variables
 }

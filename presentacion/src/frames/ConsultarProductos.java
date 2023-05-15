@@ -9,30 +9,29 @@ import entidades.Usuario;
 import excepciones.NegocioException;
 import implementaciones.ProductosNegocio;
 import interfaces.IProductosNegocio;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Kevin Rios
  */
-public class FrmProductos extends javax.swing.JFrame {
+public class ConsultarProductos extends javax.swing.JFrame {
+    private Usuario usuarioLogueado;
     private IProductosNegocio productosNegocio;
     private DefaultTableModel model;
     private List<Producto> listaProductos = new ArrayList<>();
-    private Usuario usuarioLogueado;
+    
     /**
      * Creates new form ConsultarVenta
      */
-    public FrmProductos() {
+    public ConsultarProductos() {
         initComponents();
-        productosNegocio = new ProductosNegocio();
+        this.productosNegocio = new ProductosNegocio();
         model = (DefaultTableModel) this.tblProductos.getModel();
         radioNombre.setSelected(true);
-        listarProductos();
     }
 
     /**
@@ -46,28 +45,44 @@ public class FrmProductos extends javax.swing.JFrame {
 
         radioGrupo = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
+        btnSalir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProductos = new javax.swing.JTable();
         btnMenu = new javax.swing.JButton();
         lblApartado = new javax.swing.JLabel();
         lblLogoCabecera = new javax.swing.JLabel();
         FondoTitulo = new javax.swing.JTextField();
+        btnSeleccionar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtBusqueda = new javax.swing.JTextField();
         lblCriterioBusqueda = new javax.swing.JLabel();
         radioCod = new javax.swing.JRadioButton();
+        radioID = new javax.swing.JRadioButton();
         radioNombre = new javax.swing.JRadioButton();
         btnBuscar = new javax.swing.JButton();
         btnListar = new javax.swing.JButton();
-        btnAgregar = new javax.swing.JButton();
-        btnSalir = new javax.swing.JButton();
-        btnModificar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
+
+        btnSalir.setBackground(new java.awt.Color(255, 145, 77));
+        btnSalir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_Slim_Salir.png"))); // NOI18N
+        btnSalir.setText("Salir");
+        btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnSalir.setInheritsPopupMenu(true);
+        btnSalir.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnSalir.setName(""); // NOI18N
+        btnSalir.setVerifyInputWhenFocusTarget(false);
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSalir);
+        btnSalir.setBounds(470, 50, 140, 40);
 
         tblProductos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tblProductos.setModel(new javax.swing.table.DefaultTableModel(
@@ -75,14 +90,14 @@ public class FrmProductos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre", "Proveedor", "P Compra", "P Venta", "Categoría", "Código", "Stock"
+                "ID ", "Nombre", "Proveedor", "P Compra", "P Venta", "Categoria", "Código", "Stock"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Object.class, java.lang.Long.class, java.lang.Long.class, java.lang.Long.class
+                java.lang.Long.class, java.lang.String.class, java.lang.Long.class, java.lang.Double.class, java.lang.Object.class, java.lang.Long.class, java.lang.Long.class, java.lang.Long.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -97,17 +112,18 @@ public class FrmProductos extends javax.swing.JFrame {
         tblProductos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblProductos);
         if (tblProductos.getColumnModel().getColumnCount() > 0) {
-            tblProductos.getColumnModel().getColumn(0).setPreferredWidth(70);
-            tblProductos.getColumnModel().getColumn(1).setPreferredWidth(35);
-            tblProductos.getColumnModel().getColumn(2).setPreferredWidth(40);
-            tblProductos.getColumnModel().getColumn(3).setPreferredWidth(35);
+            tblProductos.getColumnModel().getColumn(0).setPreferredWidth(15);
+            tblProductos.getColumnModel().getColumn(1).setPreferredWidth(70);
+            tblProductos.getColumnModel().getColumn(2).setPreferredWidth(35);
+            tblProductos.getColumnModel().getColumn(3).setPreferredWidth(40);
             tblProductos.getColumnModel().getColumn(4).setPreferredWidth(35);
             tblProductos.getColumnModel().getColumn(5).setPreferredWidth(35);
             tblProductos.getColumnModel().getColumn(6).setPreferredWidth(35);
+            tblProductos.getColumnModel().getColumn(7).setPreferredWidth(35);
         }
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 140, 530, 260);
+        jScrollPane1.setBounds(10, 150, 600, 250);
 
         btnMenu.setBackground(new java.awt.Color(110, 88, 68));
         btnMenu.setForeground(new java.awt.Color(255, 255, 255));
@@ -122,7 +138,7 @@ public class FrmProductos extends javax.swing.JFrame {
 
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
-        lblApartado.setText("Productos");
+        lblApartado.setText("Consultar Productos");
         jPanel1.add(lblApartado);
         lblApartado.setBounds(60, 0, 180, 30);
 
@@ -133,7 +149,24 @@ public class FrmProductos extends javax.swing.JFrame {
 
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         jPanel1.add(FondoTitulo);
-        FondoTitulo.setBounds(40, 0, 620, 30);
+        FondoTitulo.setBounds(40, 0, 590, 30);
+
+        btnSeleccionar.setBackground(new java.awt.Color(255, 145, 77));
+        btnSeleccionar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSeleccionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_modificarVenta.png"))); // NOI18N
+        btnSeleccionar.setText("Modificar Producto");
+        btnSeleccionar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnSeleccionar.setInheritsPopupMenu(true);
+        btnSeleccionar.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnSeleccionar.setName(""); // NOI18N
+        btnSeleccionar.setVerifyInputWhenFocusTarget(false);
+        btnSeleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSeleccionarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSeleccionar);
+        btnSeleccionar.setBounds(440, 95, 171, 35);
 
         jPanel2.setBackground(new java.awt.Color(0, 145, 155));
         jPanel2.setLayout(null);
@@ -149,13 +182,13 @@ public class FrmProductos extends javax.swing.JFrame {
             }
         });
         jPanel2.add(txtBusqueda);
-        txtBusqueda.setBounds(20, 42, 230, 30);
+        txtBusqueda.setBounds(20, 50, 230, 22);
 
         lblCriterioBusqueda.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblCriterioBusqueda.setForeground(new java.awt.Color(255, 255, 255));
-        lblCriterioBusqueda.setText("Producto");
+        lblCriterioBusqueda.setText("Criterios de Búsqueda");
         jPanel2.add(lblCriterioBusqueda);
-        lblCriterioBusqueda.setBounds(10, 5, 52, 14);
+        lblCriterioBusqueda.setBounds(10, 10, 126, 14);
 
         radioGrupo.add(radioCod);
         radioCod.setForeground(new java.awt.Color(255, 255, 255));
@@ -166,7 +199,18 @@ public class FrmProductos extends javax.swing.JFrame {
             }
         });
         jPanel2.add(radioCod);
-        radioCod.setBounds(100, 20, 100, 20);
+        radioCod.setBounds(150, 30, 100, 20);
+
+        radioGrupo.add(radioID);
+        radioID.setForeground(new java.awt.Color(255, 255, 255));
+        radioID.setText("ID");
+        radioID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioIDActionPerformed(evt);
+            }
+        });
+        jPanel2.add(radioID);
+        radioID.setBounds(100, 30, 34, 20);
 
         radioGrupo.add(radioNombre);
         radioNombre.setForeground(new java.awt.Color(255, 255, 255));
@@ -177,10 +221,10 @@ public class FrmProductos extends javax.swing.JFrame {
             }
         });
         jPanel2.add(radioNombre);
-        radioNombre.setBounds(20, 20, 67, 20);
+        radioNombre.setBounds(20, 30, 67, 20);
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 50, 370, 80);
+        jPanel2.setBounds(10, 50, 290, 80);
 
         btnBuscar.setBackground(new java.awt.Color(255, 145, 77));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -197,7 +241,7 @@ public class FrmProductos extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBuscar);
-        btnBuscar.setBounds(400, 50, 140, 40);
+        btnBuscar.setBounds(320, 50, 140, 40);
 
         btnListar.setBackground(new java.awt.Color(255, 145, 77));
         btnListar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -214,69 +258,13 @@ public class FrmProductos extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnListar);
-        btnListar.setBounds(400, 95, 140, 35);
-
-        btnAgregar.setBackground(new java.awt.Color(255, 145, 77));
-        btnAgregar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_AgregarAll.png"))); // NOI18N
-        btnAgregar.setText("Agregar");
-        btnAgregar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAgregar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnAgregar);
-        btnAgregar.setBounds(550, 50, 90, 80);
-
-        btnSalir.setBackground(new java.awt.Color(255, 145, 77));
-        btnSalir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_salir.png"))); // NOI18N
-        btnSalir.setText("Salir");
-        btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSalir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnSalir);
-        btnSalir.setBounds(550, 320, 90, 80);
-
-        btnModificar.setBackground(new java.awt.Color(255, 145, 77));
-        btnModificar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_ModificarAll.png"))); // NOI18N
-        btnModificar.setText("Modificar");
-        btnModificar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnModificar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnModificar);
-        btnModificar.setBounds(550, 140, 90, 80);
-
-        btnEliminar.setBackground(new java.awt.Color(255, 145, 77));
-        btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_EliminarAll.png"))); // NOI18N
-        btnEliminar.setText("Eliminar");
-        btnEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnEliminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnEliminar);
-        btnEliminar.setBounds(550, 230, 90, 80);
+        btnListar.setBounds(320, 95, 111, 35);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -289,10 +277,30 @@ public class FrmProductos extends javax.swing.JFrame {
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         // TODO add your handling code here:
-        this.dispose();
-        FrmPrincipal principal = new FrmPrincipal(usuarioLogueado);
-        principal.setVisible(true);
     }//GEN-LAST:event_btnMenuActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
+        int indiceFilaSeleccionada = tblProductos.getSelectedRow();
+        if (indiceFilaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un producto", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+        }else {
+            Producto productoAModificar = listaProductos.get(indiceFilaSeleccionada);
+            DlgModificarProducto dlgModificarProducto = new DlgModificarProducto(this, true, productoAModificar);
+            dlgModificarProducto.setVisible(true);
+            
+            while (dlgModificarProducto.isVisible()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException io) {
+                    io.printStackTrace();
+                }
+            }
+        }
+    }//GEN-LAST:event_btnSeleccionarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         if (radioCod.isSelected()) {
@@ -303,11 +311,20 @@ public class FrmProductos extends javax.swing.JFrame {
                 consultarPorCodigo(codigo);
             }
         }
+        if (radioID.isSelected()) {
+            if (txtBusqueda.getText().isBlank() || txtBusqueda.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Ingrese el ID del producto", "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                Long id = Long.parseLong(txtBusqueda.getText());
+                consultarPorId(id);
+            }
+                
+        }
         if (radioNombre.isSelected()) {
             if (txtBusqueda.getText().isBlank() || txtBusqueda.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Ingrese el nombre del producto", "Error", JOptionPane.ERROR_MESSAGE);
             }else{
-                String nombre = txtBusqueda.getText().trim();
+                String nombre = txtBusqueda.getText();
                 consultarPorNombre(nombre);
             }
         }
@@ -328,6 +345,20 @@ public class FrmProductos extends javax.swing.JFrame {
         }
     }
     
+    public void consultarPorId(Long id){
+        try {
+            Producto producto = productosNegocio.consultarPorId(id);
+            this.listaProductos.add(producto);
+            if (producto == null) {
+                JOptionPane.showMessageDialog(null, "El producto no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                model.setRowCount(0);
+                mostrarProducto(producto);
+            }            
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
     
     public void consultarPorNombre(String nombre){
         try {
@@ -344,7 +375,7 @@ public class FrmProductos extends javax.swing.JFrame {
         }
     }
     
-    private void listarProductos(){
+    public void listarProductos(){
         try {
             this.listaProductos = productosNegocio.consultarTodos();
             model.setRowCount(0);
@@ -358,32 +389,45 @@ public class FrmProductos extends javax.swing.JFrame {
     }
     
     public void mostrarProducto(Producto producto){
+        Long id_producto = producto.getId();
         String nombre = producto.getNombre();
-        String proveedor = producto.getProveedor().getNombre();
+        Long id_proveedor = producto.getProveedor().getId();
         Double precio_compra = producto.getPrecio_compra();
         Double precio_venta = producto.getPrecio_venta();
         Long id_categoria = producto.getCategoria().getId();
         Long codigo = producto.getCodigo();
         Long stock = producto.getStock();
-        Object[] fila = {nombre, proveedor, precio_compra, precio_venta, id_categoria, codigo, stock};
+        Object[] fila = {id_producto, nombre, id_proveedor, precio_compra, precio_venta, id_categoria, codigo, stock};
         model.addRow(fila);
     }
     
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
+        if (radioID.isSelected()) {
+            char c = evt.getKeyChar();
+            if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE))) {
+                evt.consume(); // Elimina el carácter que no es del 0 al 9
+            }
+        }
         if (radioCod.isSelected()) {
             char c = evt.getKeyChar();
-            if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE)) || (txtBusqueda.getText().length() >= 5)) {
+            if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE))) {
                 evt.consume(); // Elimina el carácter que no es del 0 al 9
             }
         }
         if (radioNombre.isSelected()) {
             char c = evt.getKeyChar();
             // Verificar si el carácter ingresado es una letra
-            if (!Character.isLetter(c) && c != ' ' || txtBusqueda.getText().length() >= 20) {
+            if (!Character.isLetter(c) && c != ' ') {
                 evt.consume(); // Eliminar el carácter ingresado si no es una letra o espacio
             }
         }
     }//GEN-LAST:event_txtBusquedaKeyTyped
+
+    private void radioIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIDActionPerformed
+        if (radioID.isSelected() ) {
+            txtBusqueda.setText("");
+        }
+    }//GEN-LAST:event_radioIDActionPerformed
 
     private void radioNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNombreActionPerformed
         if (radioNombre.isSelected()) {
@@ -405,105 +449,51 @@ public class FrmProductos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBusquedaActionPerformed
 
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-     int indiceFilaSeleccionada = tblProductos.getSelectedRow();
-        if (indiceFilaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(null, "Seleccione un producto", "ERROR", JOptionPane.INFORMATION_MESSAGE);
-        }else {
-            Producto productoAModificar = listaProductos.get(indiceFilaSeleccionada);
-            DlgProducto dlgModificarProducto = new DlgProducto(this, true, productoAModificar);
-            dlgModificarProducto.setVisible(true);
-           
-        }  
-    }//GEN-LAST:event_btnModificarActionPerformed
-
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnSalirActionPerformed
-
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        DlgProducto dlgModificarProducto = new DlgProducto(this, true);
-        dlgModificarProducto.setVisible(true);
-        while (dlgModificarProducto.isVisible()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException io) {
-                io.printStackTrace();
-            }
-        }
-    }//GEN-LAST:event_btnAgregarActionPerformed
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int indiceSeleccionado = tblProductos.getSelectedRow();
-        if (indiceSeleccionado == -1) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un producto para poder eliminar", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el producto?", "Eliminar producto", JOptionPane.YES_NO_OPTION);
-            if (confirmaEliminacion == 0) {
-                try {
-                    Producto producto = listaProductos.get(indiceSeleccionado);
-                    productosNegocio.eliminar(producto);
-                    listarProductos();
-                    JOptionPane.showMessageDialog(null, "Se elimino correctamente", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
-                } catch (NegocioException ex) {
-                    Logger.getLogger(FrmProductos.class.getName()).log(Level.SEVERE, null, ex);
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
                 }
-
             }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ConsultarProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ConsultarProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ConsultarProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ConsultarProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnEliminarActionPerformed
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(FrmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(FrmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(FrmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(FrmProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//        //</editor-fold>
-//        //</editor-fold>
-//        //</editor-fold>
-//        //</editor-fold>
-//        //</editor-fold>
-//        //</editor-fold>
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new FrmProductos().setVisible(true);
-//            }
-//        });
-//    }
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ConsultarProductos().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;
-    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnListar;
     private javax.swing.JButton btnMenu;
-    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JButton btnSeleccionar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -512,6 +502,7 @@ public class FrmProductos extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogoCabecera;
     private javax.swing.JRadioButton radioCod;
     private javax.swing.ButtonGroup radioGrupo;
+    private javax.swing.JRadioButton radioID;
     private javax.swing.JRadioButton radioNombre;
     private javax.swing.JTable tblProductos;
     private javax.swing.JTextField txtBusqueda;

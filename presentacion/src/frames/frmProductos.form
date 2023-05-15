@@ -7,6 +7,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="undecorated" type="boolean" value="true"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -71,7 +72,7 @@
                     <Column editable="false" title="Proveedor" type="java.lang.String"/>
                     <Column editable="false" title="P Compra" type="java.lang.Double"/>
                     <Column editable="false" title="P Venta" type="java.lang.Object"/>
-                    <Column editable="false" title="Categor&#xed;a" type="java.lang.Long"/>
+                    <Column editable="false" title="Categoria" type="java.lang.Long"/>
                     <Column editable="false" title="C&#xf3;digo" type="java.lang.Long"/>
                     <Column editable="false" title="Stock" type="java.lang.Long"/>
                   </Table>

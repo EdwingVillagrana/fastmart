@@ -23,7 +23,7 @@ public class FrmProductos extends javax.swing.JFrame {
     private IProductosNegocio productosNegocio;
     private DefaultTableModel model;
     private List<Producto> listaProductos = new ArrayList<>();
-    private Usuario usuarioLogueado;
+    
     /**
      * Creates new form ConsultarVenta
      */
@@ -65,6 +65,7 @@ public class FrmProductos extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
@@ -75,7 +76,7 @@ public class FrmProductos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre", "Proveedor", "P Compra", "P Venta", "Categoría", "Código", "Stock"
+                "Nombre", "Proveedor", "P Compra", "P Venta", "Categoria", "Código", "Stock"
             }
         ) {
             Class[] types = new Class [] {
@@ -289,9 +290,6 @@ public class FrmProductos extends javax.swing.JFrame {
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         // TODO add your handling code here:
-        this.dispose();
-        FrmPrincipal principal = new FrmPrincipal(usuarioLogueado);
-        principal.setVisible(true);
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -307,7 +305,7 @@ public class FrmProductos extends javax.swing.JFrame {
             if (txtBusqueda.getText().isBlank() || txtBusqueda.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Ingrese el nombre del producto", "Error", JOptionPane.ERROR_MESSAGE);
             }else{
-                String nombre = txtBusqueda.getText().trim();
+                String nombre = txtBusqueda.getText();
                 consultarPorNombre(nombre);
             }
         }
@@ -372,14 +370,14 @@ public class FrmProductos extends javax.swing.JFrame {
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
         if (radioCod.isSelected()) {
             char c = evt.getKeyChar();
-            if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE)) || (txtBusqueda.getText().length() >= 5)) {
+            if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE))) {
                 evt.consume(); // Elimina el carácter que no es del 0 al 9
             }
         }
         if (radioNombre.isSelected()) {
             char c = evt.getKeyChar();
             // Verificar si el carácter ingresado es una letra
-            if (!Character.isLetter(c) && c != ' ' || txtBusqueda.getText().length() >= 20) {
+            if (!Character.isLetter(c) && c != ' ') {
                 evt.consume(); // Eliminar el carácter ingresado si no es una letra o espacio
             }
         }

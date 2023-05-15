@@ -311,7 +311,7 @@ public class DlgProducto extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
             } catch (NegocioException ex) {
-                JOptionPane.showMessageDialog(null, "El producto ya existe en la base de datos", "Producto no registrado", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, ex, "Producto no registrada", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
@@ -354,14 +354,14 @@ public class DlgProducto extends javax.swing.JDialog {
 
     private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
         // TODO add your handling code here:
-        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.' || txtCodigo.getText().length() >= 5) {
+        if (!Character.isDigit(evt.getKeyChar()) && evt.getKeyChar() != '.') {
             evt.consume();
         }
     }//GEN-LAST:event_txtCodigoKeyTyped
 
     private void txtStockKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockKeyTyped
         char c = evt.getKeyChar();
-        if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE)) || txtStock.getText().length() >= 3) {
+        if (!(Character.isDigit(c) || (c == evt.VK_BACK_SPACE) || (c == evt.VK_DELETE))) {
             evt.consume(); // Elimina el carácter que no es del 0 al 9
         }
     }//GEN-LAST:event_txtStockKeyTyped

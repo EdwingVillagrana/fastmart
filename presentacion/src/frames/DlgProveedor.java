@@ -6,7 +6,9 @@ package frames;
 
 import entidades.Proveedor;
 import excepciones.NegocioException;
+import implementaciones.ProveedoresNegocio;
 import interfaces.IProveedoresNegocio;
+import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -19,7 +21,7 @@ import javax.swing.JOptionPane;
  */
 public class DlgProveedor extends javax.swing.JDialog {
 
-    private Proveedor proveedor;
+    private Proveedor proveedorActualizar;
     private IProveedoresNegocio proveedoresNegocio;
     /**
      * Creates new form DlgModificarProveedor
@@ -27,21 +29,23 @@ public class DlgProveedor extends javax.swing.JDialog {
     public DlgProveedor(java.awt.Frame parent, boolean modal, Proveedor proveedor) {
         super(parent, modal);
         initComponents();
-        this.proveedor = proveedor;
+        this.proveedorActualizar = proveedor;
+        proveedoresNegocio = new ProveedoresNegocio();
         llenarCamposActualizar();
     }
     
     public DlgProveedor(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        proveedoresNegocio = new ProveedoresNegocio();
     }
     
     private void llenarCamposActualizar(){
-        this.txtID.setText(proveedor.getId().toString());
-        this.txtNombre.setText(proveedor.getNombre());
-        this.txtDireccion.setText(proveedor.getDireccion());
-        this.txtTelefono.setText(proveedor.getTelefono());
-        this.txtEmail.setText(proveedor.getEmail());
+        this.txtID.setText(proveedorActualizar.getId().toString());
+        this.txtNombre.setText(proveedorActualizar.getNombre());
+        this.txtDireccion.setText(proveedorActualizar.getDireccion());
+        this.txtTelefono.setText(proveedorActualizar.getTelefono());
+        this.txtEmail.setText(proveedorActualizar.getEmail());
     }
 
     /**
@@ -59,19 +63,19 @@ public class DlgProveedor extends javax.swing.JDialog {
         btnMenu = new javax.swing.JButton();
         FondoTitulo = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         txtID = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
-        txtDireccion = new javax.swing.JTextField();
-        txtTelefono = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
+        txtEmail = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtTelefono = new javax.swing.JTextField();
+        txtDireccion = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -86,7 +90,7 @@ public class DlgProveedor extends javax.swing.JDialog {
 
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
-        lblApartado.setText("Modificar");
+        lblApartado.setText("Proveedor");
         jPanel1.add(lblApartado);
         lblApartado.setBounds(50, 0, 100, 30);
 
@@ -110,10 +114,6 @@ public class DlgProveedor extends javax.swing.JDialog {
         jPanel1.add(jLabel1);
         jLabel1.setBounds(80, 50, 120, 20);
 
-        jLabel2.setText("Email :");
-        jPanel1.add(jLabel2);
-        jLabel2.setBounds(20, 210, 50, 16);
-
         jLabel3.setText("ID :");
         jPanel1.add(jLabel3);
         jLabel3.setBounds(20, 90, 30, 16);
@@ -121,14 +121,6 @@ public class DlgProveedor extends javax.swing.JDialog {
         jLabel4.setText("Nombre :");
         jPanel1.add(jLabel4);
         jLabel4.setBounds(20, 120, 50, 16);
-
-        jLabel5.setText("Dirección :");
-        jPanel1.add(jLabel5);
-        jLabel5.setBounds(20, 150, 60, 16);
-
-        jLabel6.setText("Télefono :");
-        jPanel1.add(jLabel6);
-        jLabel6.setBounds(20, 180, 60, 16);
 
         btnAceptar.setBackground(new java.awt.Color(255, 145, 77));
         btnAceptar.setText("Aceptar");
@@ -138,7 +130,7 @@ public class DlgProveedor extends javax.swing.JDialog {
             }
         });
         jPanel1.add(btnAceptar);
-        btnAceptar.setBounds(20, 250, 90, 30);
+        btnAceptar.setBounds(20, 300, 90, 30);
 
         btnCancelar.setBackground(new java.awt.Color(255, 145, 77));
         btnCancelar.setText("Cancelar");
@@ -148,7 +140,7 @@ public class DlgProveedor extends javax.swing.JDialog {
             }
         });
         jPanel1.add(btnCancelar);
-        btnCancelar.setBounds(150, 250, 90, 30);
+        btnCancelar.setBounds(140, 300, 90, 30);
 
         txtID.setEditable(false);
         jPanel1.add(txtID);
@@ -160,36 +152,49 @@ public class DlgProveedor extends javax.swing.JDialog {
             }
         });
         jPanel1.add(txtNombre);
-        txtNombre.setBounds(80, 115, 160, 22);
+        txtNombre.setBounds(80, 115, 160, 30);
 
-        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDireccionKeyTyped(evt);
-            }
-        });
-        jPanel1.add(txtDireccion);
-        txtDireccion.setBounds(90, 145, 150, 22);
-
-        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtTelefonoKeyTyped(evt);
-            }
-        });
-        jPanel1.add(txtTelefono);
-        txtTelefono.setBounds(80, 175, 160, 22);
+        jPanel2.setBackground(new java.awt.Color(0, 145, 155));
+        jPanel2.setLayout(null);
 
         txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtEmailKeyTyped(evt);
             }
         });
-        jPanel1.add(txtEmail);
-        txtEmail.setBounds(60, 205, 180, 22);
+        jPanel2.add(txtEmail);
+        txtEmail.setBounds(50, 165, 180, 30);
 
-        jPanel2.setBackground(new java.awt.Color(0, 145, 155));
-        jPanel2.setLayout(null);
+        jLabel2.setText("Email :");
+        jPanel2.add(jLabel2);
+        jLabel2.setBounds(10, 170, 50, 16);
+
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtTelefono);
+        txtTelefono.setBounds(70, 125, 160, 30);
+
+        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDireccionKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtDireccion);
+        txtDireccion.setBounds(80, 80, 150, 30);
+
+        jLabel6.setText("Télefono :");
+        jPanel2.add(jLabel6);
+        jLabel6.setBounds(10, 130, 60, 16);
+
+        jLabel5.setText("Dirección :");
+        jPanel2.add(jLabel5);
+        jLabel5.setBounds(10, 90, 60, 16);
+
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 80, 250, 160);
+        jPanel2.setBounds(10, 80, 250, 210);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -199,7 +204,9 @@ public class DlgProveedor extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -215,53 +222,58 @@ public class DlgProveedor extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        if (validarCampos()) {
-            String nombre = txtNombre.getText();
-            String direccion = txtDireccion.getText();
-            String email = txtEmail.getText();
-            String telefono = txtTelefono.getText();
-
-            Proveedor proveedorAgregar = new Proveedor(nombre, direccion, telefono, email);
-
-            try {
-                proveedoresNegocio.agregar(proveedorAgregar);
-                JOptionPane.showMessageDialog(null, "Se ha registrado el proveedor exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
-            } catch (NegocioException ex) {
-                JOptionPane.showMessageDialog(null, ex, "Proveedor no registrado", JOptionPane.ERROR_MESSAGE);
+        if (proveedorActualizar != null) {
+            if (validarCampos()) {
+                proveedorActualizar.setNombre(txtNombre.getText());
+                proveedorActualizar.setDireccion(txtDireccion.getText());
+                proveedorActualizar.setTelefono(txtTelefono.getText());
+                proveedorActualizar.setEmail(txtEmail.getText());
+                try {
+                    proveedoresNegocio.actualizar(proveedorActualizar);
+                    JOptionPane.showMessageDialog(null, "Se ha actualizado la información del proveedor", "Actualización exitosa", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                } catch (NegocioException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Proveedor no actualizado", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            if (validarCampos()) {
+                String nombre = txtNombre.getText();
+                String direccion = txtDireccion.getText();
+                String email = txtEmail.getText();
+                String telefono = txtTelefono.getText();
+                Proveedor proveedorAgregar = new Proveedor(nombre, direccion, telefono, email);
+                try {
+                    proveedoresNegocio.agregar(proveedorAgregar);
+                    JOptionPane.showMessageDialog(null, "Se ha registrado el proveedor exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+                } catch (NegocioException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Proveedor no registrado", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         char c = evt.getKeyChar();
-        if (txtNombre.getText().length() >= 100 || !Character.isLetter(c)) {
+        if (txtNombre.getText().length() >= 100 || !Character.isLetter(c) && c != ' ') {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
        char c = evt.getKeyChar();
-        if (txtDireccion.getText().length() >= 250 || !Character.isLetter(c)) {
+        if (txtDireccion.getText().length() >= 250) {
             evt.consume();
         }
     }//GEN-LAST:event_txtDireccionKeyTyped
 
     private void txtEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyTyped
-        char c = evt.getKeyChar();
-        if (txtEmail.getText().length() >= 100 || !Character.isLetter(c)) {
-            evt.consume();
-        }
+       
     }//GEN-LAST:event_txtEmailKeyTyped
 
     private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
-        // TODO add your handling code here:
         char c = evt.getKeyChar();
-        String codigo = txtTelefono.getText() + c;
-        Pattern patron = Pattern.compile("^\\d{0,12}(\\.\\d{0,2})?$");
-
-        Matcher matcher = patron.matcher(codigo);
-        //Creo que no hace falta agregar lo de || txtTelefono.getText().length() == 20 porque en lo del Pattern.complile, ya le pone el limite
-        if (!matcher.matches() || txtTelefono.getText().length() >= 10) {
+        if (!Character.isDigit(c) || txtTelefono.getText().length() >=10 ) {
             evt.consume(); //Si no coincide va a hacer esto: 
         }
     }//GEN-LAST:event_txtTelefonoKeyTyped
@@ -273,14 +285,14 @@ public class DlgProveedor extends javax.swing.JDialog {
         } else if (this.txtDireccion.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Compleme el campo dirección", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
+        }
+        else if (this.txtTelefono.getText().isEmpty() || this.txtTelefono.getText().length() < 10) {
+            JOptionPane.showMessageDialog(null, "Complete el campo Teléfono", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
         } else if (this.txtEmail.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Compleme el campo E-mail", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
-        } else if (this.txtTelefono.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Complete el campo Teléfono!", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        return true;
+        }return true;
     }
     
 //    /**

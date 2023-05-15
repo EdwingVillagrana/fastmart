@@ -401,29 +401,32 @@ public class FrmProveedores extends javax.swing.JFrame {
             DlgProveedor dlgProveedor = new DlgProveedor(this, true, proveedorAModificar);
             dlgProveedor.setVisible(true);
             
-            while (dlgProveedor.isVisible()) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException io) {
-                    io.printStackTrace();
-                }
-            }
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+         int indiceFilaSeleccionada = tblProveedores.getSelectedRow();
+        if (indiceFilaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un proveedor", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            Proveedor proveedorAEliminar = listaProveedores.get(indiceFilaSeleccionada);
+            int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el proveedor: " + proveedorAEliminar.getNombre()+" ?", "Eliminar proveedor", JOptionPane.YES_NO_OPTION);
+            if (confirmaEliminacion == 0) {
+                try {
+                    proveedoresNegocio.eliminar(proveedorAEliminar);
+                    listarProveedores();
+                } catch (NegocioException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            }
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         DlgProveedor dlgProveedor = new DlgProveedor(this, true);
         dlgProveedor.setVisible(true);
         while (dlgProveedor.isVisible()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException io) {
-                io.printStackTrace();
-            }
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 

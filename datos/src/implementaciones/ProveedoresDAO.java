@@ -52,7 +52,6 @@ public class ProveedoresDAO implements IProveedoresDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar al proveedor");
         }
     }

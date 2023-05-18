@@ -55,8 +55,7 @@ public class ProductosDAO implements IProductosDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {            
             throw new PersistenciaException("No fue posible agregar el producto");
         }
     }
@@ -89,8 +88,7 @@ public class ProductosDAO implements IProductosDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {            
             throw new PersistenciaException("No fue posible actualizar los datos del producto.");
         }
     }
@@ -153,8 +151,7 @@ public class ProductosDAO implements IProductosDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {            
             throw new PersistenciaException("No fue posible actualizar los datos del producto.");
         }
     }
@@ -184,8 +181,7 @@ public class ProductosDAO implements IProductosDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {            
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }
@@ -213,8 +209,7 @@ public class ProductosDAO implements IProductosDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {           
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }
@@ -244,8 +239,7 @@ public class ProductosDAO implements IProductosDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {            
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }
@@ -270,8 +264,7 @@ public class ProductosDAO implements IProductosDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {            
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }

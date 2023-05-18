@@ -31,6 +31,7 @@ public class FrmProductos extends javax.swing.JFrame {
         initComponents();
         this.productosNegocio = new ProductosNegocio();
         model = (DefaultTableModel) this.tblProductos.getModel();
+        radioNombre.setSelected(true);
         listarProductos();
     }
 

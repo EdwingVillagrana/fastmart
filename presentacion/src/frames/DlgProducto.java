@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
  */
 public class DlgProducto extends javax.swing.JDialog {
 
-    private Producto producto;
+    private Producto productoActualizar;
     private ICategoriasNegocio categoriasNegocio;
     private IProveedoresNegocio proveedoresNegocio;
     private IProductosNegocio productosNegocio;
@@ -44,7 +44,7 @@ public class DlgProducto extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         productosNegocio = new ProductosNegocio();
-        this.producto = producto;
+        this.productoActualizar = producto;
         this.proveedoresNegocio = new ProveedoresNegocio();
         this.categoriasNegocio = new CategoriasNegocio();
         modeloProveedores = (DefaultComboBoxModel) this.comboProveedor.getModel();
@@ -64,6 +64,7 @@ public class DlgProducto extends javax.swing.JDialog {
         modeloProveedores = (DefaultComboBoxModel) this.comboProveedor.getModel();
         modeloCategorias = (DefaultComboBoxModel) this.comboCategoria.getModel();
         txtStock.setEditable(true);
+        txtCodigo.setEditable(true);
         listarProveedores();
         listarCategorias();
     }
@@ -71,14 +72,14 @@ public class DlgProducto extends javax.swing.JDialog {
     
     
     private void llenarCampos(){
-        this.txtID.setText(producto.getId().toString());
-        this.txtNombre.setText(producto.getNombre());
-        this.txtPCompra.setText(producto.getPrecio_compra().toString());
-        this.txtPVenta.setText(producto.getPrecio_venta().toString());
-        this.txtCodigo.setText(producto.getCodigo().toString());
-        this.txtStock.setText(producto.getStock().toString());
-        modeloProveedores.setSelectedItem(producto.getProveedor().getNombre());
-        modeloCategorias.setSelectedItem(producto.getCategoria().getNombre());
+        this.txtID.setText(productoActualizar.getId().toString());
+        this.txtNombre.setText(productoActualizar.getNombre());
+        this.txtPCompra.setText(productoActualizar.getPrecio_compra().toString());
+        this.txtPVenta.setText(productoActualizar.getPrecio_venta().toString());
+        this.txtCodigo.setText(productoActualizar.getCodigo().toString());
+        this.txtStock.setText(productoActualizar.getStock().toString());
+        modeloProveedores.setSelectedItem(productoActualizar.getProveedor().getNombre());
+        modeloCategorias.setSelectedItem(productoActualizar.getCategoria().getNombre());
     }
 
     /**
@@ -152,6 +153,7 @@ public class DlgProducto extends javax.swing.JDialog {
         jPanel1.add(txtPVenta);
         txtPVenta.setBounds(100, 205, 150, 21);
 
+        txtCodigo.setEditable(false);
         txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -294,24 +296,49 @@ public class DlgProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        if (validarCampos()) {
-            String nombre = txtNombre.getText();
-            int indiceProveedor = comboProveedor.getSelectedIndex();
-            Proveedor proveedor = listaProveedores.get(indiceProveedor - 1);
-            Double precioCompra = Double.parseDouble(txtPCompra.getText());
-            Double precioVenta = Double.parseDouble(txtPVenta.getText());
-            int indiceCategoria = comboCategoria.getSelectedIndex();
-            Categoria categoria = listaCategorias.get(indiceCategoria - 1);
-            Long codigo = Long.parseLong(txtCodigo.getText());
-            Long stock = Long.parseLong(txtStock.getText());
+        if (productoActualizar != null) {
+            if (validarCampos()) {
+                productoActualizar.setNombre(txtNombre.getText());
+                productoActualizar.setPrecio_compra(Double.parseDouble(txtPCompra.getText()));
+                productoActualizar.setPrecio_venta(Double.parseDouble(txtPVenta.getText()));
+                int indiceProveedor = comboProveedor.getSelectedIndex();
+                productoActualizar.setProveedor(listaProveedores.get(indiceProveedor - 1));
+                int indiceCategoria = comboCategoria.getSelectedIndex();
+                productoActualizar.setCategoria(listaCategorias.get(indiceCategoria - 1));
+                productoActualizar.setCodigo(Long.parseLong(txtCodigo.getText()));
+                productoActualizar.setStock(Long.parseLong(txtStock.getText()));
+                try {
+                    int confirmaActualizacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea actualizar el producto: " + productoActualizar.getNombre() + " ?", "Actualizar producto", JOptionPane.YES_NO_OPTION);
+                    if (confirmaActualizacion == 0) {
+                        productosNegocio.actualizar(productoActualizar);
+                        JOptionPane.showMessageDialog(null, "Se ha actualizado la información del producto", "Actualización exitosa", JOptionPane.INFORMATION_MESSAGE);
+                        this.dispose();
+                    }
 
-            Producto productoAgregar = new Producto(nombre, proveedor, precioCompra, precioVenta, categoria, codigo, stock);
-            try {
-                productosNegocio.agregar(productoAgregar);
-                JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose();
-            } catch (NegocioException ex) {
-                JOptionPane.showMessageDialog(null, ex, "Producto no registrada", JOptionPane.ERROR_MESSAGE);
+                } catch (NegocioException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Producto no actualizado", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            if (validarCampos()) {
+                String nombre = txtNombre.getText();
+                int indiceProveedor = comboProveedor.getSelectedIndex();
+                Proveedor proveedor = listaProveedores.get(indiceProveedor - 1);
+                Double precioCompra = Double.parseDouble(txtPCompra.getText());
+                Double precioVenta = Double.parseDouble(txtPVenta.getText());
+                int indiceCategoria = comboCategoria.getSelectedIndex();
+                Categoria categoria = listaCategorias.get(indiceCategoria - 1);
+                Long codigo = Long.parseLong(txtCodigo.getText());
+                Long stock = Long.parseLong(txtStock.getText());
+
+                Producto productoAgregar = new Producto(nombre, proveedor, precioCompra, precioVenta, categoria, codigo, stock);
+                try {
+                    productosNegocio.agregar(productoAgregar);
+                    JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                } catch (NegocioException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Producto no registrado", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }//GEN-LAST:event_btnAceptarActionPerformed

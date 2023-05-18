@@ -311,6 +311,7 @@ private ICategoriasNegocio categoriasNegocio;
                     listarCategorias();
                 } catch (NegocioException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                    
                 }
 
             }

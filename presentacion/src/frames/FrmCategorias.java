@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -141,6 +142,11 @@ private ICategoriasNegocio categoriasNegocio;
         });
         tblCategorias.setShowGrid(true);
         tblCategorias.getTableHeader().setReorderingAllowed(false);
+        tblCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCategoriasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCategorias);
 
         jPanel2.add(jScrollPane1);
@@ -257,12 +263,32 @@ private ICategoriasNegocio categoriasNegocio;
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int indiceFilaSeleccionada = tblCategorias.getSelectedRow();
-        if (indiceFilaSeleccionada == -1) {
+        int numfilas = tblCategorias.getSelectedRowCount();
+        String catAux = txtNombreCategoria.getText();
+        if (indiceFilaSeleccionada == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Seleccione una categoria", "ERROR", JOptionPane.INFORMATION_MESSAGE);
-        }else {
-            String nombre = listaCategorias.get(indiceFilaSeleccionada).getNombre();
-            this.txtNombreCategoria.setText(nombre);
+        } else {
+            if (validarCampos()) {
+                Categoria categoriaAModificar = listaCategorias.get(indiceFilaSeleccionada);
+                if (catAux.equals(categoriaAModificar.getNombre())) {
+                    JOptionPane.showMessageDialog(null, "Modifique la categoría", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    categoriaAModificar.setNombre(txtNombreCategoria.getText());
+                    try {
+                        int confirmaActualizacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea actualizar la categoría: " + categoriaAModificar.getNombre() + " ?", "Actualizar categoría", JOptionPane.YES_NO_OPTION);
+                        if (confirmaActualizacion == 0) {
+                            categoriasNegocio.actualizar(categoriaAModificar);
+                            JOptionPane.showMessageDialog(null, "Se ha actualizado la información de la categoría", "Actualización exitosa", JOptionPane.INFORMATION_MESSAGE);
+                            limpiarCampos();
+                            listarCategorias();
+                        }
 
+                    } catch (NegocioException ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Categoría no actualizada", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+            }
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
@@ -271,18 +297,24 @@ private ICategoriasNegocio categoriasNegocio;
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-//        String nombre = txtNombreCategoria.getText();
-//        Categoria categoriaEliminar = new Categoria(nombre);
-//        int a = JOptionPane.YES_NO_OPTION;
-//        int resultado = JOptionPane.showConfirmDialog(this, "¿DESEA ELIMINAR LA CATEGORIA: " + nombre + "?", "ELIMINAR", a);
-//        if (resultado == 0) {
-//            try {
-//                categoriasNegocio.eliminar(categoriaEliminar);
-//            } catch (NegocioException ex) {
-//                Logger.getLogger(FrmCategorias.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//            JOptionPane.showMessageDialog(null, "Se ha eliminado la categoría exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
-//        }
+        int indiceFilaSeleccionada = tblCategorias.getSelectedRow();
+        int numfilas = tblCategorias.getSelectedRowCount();
+        if (indiceFilaSeleccionada == -1 || numfilas > 1) {
+            JOptionPane.showMessageDialog(null, "Seleccione una categoria", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            Categoria categoriasAEliminar = listaCategorias.get(indiceFilaSeleccionada);
+            int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar la categoría: " + categoriasAEliminar.getNombre() + " ?", "Eliminar categoría", JOptionPane.YES_NO_OPTION);
+            if (confirmaEliminacion == 0) {
+                try {
+                    categoriasNegocio.eliminar(categoriasAEliminar);
+                    JOptionPane.showMessageDialog(null, "Se ha eliminado la categoría: " + categoriasAEliminar.getNombre() , "Eliminar categoría", JOptionPane.INFORMATION_MESSAGE);
+                    listarCategorias();
+                } catch (NegocioException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            }
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnListarCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarCategoriasActionPerformed
@@ -313,11 +345,16 @@ private ICategoriasNegocio categoriasNegocio;
                 }
 
             } catch (NegocioException ex) {               
-                JOptionPane.showMessageDialog(null, ex, "Categoría no registrada", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Categoría no registrada", JOptionPane.ERROR_MESSAGE);
 
             }
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void tblCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoriasMouseClicked
+        int seleccionar = tblCategorias.rowAtPoint(evt.getPoint());
+        this.txtNombreCategoria.setText(String.valueOf(tblCategorias.getValueAt(seleccionar, 0)));
+    }//GEN-LAST:event_tblCategoriasMouseClicked
 
     
     private void limpiarCampos() {
@@ -375,6 +412,7 @@ private ICategoriasNegocio categoriasNegocio;
             model.addRow(fila);   
     }
     
+    
      private boolean validarCampos() {
         if (this.txtNombreCategoria.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Ingrese el nombre de la categoría que desea agregar", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -382,6 +420,10 @@ private ICategoriasNegocio categoriasNegocio;
         }
         return true;
     }
+     
+
+
+     
     /**
      * @param args the command line arguments
      */

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -26,7 +27,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public FrmPrincipal(Usuario usuarioLogueado) {
         initComponents();
         this.setLocationRelativeTo(null);
-
+        UIManager.put("OptionPane.yesButtonText", "Si");
+        UIManager.put("OptionPane.noButtonText", "No");
         this.usuarioLogueado = usuarioLogueado;
 
     }

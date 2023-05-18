@@ -108,7 +108,7 @@ public class ProductosDAO implements IProductosDAO {
             EntityManager em = this.conexion.crearConexion();
             try {
                 em.getTransaction().begin();
-                Producto productoGuardado = consultarPorId(producto.getId());
+                Producto productoGuardado = em.find(Producto.class, producto.getId());
                 if (productoGuardado == null) {
                     throw new PersistenciaException("No se encontró la información del producto en la base de datos.");
                 }
@@ -118,7 +118,6 @@ public class ProductosDAO implements IProductosDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ProductosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos del producto.");
         }
     }

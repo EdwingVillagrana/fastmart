@@ -50,7 +50,6 @@ public class CategoriasDAO implements ICategoriasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar la categoria");
         }
     }
@@ -69,7 +68,8 @@ public class CategoriasDAO implements ICategoriasDAO {
             EntityManager em = this.conexion.crearConexion();
             try {
                 em.getTransaction().begin();
-                Categoria categoriaGuardada = consultarPorId(categoriaActualizada.getId());
+                //Categoria categoriaGuardada = consultarPorId(categoriaActualizada.getId());
+                Categoria categoriaGuardada = em.find(Categoria.class, categoriaActualizada.getId());
                 if (categoriaGuardada == null) {
                     throw new PersistenciaException("No se encontró la categoria en la base de datos, por lo que no se pudo actualizar.");
                 }
@@ -79,7 +79,6 @@ public class CategoriasDAO implements ICategoriasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos de la categoria.");
         }
     }
@@ -97,7 +96,7 @@ public class CategoriasDAO implements ICategoriasDAO {
             EntityManager em = this.conexion.crearConexion();
             try {
                 em.getTransaction().begin();
-                Categoria categoriaGuardada = consultarPorId(categoria.getId());
+                Categoria categoriaGuardada = em.find(Categoria.class, categoria.getId());
                 if (categoriaGuardada == null) {
                     throw new PersistenciaException("No se encontró la información de la categoria en la base de datos.");
                 }
@@ -106,8 +105,7 @@ public class CategoriasDAO implements ICategoriasDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {            
             throw new PersistenciaException("No fue posible eliminar los datos de la categoria.");
         }
     }
@@ -138,8 +136,7 @@ public class CategoriasDAO implements ICategoriasDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {            
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }
@@ -169,8 +166,7 @@ public class CategoriasDAO implements ICategoriasDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {            
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }
@@ -195,8 +191,7 @@ public class CategoriasDAO implements ICategoriasDAO {
             } finally {
                 em.close();
             }
-        } catch (Exception e) {
-            Logger.getLogger(CategoriasDAO.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {            
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }

@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
  *
@@ -222,6 +223,7 @@ public class DlgProveedor extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+
         if (proveedorActualizar != null) {
             if (validarCampos()) {
                 proveedorActualizar.setNombre(txtNombre.getText());
@@ -229,9 +231,13 @@ public class DlgProveedor extends javax.swing.JDialog {
                 proveedorActualizar.setTelefono(txtTelefono.getText());
                 proveedorActualizar.setEmail(txtEmail.getText());
                 try {
-                    proveedoresNegocio.actualizar(proveedorActualizar);
-                    JOptionPane.showMessageDialog(null, "Se ha actualizado la información del proveedor", "Actualización exitosa", JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
+                    int confirmaActualizacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea actualizar el proveedor: " + proveedorActualizar.getNombre() + " ?", "Actualizar proveedor", JOptionPane.YES_NO_OPTION);
+                    if (confirmaActualizacion == 0) {
+                        proveedoresNegocio.actualizar(proveedorActualizar);
+                        JOptionPane.showMessageDialog(null, "Se ha actualizado la información del proveedor", "Actualización exitosa", JOptionPane.INFORMATION_MESSAGE);
+                        this.dispose();
+                    }
+
                 } catch (NegocioException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Proveedor no actualizado", JOptionPane.ERROR_MESSAGE);
                 }
@@ -244,8 +250,12 @@ public class DlgProveedor extends javax.swing.JDialog {
                 String telefono = txtTelefono.getText();
                 Proveedor proveedorAgregar = new Proveedor(nombre, direccion, telefono, email);
                 try {
+                    int confirmaAgregar = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea agregar el proveedor: " + nombre + " ?", "Agregar proveedor", JOptionPane.YES_NO_OPTION);
+                    if (confirmaAgregar == 0) {
                     proveedoresNegocio.agregar(proveedorAgregar);
                     JOptionPane.showMessageDialog(null, "Se ha registrado el proveedor exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                    }
                 } catch (NegocioException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Proveedor no registrado", JOptionPane.ERROR_MESSAGE);
                 }

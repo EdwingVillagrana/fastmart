@@ -394,7 +394,8 @@ public class FrmProveedores extends javax.swing.JFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int indiceFilaSeleccionada = tblProveedores.getSelectedRow();
-        if (indiceFilaSeleccionada == -1) {
+        int numfilas = tblProveedores.getSelectedRowCount();
+        if (indiceFilaSeleccionada == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Seleccione un proveedor", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         }else {
             Proveedor proveedorAModificar = listaProveedores.get(indiceFilaSeleccionada);
@@ -406,7 +407,8 @@ public class FrmProveedores extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
          int indiceFilaSeleccionada = tblProveedores.getSelectedRow();
-        if (indiceFilaSeleccionada == -1) {
+         int numfilas = tblProveedores.getSelectedRowCount();
+        if (indiceFilaSeleccionada == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Seleccione un proveedor", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         } else {
             Proveedor proveedorAEliminar = listaProveedores.get(indiceFilaSeleccionada);

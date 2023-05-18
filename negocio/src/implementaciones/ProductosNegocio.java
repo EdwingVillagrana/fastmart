@@ -64,7 +64,7 @@ public class ProductosNegocio implements IProductosNegocio {
     @Override
     public void eliminar(Producto producto) throws NegocioException {
         try {
-            productosDAO.actualizar(producto);
+            productosDAO.eliminar(producto);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al intentar eliminar el producto: ", e);
         }

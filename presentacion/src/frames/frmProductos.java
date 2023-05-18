@@ -29,9 +29,8 @@ public class FrmProductos extends javax.swing.JFrame {
      */
     public FrmProductos() {
         initComponents();
-        productosNegocio = new ProductosNegocio();
+        this.productosNegocio = new ProductosNegocio();
         model = (DefaultTableModel) this.tblProductos.getModel();
-        radioNombre.setSelected(true);
         listarProductos();
     }
 
@@ -433,18 +432,19 @@ public class FrmProductos extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int indiceSeleccionado = tblProductos.getSelectedRow();
-        if (indiceSeleccionado == -1) {
+        int numfilas = tblProductos.getSelectedRowCount();
+        if (indiceSeleccionado == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un producto para poder eliminar", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
         } else {
+            Producto productoAeliminar = listaProductos.get(indiceSeleccionado);
             int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el producto?", "Eliminar producto", JOptionPane.YES_NO_OPTION);
             if (confirmaEliminacion == 0) {
-                try {
-                    Producto producto = listaProductos.get(indiceSeleccionado);
-                    productosNegocio.eliminar(producto);
-                    listarProductos();
+                try {                    
+                    productosNegocio.eliminar(productoAeliminar);                  
                     JOptionPane.showMessageDialog(null, "Se elimino correctamente", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+                     listarProductos();
                 } catch (NegocioException ex) {
-                    Logger.getLogger(FrmProductos.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
                 }
 
             }

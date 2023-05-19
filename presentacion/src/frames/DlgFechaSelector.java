@@ -119,13 +119,17 @@ public class DlgFechaSelector extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (DateFechaInicio.getDate() != null && DateFechaFinal.getDate() != null) {
-            Long milisFechaInicio = DateFechaInicio.getDate().getTime();
-            Long milisFechaFinal = DateFechaFinal.getDate().getTime();
-            Date sqlFechaInicio = new java.sql.Date(milisFechaInicio);
-            Date sqlFechaFinal = new java.sql.Date(milisFechaFinal);
-            fechaInicio = sqlFechaInicio;
-            fechaFinal = sqlFechaFinal;
-            this.dispose();
+            if (DateFechaFinal.getDate().getTime() < DateFechaInicio.getDate().getTime()) {
+                JOptionPane.showMessageDialog(null, "La fecha final no puede ser menor a la inicial", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else {
+                Long milisFechaInicio = DateFechaInicio.getDate().getTime();
+                Long milisFechaFinal = DateFechaFinal.getDate().getTime();
+                Date sqlFechaInicio = new java.sql.Date(milisFechaInicio);
+                Date sqlFechaFinal = new java.sql.Date(milisFechaFinal);
+                fechaInicio = sqlFechaInicio;
+                fechaFinal = sqlFechaFinal;
+                this.dispose();
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Ingrese las fechas", "Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -5,14 +5,12 @@ package frames;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 import entidades.Producto;
-import entidades.Usuario;
+
 import excepciones.NegocioException;
 import implementaciones.ProductosNegocio;
 import interfaces.IProductosNegocio;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -385,7 +383,6 @@ public class FrmProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void txtBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_txtBusquedaActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed

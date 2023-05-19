@@ -4,6 +4,7 @@
  */
 package frames;
 
+import com.toedter.calendar.JDateChooser;
 import java.sql.Date;
 import javax.swing.JOptionPane;
 /**
@@ -132,19 +133,22 @@ public class DlgFechaSelector extends javax.swing.JDialog {
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        if (DateFechaInicio.getDate() != null && DateFechaFinal.getDate() != null) {
             Long milisFechaInicio = DateFechaInicio.getDate().getTime();
-            Long milisFechaFinal = DateFechaFinal.getDate().getTime();
+        Long milisFechaFinal = DateFechaFinal.getDate().getTime();
             Date sqlFechaInicio = new java.sql.Date(milisFechaInicio);
-            Date sqlFechaFinal = new java.sql.Date(milisFechaFinal);
-        if (DateFechaInicio.getDate() == null || DateFechaFinal.getDate() == null) {
-            JOptionPane.showMessageDialog(null, "ERROR", "Ingrese las fechas", JOptionPane.ERROR_MESSAGE);
-        } else {
+            Date sqlFechaFinal = new java.sql.Date(milisFechaFinal); 
             fechaInicio = sqlFechaInicio;
             fechaFinal = sqlFechaFinal;
             this.dispose();
+        }else{
+            JOptionPane.showMessageDialog(null, "Ingrese las fechas", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
+    
+
+    
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
@@ -156,6 +160,16 @@ public class DlgFechaSelector extends javax.swing.JDialog {
     public String obtenerFechaFinal() {
         return fechaFinal.toString();
     }
+    
+//    private void validar() {
+//         int fechaSeleccionada = fechaInicio.getDate();
+//
+//// Verificar si la fecha seleccionada es nula
+//        if (fechaSeleccionada == null) {
+//            JOptionPane.showMessageDialog(null, "Por favor, seleccione una fecha");
+//            return;
+//        }
+//    }
     
     /**
      * @param args the command line arguments
@@ -212,4 +226,5 @@ public class DlgFechaSelector extends javax.swing.JDialog {
     private javax.swing.JLabel lblLogoCabecera;
     private javax.swing.JLabel lblSeleccionarFechas;
     // End of variables declaration//GEN-END:variables
+
 }

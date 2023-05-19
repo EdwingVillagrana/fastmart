@@ -416,6 +416,9 @@ public class DlgProducto extends javax.swing.JDialog {
         } else if (this.comboProveedor.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(null, "Seleccione el proveedor", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
+        } else if (this.txtCodigo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Complete el campo código", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
         return true;
     }

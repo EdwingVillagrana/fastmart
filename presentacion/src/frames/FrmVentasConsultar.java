@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -264,12 +266,17 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPorPeriodoActionPerformed
 
     private void btnVerDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerDetallesActionPerformed
-
-        int indiceFilaSeleccionada = tblVentas.getSelectedRow();
+        int indiceFilaSeleccionada = tblVentas.getSelectedRow();    
         if (indiceFilaSeleccionada == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione una venta", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            Venta ventaAMostrar = listaVentas.get(indiceFilaSeleccionada);
+            Long id = (Long) tblVentas.getValueAt(indiceFilaSeleccionada, 0);
+            Venta ventaAMostrar = null;
+            try {
+                ventaAMostrar = ventasNegocio.consultarPorId(id);
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            }
             DlgVentasDetalles dlgDetallesVenta = new DlgVentasDetalles(this, true, ventaAMostrar);
             dlgDetallesVenta.setVisible(true);
 

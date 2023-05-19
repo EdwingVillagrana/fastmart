@@ -10,6 +10,8 @@ import implementaciones.ProveedoresNegocio;
 import interfaces.IProveedoresNegocio;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -387,8 +389,14 @@ public class FrmProveedores extends javax.swing.JFrame {
         int numfilas = tblProveedores.getSelectedRowCount();
         if (indiceFilaSeleccionada == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Seleccione un proveedor", "ERROR", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            Proveedor proveedorAModificar = listaProveedores.get(indiceFilaSeleccionada);
+        } else {  
+            Proveedor proveedorAModificar = null;
+            String nombre = (String) tblProveedores.getValueAt(indiceFilaSeleccionada, 0);
+            try {                
+                proveedorAModificar = proveedoresNegocio.consultarPorNombre(nombre);
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            }
             DlgProveedor dlgProveedor = new DlgProveedor(this, true, proveedorAModificar);
             dlgProveedor.setVisible(true);
             while (dlgProveedor.isVisible()) {

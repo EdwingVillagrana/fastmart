@@ -258,8 +258,15 @@ private ICategoriasNegocio categoriasNegocio;
         if (indiceFilaSeleccionada == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Seleccione una categoria", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         } else {
+            Categoria categoriaAmodificar;
+            String nombre = (String) tblCategorias.getValueAt(indiceFilaSeleccionada, 0);
             if (validarCampos()) {
-                Categoria categoriaAModificar = listaCategorias.get(indiceFilaSeleccionada);
+                Categoria categoriaAModificar = null;
+                try {
+                    categoriaAModificar = categoriasNegocio.consultarPorNombre(nombre);
+                } catch (NegocioException ex) {
+                    Logger.getLogger(FrmCategorias.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 if (catAux.equals(categoriaAModificar.getNombre())) {
                     JOptionPane.showMessageDialog(null, "Modifique la categoría", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
                 } else {

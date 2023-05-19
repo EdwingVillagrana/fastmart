@@ -11,6 +11,8 @@ import implementaciones.ProductosNegocio;
 import interfaces.IProductosNegocio;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -392,13 +394,22 @@ public class FrmProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBusquedaActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        int indiceFilaSeleccionada = tblProductos.getSelectedRow();
-        if (indiceFilaSeleccionada == -1) {
+        int indiceFilaSeleccionada = tblProductos.getSelectedRow(); 
+        int numFilas = tblProductos.getSelectedRowCount();
+        
+        if (indiceFilaSeleccionada == -1 || numFilas > 1) {
             JOptionPane.showMessageDialog(null, "Seleccione un producto", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            Producto productoAModificar = listaProductos.get(indiceFilaSeleccionada);
-            DlgProducto dlgModificarProducto = new DlgProducto(this, true, productoAModificar);
-            dlgModificarProducto.setVisible(true);
+            String nombre = (String) tblProductos.getValueAt(indiceFilaSeleccionada, 0);
+            Producto productoAModificar;
+            try {
+                productoAModificar = productosNegocio.consultarPorNombre(nombre);
+                DlgProducto dlgModificarProducto = new DlgProducto(this, true, productoAModificar);
+                dlgModificarProducto.setVisible(true);
+            } catch (NegocioException ex) {
+               JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            }
+            
 
         }
     }//GEN-LAST:event_btnModificarActionPerformed

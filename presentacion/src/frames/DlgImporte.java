@@ -130,7 +130,7 @@ public class DlgImporte extends javax.swing.JDialog {
 
     private void btnAceptarImporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarImporteActionPerformed
         if (txtImporte.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "CUADRO VACÍO!!!!!");
+            JOptionPane.showMessageDialog(null, "Ingrese el importe");
             txtImporte.requestFocus();
         } else {
             importe = Double.parseDouble(txtImporte.getText());

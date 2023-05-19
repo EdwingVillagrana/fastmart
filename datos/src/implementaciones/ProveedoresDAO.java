@@ -84,7 +84,6 @@ public class ProveedoresDAO implements IProveedoresDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos del proveedor.");
         }
     }
@@ -112,7 +111,6 @@ public class ProveedoresDAO implements IProveedoresDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos del proveedor.");
         }
     }
@@ -142,7 +140,6 @@ public class ProveedoresDAO implements IProveedoresDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la lista de proveedores..");
         }
     }
@@ -174,7 +171,6 @@ public class ProveedoresDAO implements IProveedoresDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la lista de proveedores.");
         }
     }
@@ -199,7 +195,6 @@ public class ProveedoresDAO implements IProveedoresDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la lista de proveedores.");
         }
     }

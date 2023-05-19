@@ -159,6 +159,11 @@ public class FrmProveedores extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(0, 145, 155));
         jPanel2.setLayout(null);
 
+        txtBusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBusquedaActionPerformed(evt);
+            }
+        });
         txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtBusquedaKeyTyped(evt);
@@ -382,11 +387,18 @@ public class FrmProveedores extends javax.swing.JFrame {
         int numfilas = tblProveedores.getSelectedRowCount();
         if (indiceFilaSeleccionada == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Seleccione un proveedor", "ERROR", JOptionPane.INFORMATION_MESSAGE);
-        }else {
+        } else {
             Proveedor proveedorAModificar = listaProveedores.get(indiceFilaSeleccionada);
             DlgProveedor dlgProveedor = new DlgProveedor(this, true, proveedorAModificar);
             dlgProveedor.setVisible(true);
-            
+            while (dlgProveedor.isVisible()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException io) {
+                    io.printStackTrace();
+                }
+            }
+            listarProveedores();
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
@@ -401,6 +413,7 @@ public class FrmProveedores extends javax.swing.JFrame {
             if (confirmaEliminacion == 0) {
                 try {
                     proveedoresNegocio.eliminar(proveedorAEliminar);
+                    JOptionPane.showMessageDialog(null, "Se elimino el proveedor exitosamente", "Eliminar proveedor", JOptionPane.INFORMATION_MESSAGE);
                     listarProveedores();
                 } catch (NegocioException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
@@ -414,8 +427,18 @@ public class FrmProveedores extends javax.swing.JFrame {
         DlgProveedor dlgProveedor = new DlgProveedor(this, true);
         dlgProveedor.setVisible(true);
         while (dlgProveedor.isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException io) {
+                io.printStackTrace();
+            }
         }
+        listarProveedores();
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void txtBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaActionPerformed
 
     
 //    /**

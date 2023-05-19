@@ -240,7 +240,11 @@ private ICategoriasNegocio categoriasNegocio;
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtNombreCategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreCategoriaKeyTyped
-        
+        char c = evt.getKeyChar();
+        // Verificar si el carácter ingresado es una letra
+        if (!Character.isLetter(c) && c != ' ') {
+            evt.consume(); // Eliminar el carácter ingresado si no es una letra o espacio
+        }
     }//GEN-LAST:event_txtNombreCategoriaKeyTyped
 
     private void FondoTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FondoTituloActionPerformed
@@ -264,9 +268,9 @@ private ICategoriasNegocio categoriasNegocio;
                         int confirmaActualizacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea actualizar la categoría: " + categoriaAModificar.getNombre() + " ?", "Actualizar categoría", JOptionPane.YES_NO_OPTION);
                         if (confirmaActualizacion == 0) {
                             categoriasNegocio.actualizar(categoriaAModificar);
-                            JOptionPane.showMessageDialog(null, "Se ha actualizado la información de la categoría", "Actualización exitosa", JOptionPane.INFORMATION_MESSAGE);
                             limpiarCampos();
                             listarCategorias();
+                            JOptionPane.showMessageDialog(null, "Se ha actualizado la información de la categoría", "Actualización exitosa", JOptionPane.INFORMATION_MESSAGE);
                         }
 
                     } catch (NegocioException ex) {
@@ -293,8 +297,10 @@ private ICategoriasNegocio categoriasNegocio;
             if (confirmaEliminacion == 0) {
                 try {
                     categoriasNegocio.eliminar(categoriasAEliminar);
-                    JOptionPane.showMessageDialog(null, "Se ha eliminado la categoría: " + categoriasAEliminar.getNombre() , "Eliminar categoría", JOptionPane.INFORMATION_MESSAGE);
                     listarCategorias();
+                    limpiarCampos();
+                    JOptionPane.showMessageDialog(null, "Se ha eliminado la categoría: " + categoriasAEliminar.getNombre() , "Eliminar categoría", JOptionPane.INFORMATION_MESSAGE);
+                    
                 } catch (NegocioException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
                     
@@ -326,11 +332,10 @@ private ICategoriasNegocio categoriasNegocio;
                 int resultado = JOptionPane.showConfirmDialog(this, "¿DESEA AGREGAR LA CATEGORIA: " + nombre + "?", "AGREGAR", a);
                 if (resultado == 0) {
                     categoriasNegocio.agregar(categoriaAgregar);
-                    JOptionPane.showMessageDialog(null, "Se ha registrado la categoría exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
                     limpiarCampos();
                     listarCategorias();
+                    JOptionPane.showMessageDialog(null, "Se ha registrado la categoría exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
                 }
-
             } catch (NegocioException ex) {               
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Categoría no registrada", JOptionPane.ERROR_MESSAGE);
 

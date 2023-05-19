@@ -13,15 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Kevin Rios
  */
 public class FrmProductos extends javax.swing.JFrame {
+
     private IProductosNegocio productosNegocio;
     private DefaultTableModel model;
     private List<Producto> listaProductos = new ArrayList<>();
-    
+
     /**
      * Creates new form ConsultarVenta
      */
@@ -29,7 +31,7 @@ public class FrmProductos extends javax.swing.JFrame {
         initComponents();
         this.productosNegocio = new ProductosNegocio();
         model = (DefaultTableModel) this.tblProductos.getModel();
-        radioNombre.setSelected(true);
+        radioNombre.setSelected(true); 
         listarProductos();
     }
 
@@ -93,6 +95,11 @@ public class FrmProductos extends javax.swing.JFrame {
         });
         tblProductos.setShowGrid(true);
         tblProductos.getTableHeader().setReorderingAllowed(false);
+        tblProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProductosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblProductos);
         if (tblProductos.getColumnModel().getColumnCount() > 0) {
             tblProductos.getColumnModel().getColumn(0).setPreferredWidth(70);
@@ -279,7 +286,7 @@ public class FrmProductos extends javax.swing.JFrame {
         if (radioCod.isSelected()) {
             if (txtBusqueda.getText().isEmpty() || txtBusqueda.getText().isBlank()) {
                 JOptionPane.showMessageDialog(null, "Ingrese el código del producto", "Error", JOptionPane.ERROR_MESSAGE);
-            }else{
+            } else {
                 Long codigo = Long.parseLong(txtBusqueda.getText());
                 consultarPorCodigo(codigo);
             }
@@ -287,58 +294,57 @@ public class FrmProductos extends javax.swing.JFrame {
         if (radioNombre.isSelected()) {
             if (txtBusqueda.getText().isBlank() || txtBusqueda.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Ingrese el nombre del producto", "Error", JOptionPane.ERROR_MESSAGE);
-            }else{
+            } else {
                 String nombre = txtBusqueda.getText();
                 consultarPorNombre(nombre);
             }
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    public void consultarPorCodigo(Long codigo){
+    public void consultarPorCodigo(Long codigo) {
         try {
             Producto producto = productosNegocio.consultarPorCodigo(codigo);
             this.listaProductos.add(producto);
             if (producto == null) {
                 JOptionPane.showMessageDialog(null, "El producto no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
-            }else{
+            } else {
                 model.setRowCount(0);
-                mostrarProducto(producto);
-            }            
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
-    
-    
-    public void consultarPorNombre(String nombre){
-        try {
-            Producto producto = productosNegocio.consultarPorNombre(nombre);
-            this.listaProductos.add(producto);
-            if (producto == null) {
-                JOptionPane.showMessageDialog(null, "El producto no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
-            }else{
-                model.setRowCount(0);
-                mostrarProducto(producto);
-            }            
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
-    
-    private void listarProductos(){
-        try {
-            this.listaProductos = productosNegocio.consultarTodos();
-            model.setRowCount(0);
-
-            for (Producto producto: listaProductos) {
                 mostrarProducto(producto);
             }
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
-    public void mostrarProducto(Producto producto){
+
+    public void consultarPorNombre(String nombre) {
+        try {
+            Producto producto = productosNegocio.consultarPorNombre(nombre);
+            this.listaProductos.add(producto);
+            if (producto == null) {
+                JOptionPane.showMessageDialog(null, "El producto no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                model.setRowCount(0);
+                mostrarProducto(producto);
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private void listarProductos() {
+        try {
+            this.listaProductos = productosNegocio.consultarTodos();
+            model.setRowCount(0);
+
+            for (Producto producto : listaProductos) {
+                mostrarProducto(producto);
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    public void mostrarProducto(Producto producto) {
         String nombre = producto.getNombre();
         String proveedor = producto.getProveedor().getNombre();
         Double precio_compra = producto.getPrecio_compra();
@@ -349,7 +355,7 @@ public class FrmProductos extends javax.swing.JFrame {
         Object[] fila = {nombre, proveedor, precio_compra, precio_venta, id_categoria, codigo, stock};
         model.addRow(fila);
     }
-    
+
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
         if (radioCod.isSelected()) {
             char c = evt.getKeyChar();
@@ -373,7 +379,7 @@ public class FrmProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_radioNombreActionPerformed
 
     private void radioCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioCodActionPerformed
-      if (radioCod.isSelected()) {
+        if (radioCod.isSelected()) {
             txtBusqueda.setText("");
         }
     }//GEN-LAST:event_radioCodActionPerformed
@@ -386,15 +392,15 @@ public class FrmProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBusquedaActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-     int indiceFilaSeleccionada = tblProductos.getSelectedRow();
+        int indiceFilaSeleccionada = tblProductos.getSelectedRow();
         if (indiceFilaSeleccionada == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione un producto", "ERROR", JOptionPane.INFORMATION_MESSAGE);
-        }else {
+        } else {
             Producto productoAModificar = listaProductos.get(indiceFilaSeleccionada);
             DlgProducto dlgModificarProducto = new DlgProducto(this, true, productoAModificar);
             dlgModificarProducto.setVisible(true);
-           
-        }  
+
+        }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -411,6 +417,7 @@ public class FrmProductos extends javax.swing.JFrame {
                 io.printStackTrace();
             }
         }
+        listarProductos();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -422,10 +429,10 @@ public class FrmProductos extends javax.swing.JFrame {
             Producto productoAeliminar = listaProductos.get(indiceSeleccionado);
             int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el producto?", "Eliminar producto", JOptionPane.YES_NO_OPTION);
             if (confirmaEliminacion == 0) {
-                try {                    
-                    productosNegocio.eliminar(productoAeliminar);                  
+                try {
+                    productosNegocio.eliminar(productoAeliminar);
                     JOptionPane.showMessageDialog(null, "Se elimino correctamente", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
-                     listarProductos();
+                    listarProductos();
                 } catch (NegocioException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -433,6 +440,10 @@ public class FrmProductos extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void tblProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductosMouseClicked
+        
+    }//GEN-LAST:event_tblProductosMouseClicked
 
 //    /**
 //     * @param args the command line arguments

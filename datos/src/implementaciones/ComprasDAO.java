@@ -61,7 +61,6 @@ public class ComprasDAO implements IComprasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ComprasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar la compra");
         }
     }
@@ -92,7 +91,6 @@ public class ComprasDAO implements IComprasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ComprasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos de la compra.");
         }
     }
@@ -120,7 +118,6 @@ public class ComprasDAO implements IComprasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ComprasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos de la venta.");
         }
     }
@@ -149,7 +146,6 @@ public class ComprasDAO implements IComprasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ComprasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }
@@ -179,7 +175,6 @@ public class ComprasDAO implements IComprasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ComprasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("Error al consultar ventas por periodo", e);
         }
     }
@@ -208,7 +203,6 @@ public class ComprasDAO implements IComprasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ComprasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("Error al consultar ventas por usuario", e);
         }
     }
@@ -234,7 +228,6 @@ public class ComprasDAO implements IComprasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(ComprasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }

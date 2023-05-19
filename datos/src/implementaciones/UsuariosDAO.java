@@ -56,7 +56,6 @@ public class UsuariosDAO implements IUsuariosDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar al usuario");
         }
     }
@@ -89,7 +88,6 @@ public class UsuariosDAO implements IUsuariosDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos del usuario.");
         }
     }
@@ -117,7 +115,6 @@ public class UsuariosDAO implements IUsuariosDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos del usuario.");
         }
     }
@@ -151,7 +148,6 @@ public class UsuariosDAO implements IUsuariosDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la lista de usuarios.");
         }
     }
@@ -180,7 +176,6 @@ public class UsuariosDAO implements IUsuariosDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la lista de usuarios.");
         }
     }
@@ -205,7 +200,6 @@ public class UsuariosDAO implements IUsuariosDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la lista de usuarios.");
         }
     }
@@ -238,7 +232,6 @@ public class UsuariosDAO implements IUsuariosDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la lista de usuarios.");
         }
     }

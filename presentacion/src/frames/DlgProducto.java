@@ -63,7 +63,6 @@ public class DlgProducto extends javax.swing.JDialog {
         this.categoriasNegocio = new CategoriasNegocio();
         modeloProveedores = (DefaultComboBoxModel) this.comboProveedor.getModel();
         modeloCategorias = (DefaultComboBoxModel) this.comboCategoria.getModel();
-        txtStock.setEditable(true);
         txtCodigo.setEditable(true);
         listarProveedores();
         listarCategorias();
@@ -314,9 +313,9 @@ public class DlgProducto extends javax.swing.JDialog {
                 int indiceCategoria = comboCategoria.getSelectedIndex();
                 Categoria categoria = listaCategorias.get(indiceCategoria - 1);
                 Long codigo = Long.parseLong(txtCodigo.getText());
-                Long stock = Long.parseLong(txtStock.getText());
 
-                Producto productoAgregar = new Producto(nombre, proveedor, precioCompra, precioVenta, categoria, codigo, stock);
+
+                Producto productoAgregar = new Producto(nombre, proveedor, precioCompra, precioVenta, categoria, codigo);
                 try {
                     productosNegocio.agregar(productoAgregar);
                     JOptionPane.showMessageDialog(null, "Se ha registrado el producto exitosamente", "Registro", JOptionPane.INFORMATION_MESSAGE);

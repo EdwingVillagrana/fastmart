@@ -36,7 +36,7 @@ public class ProductosNegocio implements IProductosNegocio {
         try {
             productosDAO.agregar(producto);
         } catch (PersistenciaException e) {
-            throw new NegocioException("Error al intentar agregar el producto: ", e);
+            throw new NegocioException("Error al intentar agregar el producto: "+ e.getMessage());
         }
     }
 

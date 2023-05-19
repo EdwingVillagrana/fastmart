@@ -208,7 +208,6 @@ public class DlgProveedor extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-
         if (proveedorActualizar != null) {
             if (validarCampos()) {
                 proveedorActualizar.setNombre(txtNombre.getText());

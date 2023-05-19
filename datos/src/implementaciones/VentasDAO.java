@@ -69,7 +69,6 @@ public class VentasDAO implements IVentasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible agregar la Venta");
         }
     }
@@ -100,7 +99,6 @@ public class VentasDAO implements IVentasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible actualizar los datos de la venta.");
         }
     }
@@ -128,7 +126,6 @@ public class VentasDAO implements IVentasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible eliminar los datos de la venta.");
         }
     }
@@ -157,7 +154,6 @@ public class VentasDAO implements IVentasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }
@@ -187,7 +183,6 @@ public class VentasDAO implements IVentasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("Error al consultar ventas por periodo", e);
         }
     }
@@ -213,7 +208,6 @@ public class VentasDAO implements IVentasDAO {
                 em.close();
             }
         } catch (Exception e) {
-            Logger.getLogger(VentasDAO.class.getName()).log(Level.SEVERE, null, e);
             throw new PersistenciaException("No fue posible consultar la información en la base de datos.");
         }
     }

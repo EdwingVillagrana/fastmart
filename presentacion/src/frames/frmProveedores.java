@@ -14,14 +14,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Kevin Rios
  */
 public class FrmProveedores extends javax.swing.JFrame {
+
     private IProveedoresNegocio proveedoresNegocio;
     private List<Proveedor> listaProveedores = new ArrayList<>();
     private DefaultTableModel model;
+
     /**
      * Creates new form ConsultarVenta
      */
@@ -286,64 +289,64 @@ public class FrmProveedores extends javax.swing.JFrame {
         if (radioID.isSelected()) {
             if (txtBusqueda.getText().isBlank() || txtBusqueda.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Ingrese el código del proveedor", "Error", JOptionPane.ERROR_MESSAGE);
-            }else{
+            } else {
                 Long codigo = Long.parseLong(txtBusqueda.getText());
-                consultarPorCodigo(codigo);         
+                consultarPorCodigo(codigo);
             }
         }
         if (radioNombre.isSelected()) {
             if (txtBusqueda.getText().isBlank() || txtBusqueda.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Ingrese el nombre del proveedor", "Error", JOptionPane.ERROR_MESSAGE);
-            }else{
+            } else {
                 String nombre = txtBusqueda.getText();
                 consultarPorNombre(nombre);
             }
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    public void consultarPorCodigo(Long codigo){
+    public void consultarPorCodigo(Long codigo) {
         try {
             Proveedor proveedor = proveedoresNegocio.consultarPorId(codigo);
             this.listaProveedores.add(proveedor);
             if (proveedor == null) {
                 JOptionPane.showMessageDialog(null, "El proveedor no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
-            }else{
+            } else {
                 model.setRowCount(0);
-                mostrarProveedor(proveedor);
-            }            
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
-    
-    public void consultarPorNombre(String nombre){
-        try {
-            Proveedor proveedor = proveedoresNegocio.consultarPorNombre(nombre);
-            this.listaProveedores.add(proveedor);
-            if (proveedor == null) {
-                JOptionPane.showMessageDialog(null, "El proveedor no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
-            }else{
-                model.setRowCount(0);
-                mostrarProveedor(proveedor);
-            }            
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
-    
-    private void listarProveedores(){
-        try {
-            this.listaProveedores = proveedoresNegocio.consultarTodos();
-            model.setRowCount(0);
-            for (Proveedor proveedor: listaProveedores) {
                 mostrarProveedor(proveedor);
             }
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
-    public void mostrarProveedor(Proveedor proveedor){
+
+    public void consultarPorNombre(String nombre) {
+        try {
+            Proveedor proveedor = proveedoresNegocio.consultarPorNombre(nombre);
+            this.listaProveedores.add(proveedor);
+            if (proveedor == null) {
+                JOptionPane.showMessageDialog(null, "El proveedor no existe.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                model.setRowCount(0);
+                mostrarProveedor(proveedor);
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private void listarProveedores() {
+        try {
+            this.listaProveedores = proveedoresNegocio.consultarTodos();
+            model.setRowCount(0);
+            for (Proveedor proveedor : listaProveedores) {
+                mostrarProveedor(proveedor);
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    public void mostrarProveedor(Proveedor proveedor) {
         String direccion = proveedor.getDireccion();
         String email = proveedor.getEmail();
         String nombre = proveedor.getNombre();
@@ -351,7 +354,7 @@ public class FrmProveedores extends javax.swing.JFrame {
         Object[] fila = {nombre, direccion, telefono, email};
         model.addRow(fila);
     }
-    
+
     private void radioNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNombreActionPerformed
         if (radioNombre.isSelected()) {
             txtBusqueda.setText("");
@@ -389,10 +392,10 @@ public class FrmProveedores extends javax.swing.JFrame {
         int numfilas = tblProveedores.getSelectedRowCount();
         if (indiceFilaSeleccionada == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Seleccione un proveedor", "ERROR", JOptionPane.INFORMATION_MESSAGE);
-        } else {  
+        } else {
             Proveedor proveedorAModificar = null;
             String nombre = (String) tblProveedores.getValueAt(indiceFilaSeleccionada, 0);
-            try {                
+            try {
                 proveedorAModificar = proveedoresNegocio.consultarPorNombre(nombre);
             } catch (NegocioException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
@@ -411,13 +414,19 @@ public class FrmProveedores extends javax.swing.JFrame {
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-         int indiceFilaSeleccionada = tblProveedores.getSelectedRow();
-         int numfilas = tblProveedores.getSelectedRowCount();
+        int indiceFilaSeleccionada = tblProveedores.getSelectedRow();
+        int numfilas = tblProveedores.getSelectedRowCount();
         if (indiceFilaSeleccionada == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Seleccione un proveedor", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            Proveedor proveedorAEliminar = listaProveedores.get(indiceFilaSeleccionada);
-            int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el proveedor: " + proveedorAEliminar.getNombre()+" ?", "Eliminar proveedor", JOptionPane.YES_NO_OPTION);
+            Proveedor proveedorAEliminar = null;
+            String nombre = (String) tblProveedores.getValueAt(indiceFilaSeleccionada, 0);
+            try {
+                proveedorAEliminar = proveedoresNegocio.consultarPorNombre(nombre);
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            }
+            int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el proveedor: " + proveedorAEliminar.getNombre() + " ?", "Eliminar proveedor", JOptionPane.YES_NO_OPTION);
             if (confirmaEliminacion == 0) {
                 try {
                     proveedoresNegocio.eliminar(proveedorAEliminar);
@@ -448,7 +457,6 @@ public class FrmProveedores extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBusquedaActionPerformed
 
-    
 //    /**
 //     * @param args the command line arguments
 //     */

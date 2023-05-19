@@ -299,7 +299,13 @@ private ICategoriasNegocio categoriasNegocio;
         if (indiceFilaSeleccionada == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Seleccione una categoria", "ERROR", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            Categoria categoriasAEliminar = listaCategorias.get(indiceFilaSeleccionada);
+            Categoria categoriasAEliminar = null;
+            String nombre = (String) tblCategorias.getValueAt(indiceFilaSeleccionada, 0);
+            try {
+                categoriasAEliminar = categoriasNegocio.consultarPorNombre(nombre);
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            }
             int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar la categoría: " + categoriasAEliminar.getNombre() + " ?", "Eliminar categoría", JOptionPane.YES_NO_OPTION);
             if (confirmaEliminacion == 0) {
                 try {

@@ -437,7 +437,13 @@ public class FrmProductos extends javax.swing.JFrame {
         if (indiceSeleccionado == -1 || numfilas > 1) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un producto para poder eliminar", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            Producto productoAeliminar = listaProductos.get(indiceSeleccionado);
+            Producto productoAeliminar = null;
+            String nombre = (String) tblProductos.getValueAt(indiceSeleccionado, 0);
+            try {
+                productoAeliminar = productosNegocio.consultarPorNombre(nombre);
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
+            }
             int confirmaEliminacion = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el producto?", "Eliminar producto", JOptionPane.YES_NO_OPTION);
             if (confirmaEliminacion == 0) {
                 try {

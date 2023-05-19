@@ -4,7 +4,6 @@
  */
 package frames;
 
-import com.toedter.calendar.JDateChooser;
 import java.sql.Date;
 import javax.swing.JOptionPane;
 /**
@@ -13,17 +12,17 @@ import javax.swing.JOptionPane;
  */
 public class DlgFechaSelector extends javax.swing.JDialog {
 
-    private Date fechaInicio;
-    private Date fechaFinal;
+    private Date fechaInicio = null;
+    private Date fechaFinal = null;
     
     /**
      * Creates new form DlgFechaSelector
+     * @param parent
+     * @param modal
      */
     public DlgFechaSelector(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        this.setLocationRelativeTo(null);
         initComponents();
-        
     }
 
     /**
@@ -36,7 +35,6 @@ public class DlgFechaSelector extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        btnMenu = new javax.swing.JButton();
         lblApartado = new javax.swing.JLabel();
         lblLogoCabecera = new javax.swing.JLabel();
         FondoTitulo = new javax.swing.JTextField();
@@ -48,31 +46,22 @@ public class DlgFechaSelector extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setLayout(null);
-
-        btnMenu.setBackground(new java.awt.Color(110, 88, 68));
-        btnMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenu.setText("🏠");
-        btnMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnMenu);
-        btnMenu.setBounds(0, 0, 50, 30);
 
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
         lblApartado.setText("Fechas");
         jPanel1.add(lblApartado);
-        lblApartado.setBounds(60, 0, 90, 30);
+        lblApartado.setBounds(10, 0, 90, 30);
 
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
+        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_header.png"))); // NOI18N
         jPanel1.add(lblLogoCabecera);
-        lblLogoCabecera.setBounds(130, 0, 280, 30);
+        lblLogoCabecera.setBounds(70, 0, 220, 30);
 
+        FondoTitulo.setEditable(false);
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         jPanel1.add(FondoTitulo);
         FondoTitulo.setBounds(0, 0, 410, 30);
@@ -128,20 +117,16 @@ public class DlgFechaSelector extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuActionPerformed
-
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (DateFechaInicio.getDate() != null && DateFechaFinal.getDate() != null) {
             Long milisFechaInicio = DateFechaInicio.getDate().getTime();
-        Long milisFechaFinal = DateFechaFinal.getDate().getTime();
+            Long milisFechaFinal = DateFechaFinal.getDate().getTime();
             Date sqlFechaInicio = new java.sql.Date(milisFechaInicio);
-            Date sqlFechaFinal = new java.sql.Date(milisFechaFinal); 
+            Date sqlFechaFinal = new java.sql.Date(milisFechaFinal);
             fechaInicio = sqlFechaInicio;
             fechaFinal = sqlFechaFinal;
             this.dispose();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Ingrese las fechas", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
@@ -154,64 +139,60 @@ public class DlgFechaSelector extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     public String obtenerFechaInicio() {
+        if (fechaInicio == null) {
+            return null;
+        }
         return fechaInicio.toString();
     }
     
     public String obtenerFechaFinal() {
+        if (fechaFinal == null) {
+            return null;
+        }
         return fechaFinal.toString();
     }
     
-//    private void validar() {
-//         int fechaSeleccionada = fechaInicio.getDate();
-//
-//// Verificar si la fecha seleccionada es nula
-//        if (fechaSeleccionada == null) {
-//            JOptionPane.showMessageDialog(null, "Por favor, seleccione una fecha");
-//            return;
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(DlgFechaSelector.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(DlgFechaSelector.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(DlgFechaSelector.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(DlgFechaSelector.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
+//        //</editor-fold>
+//
+//        /* Create and display the dialog */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                DlgFechaSelector dialog = new DlgFechaSelector(new javax.swing.JFrame(), true);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.setVisible(true);
+//            }
+//        });
 //    }
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DlgFechaSelector.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DlgFechaSelector.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DlgFechaSelector.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DlgFechaSelector.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DlgFechaSelector dialog = new DlgFechaSelector(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser DateFechaFinal;
@@ -219,7 +200,6 @@ public class DlgFechaSelector extends javax.swing.JDialog {
     private javax.swing.JTextField FondoTitulo;
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnMenu;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblApartado;
     private javax.swing.JLabel lblHasta;

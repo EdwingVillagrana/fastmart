@@ -66,7 +66,6 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
         FondoTitulo = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         txtBuscarPorID = new javax.swing.JTextField();
-        btnMenu = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnMostrarTodas = new javax.swing.JButton();
         btnPorPeriodo = new javax.swing.JButton();
@@ -117,16 +116,17 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
         lblApartado.setText("Consultar Ventas");
         jPanel1.add(lblApartado);
-        lblApartado.setBounds(60, 0, 150, 30);
+        lblApartado.setBounds(10, 0, 150, 30);
 
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
+        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_header.png"))); // NOI18N
         jPanel1.add(lblLogoCabecera);
-        lblLogoCabecera.setBounds(230, 0, 190, 30);
+        lblLogoCabecera.setBounds(210, 0, 230, 30);
 
+        FondoTitulo.setEditable(false);
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         jPanel1.add(FondoTitulo);
-        FondoTitulo.setBounds(40, 0, 610, 30);
+        FondoTitulo.setBounds(0, 0, 644, 30);
 
         btnBuscar.setBackground(new java.awt.Color(255, 145, 77));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -151,17 +151,6 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
         });
         jPanel1.add(txtBuscarPorID);
         txtBuscarPorID.setBounds(10, 88, 140, 22);
-
-        btnMenu.setBackground(new java.awt.Color(110, 88, 68));
-        btnMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenu.setText("🏠");
-        btnMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnMenu);
-        btnMenu.setBounds(0, 0, 50, 30);
 
         btnSalir.setBackground(new java.awt.Color(255, 145, 77));
         btnSalir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -232,10 +221,6 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuActionPerformed
-
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
@@ -269,9 +254,13 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
                 io.printStackTrace();
             }
         }
-        fechaInicio = dlgFechaS.obtenerFechaInicio();
-        fechaFinal = dlgFechaS.obtenerFechaFinal();
-        consultarPeriodo(fechaInicio, fechaFinal);
+        
+        if (dlgFechaS.obtenerFechaInicio() != null && dlgFechaS.obtenerFechaFinal() != null) {
+            fechaInicio = dlgFechaS.obtenerFechaInicio();
+            fechaFinal = dlgFechaS.obtenerFechaFinal();
+            consultarPeriodo(fechaInicio, fechaFinal);
+        }
+        
     }//GEN-LAST:event_btnPorPeriodoActionPerformed
 
     private void btnVerDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerDetallesActionPerformed
@@ -351,7 +340,6 @@ public class FrmVentasConsultar extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;
     private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnMostrarTodas;
     private javax.swing.JButton btnPorPeriodo;
     private javax.swing.JButton btnSalir;

@@ -45,7 +45,6 @@ public class DlgVentasDetalles extends javax.swing.JDialog {
         txtFecha = new javax.swing.JButton();
         txtTotal = new javax.swing.JButton();
         txtIdVenta = new javax.swing.JButton();
-        btnMenu = new javax.swing.JButton();
         lblApartado = new javax.swing.JLabel();
         lblLogoCabecera = new javax.swing.JLabel();
         FondoTitulo = new javax.swing.JTextField();
@@ -56,6 +55,7 @@ public class DlgVentasDetalles extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDetalleVenta = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -65,23 +65,18 @@ public class DlgVentasDetalles extends javax.swing.JDialog {
         MostrarVenta.add(txtTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 90, 30));
         MostrarVenta.add(txtIdVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 90, 30));
 
-        btnMenu.setBackground(new java.awt.Color(110, 88, 68));
-        btnMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenu.setText("🏠");
-        btnMenu.setActionCommand("\\u2715");
-        MostrarVenta.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 30));
-
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
         lblApartado.setText("Detalle Venta");
-        MostrarVenta.add(lblApartado, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 190, 30));
+        MostrarVenta.add(lblApartado, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 190, 30));
 
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
-        MostrarVenta.add(lblLogoCabecera, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 190, 30));
+        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_header.png"))); // NOI18N
+        MostrarVenta.add(lblLogoCabecera, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 220, 30));
 
+        FondoTitulo.setEditable(false);
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
-        MostrarVenta.add(FondoTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, 30));
+        MostrarVenta.add(FondoTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 542, 30));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -134,11 +129,24 @@ public class DlgVentasDetalles extends javax.swing.JDialog {
 
         MostrarVenta.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 460, 180));
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        MostrarVenta.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MostrarVenta, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
+            .addComponent(MostrarVenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,12 +216,12 @@ public class DlgVentasDetalles extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField FondoTitulo;
     private javax.swing.JPanel MostrarVenta;
-    private javax.swing.JButton btnMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblApartado;
     private javax.swing.JLabel lblLogoCabecera;

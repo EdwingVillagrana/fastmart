@@ -45,7 +45,6 @@ public class FrmProveedores extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProveedores = new javax.swing.JTable();
-        btnMenu = new javax.swing.JButton();
         lblApartado = new javax.swing.JLabel();
         lblLogoCabecera = new javax.swing.JLabel();
         FondoTitulo = new javax.swing.JTextField();
@@ -120,28 +119,18 @@ public class FrmProveedores extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(10, 140, 570, 260);
 
-        btnMenu.setBackground(new java.awt.Color(110, 88, 68));
-        btnMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenu.setText("🏠");
-        btnMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnMenu);
-        btnMenu.setBounds(0, 0, 50, 30);
-
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
         lblApartado.setText("Proveedores");
         jPanel1.add(lblApartado);
-        lblApartado.setBounds(60, 0, 130, 30);
+        lblApartado.setBounds(10, 0, 130, 30);
 
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
+        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_header.png"))); // NOI18N
         jPanel1.add(lblLogoCabecera);
-        lblLogoCabecera.setBounds(280, 0, 190, 30);
+        lblLogoCabecera.setBounds(230, 0, 230, 30);
 
+        FondoTitulo.setEditable(false);
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         FondoTitulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,7 +138,7 @@ public class FrmProveedores extends javax.swing.JFrame {
             }
         });
         jPanel1.add(FondoTitulo);
-        FondoTitulo.setBounds(40, 0, 660, 30);
+        FondoTitulo.setBounds(0, 0, 696, 30);
 
         btnBuscar.setBackground(new java.awt.Color(255, 145, 77));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -277,10 +266,6 @@ public class FrmProveedores extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuActionPerformed
 
     private void FondoTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FondoTituloActionPerformed
         // TODO add your handling code here:
@@ -505,7 +490,6 @@ public class FrmProveedores extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnListarProveedores;
-    private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JPanel jPanel1;

@@ -98,7 +98,6 @@ public class DlgProducto extends javax.swing.JDialog {
         txtPVenta = new javax.swing.JTextField();
         txtCodigo = new javax.swing.JTextField();
         txtStock = new javax.swing.JTextField();
-        btnMenu = new javax.swing.JButton();
         lblApartado = new javax.swing.JLabel();
         lblLogoCabecera = new javax.swing.JLabel();
         FondoTitulo = new javax.swing.JTextField();
@@ -173,31 +172,21 @@ public class DlgProducto extends javax.swing.JDialog {
         jPanel1.add(txtStock);
         txtStock.setBounds(70, 295, 180, 21);
 
-        btnMenu.setBackground(new java.awt.Color(110, 88, 68));
-        btnMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenu.setText("🏠");
-        btnMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnMenu);
-        btnMenu.setBounds(0, 0, 40, 30);
-
         lblApartado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
         lblApartado.setText("Producto");
         jPanel1.add(lblApartado);
-        lblApartado.setBounds(50, 0, 100, 30);
+        lblApartado.setBounds(10, 0, 100, 30);
 
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
+        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_header.png"))); // NOI18N
         jPanel1.add(lblLogoCabecera);
-        lblLogoCabecera.setBounds(80, 0, 190, 30);
+        lblLogoCabecera.setBounds(60, 0, 210, 30);
 
+        FondoTitulo.setEditable(false);
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         jPanel1.add(FondoTitulo);
-        FondoTitulo.setBounds(0, 0, 290, 30);
+        FondoTitulo.setBounds(0, 0, 286, 30);
 
         jLabel1.setText("Stock :");
         jPanel1.add(jLabel1);
@@ -286,10 +275,6 @@ public class DlgProducto extends javax.swing.JDialog {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
@@ -482,7 +467,6 @@ public class DlgProducto extends javax.swing.JDialog {
     private javax.swing.JTextField FondoTitulo;
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnMenu;
     private javax.swing.JComboBox<String> comboCategoria;
     private javax.swing.JComboBox<String> comboProveedor;
     private javax.swing.JLabel jLabel1;

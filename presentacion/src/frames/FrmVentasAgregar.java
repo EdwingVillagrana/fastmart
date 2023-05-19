@@ -85,7 +85,6 @@ public class FrmVentasAgregar extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
-        btnMenu = new javax.swing.JButton();
         FondoTitulo = new javax.swing.JTextField();
         btnCancelarVenta = new javax.swing.JButton();
         btnImporte = new javax.swing.JButton();
@@ -178,7 +177,7 @@ public class FrmVentasAgregar extends javax.swing.JFrame {
         jSeparator1.setBounds(0, 28, 720, 0);
 
         lblLogoCabecera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_principal.png"))); // NOI18N
+        lblLogoCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_header.png"))); // NOI18N
         Fondo.add(lblLogoCabecera);
         lblLogoCabecera.setBounds(280, 0, 280, 30);
 
@@ -193,7 +192,7 @@ public class FrmVentasAgregar extends javax.swing.JFrame {
         lblApartado.setForeground(new java.awt.Color(255, 255, 255));
         lblApartado.setText("Ventas");
         Fondo.add(lblApartado);
-        lblApartado.setBounds(60, 0, 60, 30);
+        lblApartado.setBounds(10, 0, 60, 30);
 
         jLabel3.setBackground(new java.awt.Color(0, 0, 0));
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -221,15 +220,10 @@ public class FrmVentasAgregar extends javax.swing.JFrame {
         Fondo.add(jTextField3);
         jTextField3.setBounds(50, 260, 640, 30);
 
-        btnMenu.setBackground(new java.awt.Color(110, 88, 68));
-        btnMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenu.setText("🏠");
-        Fondo.add(btnMenu);
-        btnMenu.setBounds(0, 0, 50, 30);
-
+        FondoTitulo.setEditable(false);
         FondoTitulo.setBackground(new java.awt.Color(110, 88, 68));
         Fondo.add(FondoTitulo);
-        FondoTitulo.setBounds(0, 0, 840, 30);
+        FondoTitulo.setBounds(0, 0, 834, 30);
 
         btnCancelarVenta.setBackground(new java.awt.Color(255, 145, 77));
         btnCancelarVenta.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
@@ -446,7 +440,7 @@ public class FrmVentasAgregar extends javax.swing.JFrame {
         Fondo.add(jPanel4);
         jPanel4.setBounds(50, 205, 430, 40);
 
-        lblImagenSuper.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_abarrotesC.PNG"))); // NOI18N
+        lblImagenSuper.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icono_abarrotesJessica.png"))); // NOI18N
         Fondo.add(lblImagenSuper);
         lblImagenSuper.setBounds(490, 50, 200, 195);
 
@@ -775,7 +769,6 @@ public class FrmVentasAgregar extends javax.swing.JFrame {
     private javax.swing.JButton btnGenerarVenta;
     private javax.swing.JButton btnImporte;
     private javax.swing.JButton btnLimpiarCampos;
-    private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel2;
